@@ -1,4 +1,4 @@
-import { lesson1 } from '../data';
+import { unit1 } from '../data';
 
 const Page = () => {
   const speak = (text: string) => {
@@ -7,8 +7,8 @@ const Page = () => {
   };
   return (
     <div className='p-4'>
-      <h1 className='text-2xl font-bold text-center text-orange-500 mb-4'>Lesson 1</h1>
-      {lesson1.map((word, index) => (
+      <h1 className='text-2xl font-bold text-center text-orange-500 mb-4'>Unit 1</h1>
+      {unit1.map((word, index) => (
         <details key={index} className='mb-4'>
           <summary className='flex items-center font-medium'>
             <p className='mr-2 px-4 py-2 rounded-lg bg-gray-100 text-orange-500'>{word.row}</p>
@@ -23,33 +23,33 @@ const Page = () => {
             </button>
 
             <p>
-              <strong>Part of Speech:</strong> {word.partOfSpeech.join(', ')}
+              <strong className='text-orange-500'>Part of Speech:</strong> {word.partOfSpeech.join(', ')}
             </p>
             {word.noun.length > 0 && (
               <p>
-                <strong>Noun:</strong> {word.noun.join(', ')}
+                <strong className='text-orange-500'>Noun:</strong> {word.noun.join(', ')}
               </p>
             )}
             {word.verb.length > 0 && (
               <p>
-                <strong>Verb:</strong> {word.verb.join(', ')}
+                <strong className='text-orange-500'>Verb:</strong> {word.verb.join(', ')}
               </p>
             )}
             {word.adjective.length > 0 && (
               <p>
-                <strong>Adjective:</strong> {word.adjective.join(', ')}
+                <strong className='text-orange-500'>Adjective:</strong> {word.adjective.join(', ')}
               </p>
             )}
             {word.adverb.length > 0 && (
               <p>
-                <strong>Adverb:</strong> {word.adverb.join(', ')}
+                <strong className='text-orange-500'>Adverb:</strong> {word.adverb.join(', ')}
               </p>
             )}
             <p>
-              <strong>Definition:</strong> {word.definition.join(', ')}
+              <strong className='text-orange-500'>Definition:</strong> {word.definition.join(', ')}
             </p>
             <p>
-              <strong>Example:</strong>
+              <strong className='text-orange-500'>Example:</strong>
             </p>
             <ol className='list-lower-alpha list-inside'>
               {word.example.map((example, index) => (
@@ -58,7 +58,7 @@ const Page = () => {
             </ol>
             {word.note.length > 0 && (
               <p>
-                <strong>Note:</strong> {word.note.join(', ')}
+                <strong className='text-orange-500'>Note:</strong> {word.note.join(', ')}
               </p>
             )}
           </div>

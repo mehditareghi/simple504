@@ -1,4 +1,4 @@
-interface Lesson {
+interface Unit {
   row: number;
   word: string;
   partOfSpeech: string[];
@@ -11,7 +11,7 @@ interface Lesson {
   note: string[];
 }
 
-export const lesson1: Lesson[] = [
+export const unit1: Unit[] = [
   {
     row: 1,
     word: 'abandon',
