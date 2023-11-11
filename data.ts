@@ -1,4 +1,17 @@
-export const lesson1 = [
+interface Lesson {
+  row: number;
+  word: string;
+  partOfSpeech: string[];
+  noun: string[];
+  verb: string[];
+  adjective: string[];
+  adverb: string[];
+  definition: string[];
+  example: string[];
+  note: string[];
+}
+
+export const lesson1: Lesson[] = [
   {
     row: 1,
     word: 'abandon',
