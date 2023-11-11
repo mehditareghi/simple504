@@ -22,7 +22,7 @@ const Page = () => {
       <h1 className='text-2xl font-bold text-center text-orange-500 mb-4'>Unit 1</h1>
       {unit1.map((word, index) => (
         <details key={index} className='mb-4'>
-          <summary className='flex items-center font-medium'>
+          <summary className='flex items-center font-medium summary'>
             <p className='mr-2 px-4 py-2 rounded-lg bg-gray-100 text-orange-500'>{word.row}</p>
             <p className='bg-gray-100 px-4 py-2 rounded-lg w-full'>{word.word}</p>
           </summary>
