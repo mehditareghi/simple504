@@ -1,8 +1,20 @@
 import { unit1 } from '../data';
+import { PlayCircle } from 'phosphor-react';
 
 const Page = () => {
-  const speak = (text: string) => {
+  const speakUS = (text: string) => {
     const utterance = new SpeechSynthesisUtterance(text);
+    const voices = window.speechSynthesis.getVoices();
+    const usVoice = voices.find((voice) => voice.lang === 'en-US');
+    if (usVoice) utterance.voice = usVoice;
+    window.speechSynthesis.speak(utterance);
+  };
+
+  const speakUK = (text: string) => {
+    const utterance = new SpeechSynthesisUtterance(text);
+    const voices = window.speechSynthesis.getVoices();
+    const ukVoice = voices.find((voice) => voice.lang === 'en-GB');
+    if (ukVoice) utterance.voice = ukVoice;
     window.speechSynthesis.speak(utterance);
   };
   return (
@@ -15,12 +27,18 @@ const Page = () => {
             <p className='bg-gray-100 px-4 py-2 rounded-lg w-full'>{word.word}</p>
           </summary>
           <div className='pl-4 bg-orange-50 rounded-lg px-4 py-2 mt-2'>
-            <button
-              onClick={() => speak(word.word)}
-              className='border border-orange-500 text-orange-500 rounded-full w-6 h-6 flex items-center justify-center text-xs'
-            >
-              &#9658;
-            </button>
+            <div className='flex items-center'>
+              <strong className='text-orange-500'>US:</strong>
+              <button onClick={() => speakUS(word.word)} className='flex items-center justify-center text-lg ml-1'>
+                <PlayCircle weight='fill' />
+              </button>
+            </div>
+            <div className='flex items-center'>
+              <strong className='text-orange-500'>UK:</strong>
+              <button onClick={() => speakUK(word.word)} className='flex items-center justify-center text-lg ml-1'>
+                <PlayCircle weight='fill' />
+              </button>
+            </div>
 
             <p>
               <strong className='text-orange-500'>Part of Speech:</strong> {word.partOfSpeech.join(', ')}
