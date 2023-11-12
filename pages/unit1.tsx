@@ -84,7 +84,7 @@ const Page = () => {
       ))}
       <h2 className='text-xl font-bold text-center text-orange-500 mb-4'>Words in Use</h2>
       <p>Read the following passage to see how the new words are used in it.</p>
-      <div className='bg-orange-100 p-4 rounded-lg my-4'>
+      <div className='bg-orange-50 p-4 rounded-lg my-4'>
         <h3 className='text-lg font-bold text-orange-500 mb-2'>My Brother, the Gentleman</h3>
         <p>
           The story of Sir Walter Raleigh, who spread his cloak on the ground to keep Queen Elizabeth from the hardship
