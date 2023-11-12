@@ -87,18 +87,19 @@ const Page = () => {
       <div className='bg-orange-50 p-4 rounded-lg my-4'>
         <h3 className='text-lg font-bold text-orange-500 mb-2'>My Brother, the Gentleman</h3>
         <p>
-          The story of Sir Walter Raleigh, who spread his cloak on the ground to keep Queen Elizabeth from the hardship
-          of crossing a muddy puddle, can qualify that nobleman for an award as a man of tact and good breeding. My
-          brother Kenny, a bachelor with a keen interest in history, was impressed by that anecdote and thought he might
-          demonstrate his excellent upbringing in a parallel situation. Accordingly he decided to abandon his subway
+          The story of Sir Walter Raleigh, who spread his cloak on the ground to keep Queen Elizabeth from the{' '}
+          <strong>hardship</strong> of crossing a muddy puddle, can <strong>qualify</strong> that nobleman for an award
+          as a man of <strong>tact</strong> and good breeding. My brother Kenny, a <strong>bachelor</strong> with a{' '}
+          <strong>keen</strong> interest in history, was impressed by that anecdote and thought he might demonstrate his
+          excellent upbringing in a parallel situation. Accordingly he decided to <strong>abandon</strong> his subway
           seat in favor of a woman standing nearby.
         </p>
         <p>
-          Although unaccustomed to such generous treatment, the young woman was pleased to accept Kenny&apos;s kind
-          offer. However, her jealous boyfriend swore an oath under his breath because he thought my brother was
-          flirting with his girlfriend. I don&apos;t have any data on the number of young men who get into similar
-          trouble as a result of a gallant gesture, but it&apos;s probably one in a thousand. Poor Kenny! He pointed to
-          the now vacant seat.
+          Although <strong>unaccustomed</strong> to such generous treatment, the young woman was pleased to accept
+          Kenny&apos;s kind offer. However, her <strong>jealous</strong> boyfriend swore an <strong>oath</strong> under his breath because he thought my
+          brother was flirting with his girlfriend. I don&apos;t have any <strong>data</strong> on the number of young men who get into
+          similar trouble as a result of a <strong>gallant</strong> gesture, but it&apos;s probably one in a thousand. Poor Kenny! He
+          pointed to the now <strong>vacant</strong> seat.
         </p>
       </div>
     </div>
