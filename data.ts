@@ -9,6 +9,7 @@ interface Unit {
   definition: string[];
   example: string[];
   note: string[];
+  imgSrc: string;
 }
 
 export const unit1: Unit[] = [
@@ -27,6 +28,7 @@ export const unit1: Unit[] = [
       `Because Rose was poor, she had to abandon her idea of going to college.`,
     ],
     note: [],
+    imgSrc: '/static/abandon',
   },
   {
     row: 2,
@@ -43,6 +45,7 @@ export const unit1: Unit[] = [
       `Bill's keen mind pleased all his teachers.`,
     ],
     note: ['keen on === interested in'],
+    imgSrc: '/static/keen',
   },
   {
     row: 3,
@@ -62,6 +65,7 @@ him.`,
 the cheerleaders. `,
     ],
     note: ['always with of'],
+    imgSrc: '/static/jealous',
   },
   {
     row: 4,
@@ -78,6 +82,7 @@ the cheerleaders. `,
       `Bill's keen mind pleased all his teachers.`,
     ],
     note: ['with use for verb'],
+    imgSrc: '/static/tact',
   },
   {
     row: 5,
@@ -95,6 +100,7 @@ the cheerleaders. `,
 angry oath.`,
     ],
     note: ['take the oath for president or special position, make an oath for normal people'],
+    imgSrc: '/static/oath',
   },
   {
     row: 6,
@@ -111,6 +117,7 @@ angry oath.`,
       `When the landlord broke in, he found that apartment vacant.`,
     ],
     note: [],
+    imgSrc: '/static/vacant',
   },
   {
     row: 7,
@@ -129,6 +136,7 @@ champion.`,
 of his sick mother.`,
     ],
     note: [],
+    imgSrc: '/static/hardship',
   },
   {
     row: 8,
@@ -145,6 +153,7 @@ of his sick mother.`,
       `Ed is so gallant that he always gives up his subway seat to a woman.`,
     ],
     note: [],
+    imgSrc: '/static/gallant',
   },
   {
     row: 9,
@@ -161,6 +170,7 @@ of his sick mother.`,
       `Unless you are given all the data, you cannot do the math problem.`,
     ],
     note: [],
+    imgSrc: '/static/data',
   },
   {
     row: 10,
@@ -177,6 +187,7 @@ of his sick mother.`,
       `Unaccustomed as he was to exercise, Vic quickly became tired.`,
     ],
     note: ['always with to'],
+    imgSrc: '/static/unaccustomed',
   },
   {
     row: 11,
@@ -193,6 +204,7 @@ of his sick mother.`,
       `Before the wedding, all his bachelor friends had a party.`,
     ],
     note: [],
+    imgSrc: '/static/bachelor',
   },
   {
     row: 12,
@@ -210,5 +222,6 @@ of his sick mother.`,
 5" to qualify as a policeman in our town.`,
     ],
     note: ['to qualify'],
+    imgSrc: '/static/qualify',
   },
 ];
