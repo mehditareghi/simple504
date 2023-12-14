@@ -20,6 +20,10 @@ const Page = () => {
   return (
     <div className='p-4'>
       <h1 className='text-2xl font-bold text-center text-orange-500 mb-4'>Unit 1</h1>
+      <audio controls className=' mb-4'>
+        <source src='/static/unit1.mp3' type='audio/mpeg' />
+        Your browser does not support the audio element.
+      </audio>
       {unit1.map((word, index) => (
         <details key={index} className='mb-4'>
           <summary className='flex items-center font-medium summary'>
@@ -96,10 +100,11 @@ const Page = () => {
         </p>
         <p>
           Although <strong>unaccustomed</strong> to such generous treatment, the young woman was pleased to accept
-          Kenny&apos;s kind offer. However, her <strong>jealous</strong> boyfriend swore an <strong>oath</strong> under his breath because he thought my
-          brother was flirting with his girlfriend. I don&apos;t have any <strong>data</strong> on the number of young men who get into
-          similar trouble as a result of a <strong>gallant</strong> gesture, but it&apos;s probably one in a thousand. Poor Kenny! He
-          pointed to the now <strong>vacant</strong> seat.
+          Kenny&apos;s kind offer. However, her <strong>jealous</strong> boyfriend swore an <strong>oath</strong> under
+          his breath because he thought my brother was flirting with his girlfriend. I don&apos;t have any{' '}
+          <strong>data</strong> on the number of young men who get into similar trouble as a result of a{' '}
+          <strong>gallant</strong> gesture, but it&apos;s probably one in a thousand. Poor Kenny! He pointed to the now{' '}
+          <strong>vacant</strong> seat.
         </p>
       </div>
     </div>
