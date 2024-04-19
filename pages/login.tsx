@@ -6,9 +6,10 @@ import { setUser } from '@/state/user/userSlice';
 import { useRouter } from 'next/router';
 import Cookies from 'js-cookie';
 import { useSelector } from 'react-redux';
+import { RootState } from '@/state/store';
 
 const Login = () => {
-  const user = useSelector((state) => state.user);
+  const user = useSelector((state: RootState) => state.user);
   const router = useRouter();
   const dispatch = useDispatch();
   const [formData, setFormData] = useState({
