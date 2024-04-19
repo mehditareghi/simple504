@@ -38,7 +38,7 @@ const Login = () => {
         username: response.data.user.username,
       };
       dispatch(setUser(userObject));
-      Cookies.set('token', response.data.key, { expires: 7 }); // Cookie will expire after 7 days
+      Cookies.set('token', response.data.key); // Cookie will expire after 7 days
       router.push('/courses');
     } catch (error) {
       console.error(error);
