@@ -3,11 +3,24 @@ import Image from 'next/image';
 import { PlayCircle } from 'phosphor-react';
 import { GetServerSidePropsContext } from 'next';
 
+type Word = {
+  id: number;
+  word: string;
+  part_of_speech: string;
+  definition: string;
+  examples: string;
+  image: string;
+  adjective: string;
+  noun: string;
+  unit: number;
+  created_at: string;
+  updated_at: string;
+};
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   const { unitId } = context.query;
   const token = context.req.cookies.token; // assuming the token is stored in cookies
 
-  let words = null;
+  let words: Word[] | null = null;
 
   try {
     const response = await fetch(`${API_URL}/lesson/unit/${unitId}/words/`, {
@@ -30,7 +43,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
   };
 }
 
-const Words = ({ words }) => {
+const Words = ({ words }: { words: Word[] }) => {
   const speakUS = (text: string) => {
     const utterance = new SpeechSynthesisUtterance(text);
     const voices = window.speechSynthesis.getVoices();

@@ -4,11 +4,18 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { GetServerSidePropsContext } from 'next';
 
+type Unit = {
+  id: number;
+  words_count: number;
+  name: string;
+  audio: string;
+}
+
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   const { lessonId } = context.query;
   const token = context.req.cookies.token; // assuming the token is stored in cookies
 
-  let units = null;
+  let units: Unit[] | null = null;
 
   try {
     const response = await fetch(`${API_URL}/lesson/lesson/${lessonId}/units/`, {
@@ -31,7 +38,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
   };
 }
 
-const Units = ({ units }) => {
+const Units = ({ units }: {units: Unit[]}) => {
   const router = useRouter();
   const { lessonId } = router.query;
 

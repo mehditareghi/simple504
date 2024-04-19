@@ -3,10 +3,26 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { GetServerSidePropsContext } from 'next';
 
+type Lesson = {
+  id: number;
+  units_count: number;
+  words_count: number;
+  name: string;
+  created_at: string;
+  updated_at: string;
+};
+
+type Res = {
+  count: number;
+  next: string | null;
+  previous: string | null;
+  results: Lesson[];
+}
+
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   const token = context.req.cookies.token; // assuming the token is stored in cookies
 
-  let lessons = null;
+  let lessons: Res | null = null;
 
   try {
     const response = await fetch(`${API_URL}/lesson/lesson/`, {
@@ -24,12 +40,12 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
 
   return {
     props: {
-      lessons: lessons.results,
+      lessons: lessons ? lessons.results : [],
     },
   };
 }
 
-const Lessons = ({ lessons }) => {
+const Lessons = ({ lessons }: {lessons: Lesson[]}) => {
   return (
     <div>
       <h1>Lessons</h1>
