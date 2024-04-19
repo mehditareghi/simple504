@@ -43,7 +43,6 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
 }
 
 const Units = ({ units }: {units: Unit[]}) => {
-  console.log(units); 
   const router = useRouter();
   const { courseId } = router.query;
 

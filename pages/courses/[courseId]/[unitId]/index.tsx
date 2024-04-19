@@ -114,9 +114,11 @@ const Words = ({ words }: { words: Word[] }) => {
               <p>
                 <strong className='text-orange-500'>Example:</strong>
               </p>
-              <ol className='list-lower-alpha list-inside'>
-                {word.example && word.example.map((example: string, index: number) => <li key={index}>{example}</li>)}
-              </ol>
+              {word.examples && word.examples.length > 0 && (
+                <p>
+                  <strong className='text-orange-500'>Examples:</strong> {word.examples}
+                </p>
+              )}
               {word.note && word.note.length > 0 && (
                 <p>
                   <strong className='text-orange-500'>Note:</strong> {word.note.join(', ')}
