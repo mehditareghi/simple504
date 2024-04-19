@@ -1,31 +1,24 @@
 import { API_URL } from '@/utils/constants';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import { GetServerSidePropsContext } from 'next';
 
-type Lesson = {
+type Unit = {
   id: number;
-  units_count: number;
   words_count: number;
   name: string;
-  created_at: string;
-  updated_at: string;
-};
-
-type Res = {
-  count: number;
-  next: string | null;
-  previous: string | null;
-  results: Lesson[];
+  audio: string;
 }
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
+  const { courseId } = context.query;
   const token = context.req.cookies.token; // assuming the token is stored in cookies
 
-  let lessons: Res | null = null;
+  let units: Unit[] | null = null;
 
   try {
-    const response = await fetch(`${API_URL}/lesson/lesson/`, {
+    const response = await fetch(`${API_URL}/lesson/course/${courseId}/units/`, {
       headers: {
         Authorization: `Token ${token}`,
       },
@@ -33,39 +26,42 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
     if (!response.ok) {
       throw new Error('Network response was not ok');
     }
-    lessons = await response.json();
+    units = await response.json();
   } catch (error) {
     console.error(error);
   }
 
   return {
     props: {
-      lessons: lessons ? lessons.results : [],
+      units,
     },
   };
 }
 
-const Lessons = ({ lessons }: {lessons: Lesson[]}) => {
+const Units = ({ units }: {units: Unit[]}) => {
+  const router = useRouter();
+  const { courseId } = router.query;
+
   return (
     <div>
-      <h1>Lessons</h1>
+      <h1>Units</h1>
       <ul className='grid gap-4' style={{ gridTemplateColumns: 'repeat(auto-fill, minmax(min(15rem , 100%), 1fr ))' }}>
-        {lessons.map((lesson: any) => {
+        {units.map((unit: any) => {
           return (
             <li
-              key={lesson.id}
+              key={unit.id}
               className='flex gap-4 border border-gray-300 p-4 rounded-lg bg-gray-50 hover:bg-orange-100 hover:border-orange-500'
             >
               <div className='w-[20%]'>
-                <Link href={`/lessons/${lesson.id}`}>
+                <Link href={`/lessons/${courseId}/${unit.id}`}>
                   <Image src='/504.webp' width={225} height={225} alt='avatar' className='rounded-lg bg-gray-500' />
                 </Link>
               </div>
               <div className='flex justify-between p-4 w-full rounded-lg'>
-                <Link href={`/lessons/${lesson.id}`}>
-                  <h3 className='font-medium text-lg'>{lesson.name}</h3>
-                  <p>{lesson.units_count} Units</p>
-                  <p>{lesson.words_count} Words</p>
+                <Link href={`/lessons/${courseId}/${unit.id}`}>
+                  <h3 className='font-medium text-lg'>{unit.name}</h3>
+                  <p>{unit.description}</p>
+                  <p>{unit.words_count} Words</p>
                 </Link>
               </div>
             </li>
@@ -76,4 +72,4 @@ const Lessons = ({ lessons }: {lessons: Lesson[]}) => {
   );
 };
 
-export default Lessons;
+export default Units;
