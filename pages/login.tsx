@@ -5,8 +5,10 @@ import { useDispatch } from 'react-redux';
 import { setUser } from '@/state/user/userSlice';
 import { useRouter } from 'next/router';
 import Cookies from 'js-cookie';
+import { useSelector } from 'react-redux';
 
 const Login = () => {
+  const user = useSelector((state) => state.user);
   const router = useRouter();
   const dispatch = useDispatch();
   const [formData, setFormData] = useState({
@@ -37,12 +39,16 @@ const Login = () => {
       };
       dispatch(setUser(userObject));
       Cookies.set('token', response.data.key, { expires: 7 }); // Cookie will expire after 7 days
-      router.push('/lessons');
+      router.push('/courses');
     } catch (error) {
       console.error(error);
       // Handle errors here
     }
   };
+
+  if (user) {
+    router.push('/courses');
+  }
 
   return (
     <div className='flex flex-col items-center justify-center min-h-screen bg-gray-100'>

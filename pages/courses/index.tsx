@@ -17,7 +17,7 @@ type Res = {
   next: string | null;
   previous: string | null;
   results: Course[];
-}
+};
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   const token = context.req.cookies.token; // assuming the token is stored in cookies
@@ -45,7 +45,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
   };
 }
 
-const Courses = ({ courses }: {courses: Course[]}) => {
+const Courses = ({ courses }: { courses: Course[] }) => {
   return (
     <div>
       <h1>Courses</h1>
@@ -57,12 +57,12 @@ const Courses = ({ courses }: {courses: Course[]}) => {
               className='flex gap-4 border border-gray-300 p-4 rounded-lg bg-gray-50 hover:bg-orange-100 hover:border-orange-500'
             >
               <div className='w-[20%]'>
-                <Link href={`/lessons/${course.id}`}>
+                <Link href={`/courses/${course.id}`}>
                   <Image src='/504.webp' width={225} height={225} alt='avatar' className='rounded-lg bg-gray-500' />
                 </Link>
               </div>
               <div className='flex justify-between p-4 w-full rounded-lg'>
-                <Link href={`/lessons/${course.id}`}>
+                <Link href={`/courses/${course.id}`}>
                   <h3 className='font-medium text-lg'>{course.name}</h3>
                   <p>{course.units_count} Units</p>
                   <p>{course.words_count} Words</p>
