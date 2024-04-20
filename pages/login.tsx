@@ -2,14 +2,14 @@ import axios from 'axios';
 import React, { SyntheticEvent, useState } from 'react';
 import { API_URL } from '@/utils/constants';
 import { useDispatch } from 'react-redux';
-import { setUser } from '@/state/user/userSlice';
+import { UserState, setUser } from '@/state/user/userSlice';
 import { useRouter } from 'next/router';
 import Cookies from 'js-cookie';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/state/store';
 
 const Login = () => {
-  const user = useSelector((state: RootState) => state.user);
+  const user = useSelector((state: RootState) => state.user) as UserState;
   const router = useRouter();
   const dispatch = useDispatch();
   const [formData, setFormData] = useState({
@@ -47,7 +47,7 @@ const Login = () => {
     }
   };
 
-  if (user.token) {
+  if (user && user.token) {
     router.push('/courses');
   }
 

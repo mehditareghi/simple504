@@ -4,12 +4,12 @@ import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@/state/store';
 import Cookies from 'js-cookie';
 import { API_URL } from '@/utils/constants';
-import { clearUser } from '@/state/user/userSlice';
+import { UserState, clearUser } from '@/state/user/userSlice';
 import { useRouter } from 'next/router';
 
 const Header = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const user = useSelector((state: RootState) => state.user);
+  const user = useSelector((state: RootState) => state.user) as UserState;
   const dispatch = useDispatch();
   const router = useRouter()
 
@@ -18,7 +18,7 @@ const Header = () => {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Token ${user.token}`, // replace with actual token
+        Authorization: `Token ${user && user.token}`, // replace with actual token
       },
     });
 
@@ -50,7 +50,7 @@ const Header = () => {
           <Link href='/' className='block mt-4 sm:inline-block sm:mt-0 mr-4'>
             Blog
           </Link>
-          {user.token ? (
+          {user && user.token ? (
             <>
               <Link href='/' className='block mt-4 sm:inline-block sm:mt-0'>
                 {user.firstName}

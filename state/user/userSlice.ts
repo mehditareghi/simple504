@@ -9,7 +9,7 @@ interface User {
   username: string;
 }
 
-type UserState = User | null;
+export type UserState = User | null;
 
 const initialState: UserState = null;
 
