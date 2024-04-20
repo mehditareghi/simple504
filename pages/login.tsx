@@ -47,7 +47,7 @@ const Login = () => {
     }
   };
 
-  if (user) {
+  if (user.token) {
     router.push('/courses');
   }
 
