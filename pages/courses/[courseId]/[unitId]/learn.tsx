@@ -1,6 +1,6 @@
 import { API_URL } from '@/utils/constants';
 import { GetServerSidePropsContext } from 'next';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 type Word = {
   id: number;
@@ -65,6 +65,13 @@ const Learn = ({ firstQuestion, token }: { firstQuestion: Question; token: strin
   const [data, setData] = useState<Question>(firstQuestion);
   const [action, setAction] = useState('Submit');
   const [isCorrect, setIsCorrect] = useState<boolean | null>(null);
+  const [progress, setProgress] = useState(0);
+
+  useEffect(() => {
+    if (isCorrect) {
+      setProgress((prevProgress) => prevProgress + 100 / 15);
+    }
+  }, [isCorrect]);
 
   const onAnswerSelected = (index: number) => {
     if (isCorrect !== null) return;
@@ -114,6 +121,10 @@ const Learn = ({ firstQuestion, token }: { firstQuestion: Question; token: strin
   return (
     <div>
       <h1>Learning New Words</h1>
+      <div
+        style={{ width: `${progress}%`, backgroundColor: 'blue', height: '20px', transition: 'width 0.5s ease-out' }}
+        className='rounded'
+      ></div>
       <h2 className='font-semibold text-center mt-4'>{data.question}</h2>
       <form className='mt-[5%] w-full'>
         {data.words.map((word, index) => (
