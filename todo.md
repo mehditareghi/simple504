@@ -3,8 +3,9 @@
 - add radix ui for colors and ui components
 
 # Header
-- add login/profile/logout button
-- add courses link
+- ✅ add login/profile/logout button
+- ✅ add courses link
+- make it responsive
 
 # Footer
 
