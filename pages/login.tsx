@@ -54,14 +54,14 @@ const Login = () => {
   return (
     <div className='flex flex-col items-center justify-center min-h-screen bg-gray-100'>
       <form onSubmit={handleSubmit} className='p-8 bg-white rounded shadow-md w-80'>
-        <h2 className='text-2xl font-bold mb-8 text-center'>Login</h2>
+        <h2 className='H2'>Login</h2>
         <input
           type='text'
           name='usernameOrEmail'
           required
           placeholder='Username or Email'
           onChange={handleChange}
-          className='mb-4 w-full px-3 py-2 placeholder-gray-300 border border-gray-300 rounded-md focus:outline-none focus:border-indigo-500'
+          className='field'
         />
         <input
           type='password'
@@ -69,11 +69,11 @@ const Login = () => {
           required
           placeholder='Password'
           onChange={handleChange}
-          className='mb-4 w-full px-3 py-2 placeholder-gray-300 border border-gray-300 rounded-md focus:outline-none focus:border-indigo-500'
+          className='field'
         />
         <button
           type='submit'
-          className='w-full px-3 py-4 text-white bg-indigo-500 rounded-md hover:bg-indigo-600 focus:outline-none'
+          className='btn'
         >
           Login
         </button>

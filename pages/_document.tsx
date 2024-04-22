@@ -7,7 +7,7 @@ export default function Document() {
         <link rel='manifest' href='/manifest.json' />
         <meta name='theme-color' content='#000000' />
       </Head>
-      <body>
+      <body className={`light h-full bg-white c-sand12 !block`}>
         <Main />
         <NextScript />
       </body>

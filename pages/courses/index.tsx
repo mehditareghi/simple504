@@ -48,7 +48,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
 const Courses = ({ courses }: { courses: Course[] }) => {
   return (
     <div>
-      <h1>Courses</h1>
+      <h1 className='H1'>Courses</h1>
       <ul className='grid gap-4' style={{ gridTemplateColumns: 'repeat(auto-fill, minmax(min(15rem , 100%), 1fr ))' }}>
         {courses.map((course: any) => {
           return (
@@ -63,7 +63,7 @@ const Courses = ({ courses }: { courses: Course[] }) => {
               </div>
               <div className='flex justify-between p-4 w-full rounded-lg'>
                 <Link href={`/courses/${course.id}`}>
-                  <h3 className='font-medium text-lg'>{course.name}</h3>
+                  <h2 className='H2'>{course.name}</h2>
                   <p>{course.units_count} Units</p>
                   <p>{course.words_count} Words</p>
                 </Link>

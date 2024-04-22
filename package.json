@@ -3,14 +3,24 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
+    "prepare": "husky install",
+    "check-types": "tsc --pretty --noEmit",
+    "check-format": "prettier --check .",
+    "format": "prettier --write .",
+    "check-lint": "eslint . --ext ts --ext tsx --ext js",
+    "test": "npm run check-lint && npm run check-types",
+    "dev-turbo": "concurrently \"pnpm unocss:dev\"  \"next dev --turbo\"",
+    "dev": "concurrently \"pnpm unocss:dev\"  \"next dev\"",
+    "build": "pnpm unocss:build && next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "unocss:dev": "unocss -c uno.config.ts -o styles/uno.css --watch  \"./**/*.tsx\"",
+    "unocss:build": "unocss -c uno.config.ts -o styles/uno.css  \"./**/*.tsx\""
   },
   "dependencies": {
     "@reduxjs/toolkit": "^2.2.1",
     "@types/js-cookie": "^3.0.6",
+    "@unocss/cli": "^0.58.5",
     "axios": "^1.6.7",
     "js-cookie": "^3.0.5",
     "next": "14.0.2",
@@ -22,14 +32,21 @@
     "redux-persist": "^6.0.0"
   },
   "devDependencies": {
+    "@iconify-json/ph": "^1.1.11",
+    "@iconify-json/svg-spinners": "^1.1.2",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
+    "@unocss/reset": "^0.47.4",
+    "@unocss/webpack": "^0.47.4",
     "autoprefixer": "^10.0.1",
+    "concurrently": "^8.2.2",
     "eslint": "^8",
     "eslint-config-next": "14.0.2",
-    "postcss": "^8",
-    "tailwindcss": "^3.3.0",
-    "typescript": "^5"
+    "typescript": "^5",
+    "unocss": "^0.47.4",
+    "unocss-preset-primitives": "0.0.1-beta.5",
+    "unocss-preset-radix": "^2.5.5",
+    "unocss-preset-theme": "^0.2.0"
   }
 }

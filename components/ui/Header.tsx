@@ -30,7 +30,7 @@ const Header = () => {
   };
 
   return (
-    <header className='bg-blue-500 text-white p-4'>
+    <header className='bg-blue-500 p-4'>
       <div className='container mx-auto flex flex-wrap items-center justify-between'>
         <Link href='/' className='flex items-center text-white no-underline'>
           <span className='text-xl pl-2'>Website Name</span>
