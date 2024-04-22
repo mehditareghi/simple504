@@ -56,13 +56,8 @@ const Courses = ({ courses }: { courses: Course[] }) => {
               key={course.id}
               className='flex gap-4 border border-gray-300 p-4 rounded-lg bg-gray-50 hover:bg-orange-100 hover:border-orange-500'
             >
-              <div className='w-[20%]'>
-                <Link href={`/courses/${course.id}`}>
-                  <Image src='/504.webp' width={225} height={225} alt='avatar' className='rounded-lg bg-gray-500' />
-                </Link>
-              </div>
               <div className='flex justify-between p-4 w-full rounded-lg'>
-                <Link href={`/courses/${course.id}`}>
+                <Link href={`/courses/${course.id}`} className=''>
                   <h2 className='H2'>{course.name}</h2>
                   <p>{course.units_count} Units</p>
                   <p>{course.words_count} Words</p>

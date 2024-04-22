@@ -61,7 +61,7 @@ const Words = ({ words }: { words: Word[] }) => {
   };
   return (
     <div>
-      <h1>Words</h1>
+      <h1 className='H1'>Words</h1>
       {words.map((word: any, index: number) => (
         <details key={index} className='mb-4'>
           <summary className='flex items-center font-medium summary'>
@@ -110,9 +110,6 @@ const Words = ({ words }: { words: Word[] }) => {
               <p>
                 <strong className='text-orange-500'>Definition:</strong>{' '}
                 {Array.isArray(word.definition) ? word.definition.join(', ') : word.definition}
-              </p>
-              <p>
-                <strong className='text-orange-500'>Example:</strong>
               </p>
               {word.examples && word.examples.length > 0 && (
                 <p>

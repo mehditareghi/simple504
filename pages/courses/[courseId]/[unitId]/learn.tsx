@@ -120,12 +120,12 @@ const Learn = ({ firstQuestion, token }: { firstQuestion: Question; token: strin
 
   return (
     <div>
-      <h1>Learning New Words</h1>
+      <h1 className='H1'>Learning New Words</h1>
       <div
         style={{ width: `${progress}%`, backgroundColor: 'blue', height: '20px', transition: 'width 0.5s ease-out' }}
         className='rounded'
       ></div>
-      <h2 className='font-semibold text-center mt-4'>{data.question}</h2>
+      <h2 className='H2'>{data.question}</h2>
       <form className='mt-[5%] w-full'>
         {data.words.map((word, index) => (
           <div
@@ -162,7 +162,7 @@ const Learn = ({ firstQuestion, token }: { firstQuestion: Question; token: strin
       </form>
       <div className='flex justify-center gap-4 mt-10'>
         <button
-          className='w-full px-3 py-4 text-white bg-indigo-500 rounded-md hover:bg-indigo-600 focus:outline-none'
+          className='btn'
           disabled={selectedAnswerIndex === null}
           onClick={onClick}
         >
