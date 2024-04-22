@@ -54,7 +54,7 @@ const Courses = ({ courses }: { courses: Course[] }) => {
           return (
             <li
               key={course.id}
-              className='flex gap-4 border border-gray-300 p-4 rounded-lg bg-gray-50 hover:bg-orange-100 hover:border-orange-500'
+              className='flex gap-4 border border-gray-300 p-4 rounded-lg bg-gray-50 hover:bg-orange-100 hover:border-orange-500 shadow'
             >
               <div className='flex justify-between p-4 w-full rounded-lg'>
                 <Link href={`/courses/${course.id}`} className=''>
