@@ -63,7 +63,7 @@ const Register = () => {
         />
         <button
           type='submit'
-          className='btn'
+          className='btn-prm'
         >
           Register
         </button>

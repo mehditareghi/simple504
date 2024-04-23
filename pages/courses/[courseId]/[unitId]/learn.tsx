@@ -105,6 +105,9 @@ const Learn = ({ firstQuestion, token }: { firstQuestion: Question; token: strin
         },
       });
       const nextData = await response.json();
+      setSelectedAnswerIndex(null);
+      setAnswer(null);
+      setIsCorrect(null);
       setData(nextData);
       setAction('Submit');
     }
@@ -122,50 +125,33 @@ const Learn = ({ firstQuestion, token }: { firstQuestion: Question; token: strin
     <div>
       <h1 className='H1'>Learning New Words</h1>
       <div
-        style={{ width: `${progress}%`, backgroundColor: 'blue', height: '20px', transition: 'width 0.5s ease-out' }}
-        className='rounded'
+        style={{ width: `${progress}%`, height: '20px', transition: 'width 0.5s ease-out' }}
+        className='rounded-xl bg-accent9'
       ></div>
-      <h2 className='H2'>{data.question}</h2>
-      <form className='mt-[5%] w-full'>
+      <h2 className='H2 text-center'>{data.question}</h2>
+      <div className='flex flex-col space-y-4'>
         {data.words.map((word, index) => (
-          <div
+          <button
             key={index}
-            className={`flex justify-start align-center cursor-pointer mt-4 rounded-full w-full ${
+            className={`flex-grow flex justify-start font-bold align-center cursor-pointer mt-4 p-4 rounded-xl ${
               selectedAnswerIndex === index
                 ? isCorrect === null
-                  ? 'bg-orange-50 border border-orange-400 border-dashed'
+                  ? 'bg-orange5 border border-orange7'
                   : isCorrect
-                  ? 'bg-green-50 border border-green-400 border-dashed'
-                  : 'bg-red-50 border border-red-400 border-dashed'
+                  ? 'bg-green5 border border-green7'
+                  : 'bg-red5 border border-red7'
                 : data.answer.id === word.id && isCorrect === false
-                ? 'bg-green-50 border border-green-400 border-dashed'
-                : 'bg-gray-100 text-gray-500'
+                ? 'bg-green5 border border-green7'
+                : 'bg-base3 c-base11'
             }`}
+            onClick={() => onAnswerSelected(index)}
           >
-            <input
-              type='radio'
-              id={word.word}
-              name='answer'
-              value={word.id}
-              checked={selectedAnswerIndex === index}
-              onChange={() => onAnswerSelected(index)}
-              className={`ml-4`}
-            />
-            <label
-              htmlFor={word.word}
-              className={`inline-block text-gray-500 cursor-pointer px-3 py-2 rounded-full w-full`}
-            >
-              {word.word}
-            </label>
-          </div>
+            {word.word}
+          </button>
         ))}
-      </form>
+      </div>
       <div className='flex justify-center gap-4 mt-10'>
-        <button
-          className='btn'
-          disabled={selectedAnswerIndex === null}
-          onClick={onClick}
-        >
+        <button className='btn-prm' disabled={selectedAnswerIndex === null} onClick={onClick}>
           {action}
         </button>
       </div>

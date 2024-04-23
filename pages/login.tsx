@@ -73,7 +73,7 @@ const Login = () => {
         />
         <button
           type='submit'
-          className='btn'
+          className='btn-prm'
         >
           Login
         </button>
