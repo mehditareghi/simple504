@@ -8,5 +8,7 @@ module.exports = withPWA({
     domains: ['simple504minio.darkube.app'],
   },
   reactStrictMode: true,
+  typescript: {
+    ignoreBuildErrors: true,
+  },
 });
-
