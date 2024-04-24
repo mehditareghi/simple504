@@ -1,3 +1,4 @@
+import ProgressBar from '@/components/ui/Progress';
 import { API_URL } from '@/utils/constants';
 import { GetServerSidePropsContext } from 'next';
 import { useEffect, useState } from 'react';
@@ -123,12 +124,9 @@ const Learn = ({ firstQuestion, token }: { firstQuestion: Question; token: strin
 
   return (
     <div>
-      <h1 className='H1'>Learning New Words</h1>
-      <div
-        style={{ width: `${progress}%`, height: '20px', transition: 'width 0.5s ease-out' }}
-        className='rounded-xl bg-accent9'
-      ></div>
-      <h2 className='H2 text-center'>{data.question}</h2>
+      <h1 className='H1 hidden'>Learning New Words</h1>
+      <ProgressBar progress={progress} />
+      <h2 className='H2 text-center mt-10'>{data.question}</h2>
       <div className='flex flex-col space-y-4'>
         {data.words.map((word, index) => (
           <button

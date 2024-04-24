@@ -17,6 +17,8 @@
     "unocss:build": "unocss -c uno.config.ts -o styles/uno.css  \"./**/*.tsx\""
   },
   "dependencies": {
+    "@radix-ui/react-dropdown-menu": "^2.0.6",
+    "@radix-ui/react-progress": "^1.0.3",
     "@reduxjs/toolkit": "^2.2.1",
     "@types/js-cookie": "^3.0.6",
     "@unocss/cli": "^0.58.5",

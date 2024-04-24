@@ -131,7 +131,7 @@ export const shortcuts = [
     ac: 'items-center',
     'btn-disabled': '!c-slate9 !bg-slate5 !b-slate5',
     'btn-prm':
-      'b-1 fw-500 px-4 py-1 rd-lg b-accent10 bg-accent10 c-white hover:bg-accent9 hover:b-accent9 focus:bg-accent9 focus:b-accent9 active:bg-accent11 active:b-accent9 disabled:btn-disabled',
+      'b-1   fw-500 px-4 py-1 rd-lg !b-accent10 !bg-accent10 !c-white  hover:bg-accent9 hover:b-accent9 focus:bg-accent9 focus:b-accent9 active:bg-accent11 active:b-accent9 disabled:btn-disabled',
     btn: `p-2 px-4 rd-2 b-1 
     b-base6 hover:b-base7 active:b-base7
     bg-base2A hover:bg-base3A active:bg-base4A
