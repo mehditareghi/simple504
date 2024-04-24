@@ -52,17 +52,20 @@ const Courses = ({ courses }: { courses: Course[] }) => {
       <ul className='grid gap-4' style={{ gridTemplateColumns: 'repeat(auto-fill, minmax(min(15rem , 100%), 1fr ))' }}>
         {courses.map((course: any) => {
           return (
-            <li
-              key={course.id}
-              className='flex gap-4 border border-gray-300 p-4 rounded-lg bg-gray-50 hover:bg-orange-100 hover:border-orange-500 shadow'
-            >
-              <div className='flex justify-between p-4 w-full rounded-lg'>
-                <Link href={`/courses/${course.id}`} className=''>
-                  <h2 className='H2'>{course.name}</h2>
-                  <p>{course.units_count} Units</p>
-                  <p>{course.words_count} Words</p>
-                </Link>
-              </div>
+            <li key={course.id} className=''>
+              <Link
+                href={`/courses/${course.id}`}
+                className='block grid gap-4 border border-slate5 p-4 rounded-lg bg-slate3 hover:bg-accent5 hover:border-accent8 transition duration-100 ease-in-out transform hover:scale-102 shadow'
+                style={{ gridTemplateColumns: 'repeat(auto-fill, minmax(min(15rem, 100%), 1fr))' }}
+              >
+                <div className='flex justify-between p-4 w-full rounded-lg'>
+                  <div>
+                    <h2 className='H2'>{course.name}</h2>
+                    <p>{course.units_count} Units</p>
+                    <p>{course.words_count} Words</p>
+                  </div>
+                </div>
+              </Link>
             </li>
           );
         })}

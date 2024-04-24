@@ -13,7 +13,7 @@ type Unit = {
   description: string;
   created_at: string;
   updated_at: string;
-}
+};
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   const { courseId } = context.query;
@@ -42,7 +42,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
   };
 }
 
-const Units = ({ units }: {units: Unit[]}) => {
+const Units = ({ units }: { units: Unit[] }) => {
   const router = useRouter();
   const { courseId } = router.query;
 
@@ -52,17 +52,20 @@ const Units = ({ units }: {units: Unit[]}) => {
       <ul className='grid gap-4' style={{ gridTemplateColumns: 'repeat(auto-fill, minmax(min(15rem , 100%), 1fr ))' }}>
         {units.map((unit: any) => {
           return (
-            <li
-              key={unit.id}
-              className='flex gap-4 border border-gray-300 p-4 rounded-lg bg-gray-50 hover:bg-orange-100 hover:border-orange-500 shadow'
-            >
-              <div className='flex justify-between p-4 w-full rounded-lg'>
-                <Link href={`/courses/${courseId}/${unit.id}`}>
-                  <h2 className='H2'>{unit.name}</h2>
-                  <p>{unit.description}</p>
-                  <p>{unit.words_count} Words</p>
-                </Link>
-              </div>
+            <li key={unit.id}>
+              <Link
+                href={`/courses/${courseId}/${unit.id}`}
+                className='block grid gap-4 border border-slate5 p-4 rounded-lg bg-slate3 hover:bg-accent5 hover:border-accent8 transition duration-100 ease-in-out transform hover:scale-102 shadow'
+                style={{ gridTemplateColumns: 'repeat(auto-fill, minmax(min(15rem, 100%), 1fr))' }}
+              >
+                <div className='flex justify-between p-4 w-full rounded-lg'>
+                  <div>
+                    <h2 className='H2'>{unit.name}</h2>
+                    <p>{unit.description}</p>
+                    <p>{unit.words_count} Words</p>
+                  </div>
+                </div>
+              </Link>
             </li>
           );
         })}
