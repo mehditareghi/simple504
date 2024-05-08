@@ -5,7 +5,7 @@ const withPWA = require('next-pwa')({
 
 module.exports = withPWA({
   images: {
-    domains: ['simple504minio.darkube.app'],
+    domains: ['simple504minio.darkube.app', 'localhost'],
   },
   reactStrictMode: true,
   typescript: {

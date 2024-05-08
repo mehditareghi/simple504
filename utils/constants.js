@@ -1,1 +1,1 @@
-export const API_URL = 'https://simple504api.darkube.app/api';
+export const API_URL = 'http://192.168.31.58:8000/api';

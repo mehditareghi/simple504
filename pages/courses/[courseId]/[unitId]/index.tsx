@@ -3,20 +3,8 @@ import Image from 'next/image';
 import { PlayCircle } from 'phosphor-react';
 import { GetServerSidePropsContext } from 'next';
 import { useState } from 'react';
+import { Word } from '@/types';
 
-type Word = {
-  id: number;
-  word: string;
-  part_of_speech: string;
-  definition: string;
-  examples: string;
-  image: string;
-  adjective: string;
-  noun: string;
-  unit: number;
-  created_at: string;
-  updated_at: string;
-};
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   const { unitId } = context.query;
   const token = context.req.cookies.token; // assuming the token is stored in cookies
@@ -95,7 +83,7 @@ const Words = ({ words }: { words: Word[] }) => {
 
                 <p>
                   <strong className='c-accent11'>Part of Speech:</strong>{' '}
-                  {Array.isArray(word.partOfSpeech) ? word.partOfSpeech.join(', ') : word.partOfSpeech}
+                  {Array.isArray(word.part_of_speech) ? word.part_of_speech.join(', ') : word.part_of_speech}
                 </p>
                 {word.noun.length > 0 && (
                   <p>
