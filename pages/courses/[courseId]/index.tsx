@@ -3,6 +3,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { GetServerSidePropsContext } from 'next';
+import WithAuth from '@/components/WithAuth';
 
 type Unit = {
   id: number;
@@ -74,4 +75,4 @@ const Units = ({ units }: { units: Unit[] }) => {
   );
 };
 
-export default Units;
+export default WithAuth(Units);

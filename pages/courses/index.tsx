@@ -2,6 +2,7 @@ import { API_URL } from '@/utils/constants';
 import Image from 'next/image';
 import Link from 'next/link';
 import { GetServerSidePropsContext } from 'next';
+import WithAuth from '@/components/WithAuth';
 
 type Course = {
   id: number;
@@ -74,4 +75,4 @@ const Courses = ({ courses }: { courses: Course[] }) => {
   );
 };
 
-export default Courses;
+export default WithAuth(Courses);

@@ -7,10 +7,15 @@ import Card from '@/components/ui/questions/Card';
 import { Question } from '@/types';
 import Listening from '@/components/ui/questions/Listening';
 import Writing from '@/components/ui/questions/Writing';
+import WithAuth from '@/components/WithAuth';
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   const { unitId } = context.query;
-  const token = context.req.cookies.token;
+  let token: string | undefined | null = context.req.cookies.token;
+
+  if (typeof token === 'undefined') {
+    token = null;
+  }
 
   let firstQuestion: Question | null = null;
 
@@ -115,7 +120,7 @@ const Learn = ({ firstQuestion, token, unitId }: { firstQuestion: Question; toke
     setIsCorrect(null);
     setData(nextData);
     setAction('Submit');
-  }
+  };
 
   const onClick = async () => {
     if (action === 'Submit') {
@@ -167,4 +172,4 @@ const Learn = ({ firstQuestion, token, unitId }: { firstQuestion: Question; toke
   );
 };
 
-export default Learn;
+export default WithAuth(Learn);

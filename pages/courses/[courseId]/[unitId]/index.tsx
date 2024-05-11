@@ -4,6 +4,7 @@ import { PlayCircle } from 'phosphor-react';
 import { GetServerSidePropsContext } from 'next';
 import { useState } from 'react';
 import { Word } from '@/types';
+import WithAuth from '@/components/WithAuth';
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   const { unitId } = context.query;
@@ -150,4 +151,4 @@ const Words = ({ words }: { words: Word[] }) => {
   );
 };
 
-export default Words;
+export default WithAuth(Words);

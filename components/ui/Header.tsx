@@ -19,7 +19,7 @@ const Header = () => {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Token ${user && user.token}`, // replace with actual token
+        Authorization: `Token ${user && user.token}`,
       },
     });
 
