@@ -26,7 +26,8 @@
 # coding
 - learn page
   - ✅ show next question properly and with loading state (if needed)
-  - send answer to server for each question
+  - ✅ send answer to server for each question
   - show the result
   - ✅ add progress bar
+  - change the look of word of interest in the index page of words, in examples section...
 
