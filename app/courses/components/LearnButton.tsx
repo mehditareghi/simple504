@@ -27,7 +27,7 @@ export default function LearnButton({ userId, word, isLearned, setIsLearned }: {
 
   return (
     <Button variant='default' onClick={onClick} className='w-full'>
-      {isLearned ? 'I want to learn this again' : 'Learn'}
+      {isLearned ? 'I want to learn this again' : 'I learned this'}
     </Button>
   );
 }

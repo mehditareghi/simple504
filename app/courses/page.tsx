@@ -13,14 +13,14 @@ export default async function CoursesPage() {
     data: { user },
   } = await supabase.auth.getUser();
 
-  if (!user) {
+/*   if (!user) {
     return redirect('/login');
   }
 
   if (!user) {
     console.error('No user is logged in.');
     return; // Handle the case where no user is logged in
-  }
+  } */
 
   // Fetch courses
   const { data: courses, error: coursesError } = await supabase.from('courses').select('*');
@@ -33,14 +33,13 @@ export default async function CoursesPage() {
   const { data: userCourses, error: userCoursesError } = await supabase
     .from('user_courses')
     .select('*')
-    .eq('user_id', user.id);
+    .eq('user_id', user?.id);
 
   if (userCoursesError) {
     console.error('Error fetching user courses:', userCoursesError);
-    return; // Handle the error according to your app's flow
   }
 
-  const userCourseMap = new Map(userCourses.map((uc) => [uc.course_id, uc]));
+  const userCourseMap = userCourses && new Map(userCourses.map((uc) => [uc.course_id, uc]));
 
   return (
     <div className='flex-1 w-full flex flex-col gap-20 items-center'>
@@ -54,7 +53,7 @@ export default async function CoursesPage() {
       </div>
 
       {courses.map((course) => {
-        const userCourse = userCourseMap.get(course.id);
+        const userCourse = userCourseMap && userCourseMap.get(course.id);
         return (
           <Card key={course.id}>
             <CardHeader>
@@ -62,7 +61,7 @@ export default async function CoursesPage() {
               <CardDescription>{course.description}</CardDescription>
             </CardHeader>
             <CardContent>
-              {!!userCourse && (
+              {!!user && !!userCourse && (
                 <Progress
                   value={(userCourse.progress / course.word_count) * 100}
                   className={`${
@@ -76,7 +75,7 @@ export default async function CoursesPage() {
               )}
             </CardContent>
             <CardFooter>
-              <EnrollButton userId={user.id} courseId={course.id} />
+              <EnrollButton userId={user?.id} courseId={course.id} />
             </CardFooter>
           </Card>
         );

@@ -6,7 +6,7 @@ import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
 
-export default function EnrollButton({ userId, courseId }: { userId: string; courseId: string }) {
+export default function EnrollButton({ userId, courseId }: { userId: string | undefined; courseId: string }) {
   const supabase = createClient();
   const [isEnrolled, setIsEnrolled] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -60,9 +60,18 @@ export default function EnrollButton({ userId, courseId }: { userId: string; cou
         Go to Course
       </Link>
     </Button>
-  ) : (
+  ) : !!userId ? (
     <Button variant='default' onClick={onClick} className='w-full'>
       Enroll
+    </Button>
+  ) : (
+    <Button asChild variant='outline' className='w-full'>
+      <Link
+        href={`/login`}
+        className='py-2 px-3 flex rounded-md no-underline bg-btn-background hover:bg-btn-background-hover'
+      >
+        Log in to enroll
+      </Link>
     </Button>
   );
 }
