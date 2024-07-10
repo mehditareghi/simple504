@@ -14,7 +14,7 @@ export default function LearnButton({ userId, word, isLearned, setIsLearned }: {
       .update({
         user_id: userId,
         word_id: word.id,
-        completed: true,
+        completed: !isLearned,
       })
       .match({ user_id: userId, word_id: word.id });
     if (error) {
@@ -22,12 +22,12 @@ export default function LearnButton({ userId, word, isLearned, setIsLearned }: {
       return; // Handle the error according to your app's flow
     }
     toast(`Good job! You learned the word ${word.word}.`);
-    setIsLearned(true); // Update the state to reflect enrollment
+    setIsLearned(!isLearned); // Update the state to reflect enrollment
   };
 
   return (
-    <Button variant='default' onClick={onClick} className='w-full' disabled={isLearned}>
-      {isLearned ? 'Learned' : 'Learn'}
+    <Button variant='default' onClick={onClick} className='w-full'>
+      {isLearned ? 'I want to learn this again' : 'Learn'}
     </Button>
   );
 }

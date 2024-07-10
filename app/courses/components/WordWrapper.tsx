@@ -47,12 +47,11 @@ export default function WordWrapper({ userId, word }: { userId: string; word: an
             ))}
           </ul>
           <p className='font-bold'>Examples:</p>
-          <ul>
+          <ul className='mb-2'>
             {word.examples.map((ex: string) => (
               <li key={ex}>{ex}</li>
             ))}
           </ul>
-          <p className='mb-2'>{word.examples.join(', ')}</p>
           <LearnButton userId={userId} word={word} isLearned={isLearned} setIsLearned={setIsLearned} />
         </AccordionContent>
       </AccordionItem>
