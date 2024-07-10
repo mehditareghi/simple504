@@ -1,14 +1,4 @@
 /** @type {import('next').NextConfig} */
-const withPWA = require('next-pwa')({
-  dest: 'public',
-});
+const nextConfig = {};
 
-module.exports = withPWA({
-  images: {
-    domains: ['simple504minio.darkube.app', 'localhost'],
-  },
-  reactStrictMode: true,
-  typescript: {
-    ignoreBuildErrors: true,
-  },
-});
+module.exports = nextConfig;

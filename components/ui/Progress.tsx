@@ -1,23 +1,25 @@
-import * as Progress from '@radix-ui/react-progress';
+"use client"
 
-const ProgressBar = ({progress}:{progress: number}) => {
+import * as React from "react"
+import * as ProgressPrimitive from "@radix-ui/react-progress"
 
-  return (
-    <Progress.Root
-      className='relative overflow-hidden bg-slate3 rounded-xl w-full h-[25px]'
-      style={{
-        // Fix overflow clipping in Safari
-        // https://gist.github.com/domske/b66047671c780a238b51c51ffde8d3a0
-        transform: 'translateZ(0)',
-      }}
-      value={progress}
-    >
-      <Progress.Indicator
-        className='bg-accent9 w-full h-full transition-transform duration-[660ms] ease-[cubic-bezier(0.65, 0, 0.35, 1)]'
-        style={{ transform: `translateX(-${100 - progress}%)` }}
-      />
-    </Progress.Root>
-  );
-};
+import { cn } from "@/lib/utils"
 
-export default ProgressBar;
+const Progress = React.forwardRef<
+  React.ElementRef<typeof ProgressPrimitive.Root>,
+  React.ComponentPropsWithoutRef<typeof ProgressPrimitive.Root>
+>(({ className, value, ...props }, ref) => (
+  <ProgressPrimitive.Root
+    ref={ref}
+    className="relative h-2 w-full overflow-hidden rounded-full bg-slate-400/20 dark:bg-slate-50/20"
+    {...props}
+  >
+    <ProgressPrimitive.Indicator
+      className={cn("h-full w-full flex-1 bg-slate-900 transition-all dark:bg-slate-50", className)}
+      style={{ transform: `translateX(-${100 - (value || 0)}%)` }}
+    />
+  </ProgressPrimitive.Root>
+))
+Progress.displayName = ProgressPrimitive.Root.displayName
+
+export { Progress }
