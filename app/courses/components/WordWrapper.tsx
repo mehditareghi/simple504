@@ -37,7 +37,7 @@ export default function WordWrapper({ userId, word }: { userId: string; word: an
   }
 
   return (
-      <AccordionItem key={word.id} value={word.id}>
+      <AccordionItem key={word.id} value={word.id} className='w-full'>
         <AccordionTrigger className={`${isLearned && 'text-green-500'}`} >{word.word}</AccordionTrigger>
         <AccordionContent>
           <p className='font-bold'>Definition:</p>

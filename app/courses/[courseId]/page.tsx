@@ -54,16 +54,8 @@ export default async function CoursePage({ params }: { params: Params }) {
   const userUnitProgressMap = new Map(userUnitProgress.map((uup) => [uup.unit_id, uup]));
 
   return (
-    <div className='flex-1 w-full flex flex-col gap-20 items-center'>
-      <div className='w-full'>
-        <nav className='w-full flex justify-center border-b border-b-foreground/10 h-16'>
-          <div className='w-full max-w-4xl flex justify-between items-center p-3 text-sm'>
-            <DeployButton />
-            <AuthButton />
-          </div>
-        </nav>
-      </div>
-      <div className='flex w-11/12 gap-4 flex-wrap'>
+    <div className='flex-1 w-full flex flex-col gap-10 items-center'>
+      <div className='flex w-full gap-4 flex-wrap items-center justify-center'>
         {units.map((unit) => {
           const userProgress = (userUnitProgressMap.get(unit.id).progress / unit.word_count) * 100;
 
@@ -94,20 +86,6 @@ export default async function CoursePage({ params }: { params: Params }) {
           );
         })}
       </div>
-
-      <footer className='w-full border-t border-t-foreground/10 p-8 flex justify-center text-center text-xs'>
-        <p>
-          Powered by{' '}
-          <a
-            href='https://supabase.com/?utm_source=create-next-app&utm_medium=template&utm_term=nextjs'
-            target='_blank'
-            className='font-bold hover:underline'
-            rel='noreferrer'
-          >
-            Supabase
-          </a>
-        </p>
-      </footer>
     </div>
   );
 }
