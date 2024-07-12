@@ -33,27 +33,27 @@ export default function WordWrapper({ userId, word }: { userId: string; word: an
   }, [supabase, userId, word.id]);
 
   if (loading) {
-    return <div>Loading...</div>;
+    return <div className='w-full h-11 bg-slate-200 animate-pulse rounded-md mb-2'></div>;
   }
 
   return (
-      <AccordionItem key={word.id} value={word.id} className='w-full'>
-        <AccordionTrigger className={`${isLearned && 'text-green-500'}`} >{word.word}</AccordionTrigger>
-        <AccordionContent>
-          <p className='font-bold'>Definition:</p>
-          <ul>
-            {word.definitions.map((def: string) => (
-              <li key={def}>{def}</li>
-            ))}
-          </ul>
-          <p className='font-bold'>Examples:</p>
-          <ul className='mb-2'>
-            {word.examples.map((ex: string) => (
-              <li key={ex}>{ex}</li>
-            ))}
-          </ul>
-          <LearnButton userId={userId} word={word} isLearned={isLearned} setIsLearned={setIsLearned} />
-        </AccordionContent>
-      </AccordionItem>
+    <AccordionItem key={word.id} value={word.id} className='w-full'>
+      <AccordionTrigger className={`${isLearned && 'text-green-500'}`}>{word.word}</AccordionTrigger>
+      <AccordionContent>
+        <p className='font-bold'>Definition:</p>
+        <ul>
+          {word.definitions.map((def: string) => (
+            <li key={def}>{def}</li>
+          ))}
+        </ul>
+        <p className='font-bold'>Examples:</p>
+        <ul className='mb-2'>
+          {word.examples.map((ex: string) => (
+            <li key={ex}>{ex}</li>
+          ))}
+        </ul>
+        <LearnButton userId={userId} word={word} isLearned={isLearned} setIsLearned={setIsLearned} />
+      </AccordionContent>
+    </AccordionItem>
   );
 }

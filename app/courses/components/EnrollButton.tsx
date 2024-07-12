@@ -48,7 +48,7 @@ export default function EnrollButton({ userId, courseId }: { userId: string | un
   };
 
   if (loading) {
-    return <div>Loading...</div>;
+    return <div className='w-full h-9 bg-slate-200 animate-pulse rounded-md'></div>;
   }
 
   return isEnrolled ? (
