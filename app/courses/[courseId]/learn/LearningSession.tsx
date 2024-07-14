@@ -25,7 +25,7 @@ interface SessionData {
   words: Word[];
 }
 
-const fetchSession = async (userId: string): Promise<SessionData> => {
+const fetchSession = async (userId: string, courseId: string): Promise<SessionData> => {
   const response = await fetch('/api/create-session', {
     method: 'POST',
     headers: {
@@ -143,15 +143,15 @@ export default function LearningSession({ courseId, userId }: LearningSessionPro
       case 1:
         return <Step1 word={word} onNext={handleNextStep} />;
       case 2:
-        return <Step2 word={word} onAnswer={handleAnswer} />;
+        return <Step2 word={word} onAnswer={handleAnswer} courseId={courseId} />;
       case 3:
-        return <Step3 word={word} onAnswer={handleAnswer} />;
+        return <Step3 word={word} onAnswer={handleAnswer} courseId={courseId} />;
       case 4:
-        return <Step4 word={word} onAnswer={handleAnswer} />;
+        return <Step4 word={word} onAnswer={handleAnswer} courseId={courseId} />;
       case 5:
-        return <Step5 word={word} onAnswer={handleAnswer} />;
+        return <Step5 word={word} onAnswer={handleAnswer} courseId={courseId} />;
       case 6:
-        return <Step6 word={word} onAnswer={handleAnswer} />;
+        return <Step6 word={word} onAnswer={handleAnswer} courseId={courseId} />;
       case 7:
         return <Step7 word={word} onAnswer={handleAnswer} />;
       case 8:

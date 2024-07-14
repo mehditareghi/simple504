@@ -1,6 +1,11 @@
 'use client';
-import { useEffect, useState } from 'react';
+
+import { FC } from 'react';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+import { SpeakerLoudIcon } from '@radix-ui/react-icons';
 import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition';
+import { keyframes } from '@stitches/react';
 
 interface Step7Props {
   word: {
@@ -12,8 +17,13 @@ interface Step7Props {
   onAnswer: (correct: boolean) => void;
 }
 
-const Step7: React.FC<Step7Props> = ({ word, onAnswer }) => {
-  const { transcript, listening, resetTranscript, browserSupportsSpeechRecognition } = useSpeechRecognition();
+const pulse = keyframes({
+  '0%, 100%': { transform: 'scale(1)', opacity: 1 },
+  '50%': { transform: 'scale(1.2)', opacity: 0.8 },
+});
+
+const Step7: FC<Step7Props> = ({ word, onAnswer }) => {
+  const { transcript, listening, browserSupportsSpeechRecognition } = useSpeechRecognition();
 
   if (!browserSupportsSpeechRecognition) {
     return <span>Browser does not support speech recognition.</span>;
@@ -27,27 +37,41 @@ const Step7: React.FC<Step7Props> = ({ word, onAnswer }) => {
     }
   };
 
-  return (
-    <div>
-      <p className='mb-2 text-xl font-bold'>Microphone: {listening ? 'Listening to your voice..' : 'off'}</p>
+  const handleMouseDown = () => {
+    SpeechRecognition.startListening();
+  };
 
-      <h2>Pronounce the word: {word.word}</h2>
-      <div className='flex gap-3'>
-        <button className='btn btn-primary btn-sm' onClick={SpeechRecognition.startListening}>
-          Start
-        </button>
-        <button className='btn btn-secondary btn-sm' onClick={SpeechRecognition.stopListening}>
-          Stop
-        </button>
-        <button className='btn btn-accent btn-sm' onClick={resetTranscript}>
-          Reset
-        </button>
-      </div>
-      <p>Spoken word: {transcript.toLowerCase().trim()}</p>
-      <button onClick={handleSubmit} className='btn btn-success btn-sm mt-4'>
-        Submit
-      </button>
-    </div>
+  const handleMouseUp = () => {
+    SpeechRecognition.stopListening();
+  };
+
+  return (
+    <Card className="p-6 bg-white rounded-lg shadow-lg space-y-4">
+      <CardHeader className="mb-4">
+        <CardTitle className="text-2xl font-bold text-gray-800">
+          Pronounce the word: {word.word}
+        </CardTitle>
+        <CardDescription>Hold the button below and pronounce the word clearly.</CardDescription>
+      </CardHeader>
+      <CardContent>
+        <div className="flex gap-3 items-center">
+          <Button
+            onMouseDown={handleMouseDown}
+            onMouseUp={handleMouseUp}
+            onMouseLeave={handleMouseUp}
+            className={`flex items-center gap-2 ${listening ? 'animate-pulse' : ''}`}
+            style={listening ? { animation: `${pulse} 1s infinite` } : {}}
+          >
+            <SpeakerLoudIcon className="w-5 h-5" />
+            {listening ? 'Listening...' : 'Hold to Pronounce'}
+          </Button>
+        </div>
+        <p className="mt-4">Spoken word: <span className="font-bold">{transcript.toLowerCase().trim()}</span></p>
+        <Button onClick={handleSubmit} className="w-full mt-4">
+          Submit
+        </Button>
+      </CardContent>
+    </Card>
   );
 };
 
