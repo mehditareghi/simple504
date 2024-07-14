@@ -4,7 +4,6 @@ import { Toaster } from '@/components/ui/sonner';
 import AuthButton from '@/components/AuthButton';
 import Link from 'next/link';
 
-
 const defaultUrl = process.env.VERCEL_URL
   ? `https://${process.env.VERCEL_URL}`
   : "http://localhost:3000";

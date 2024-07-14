@@ -4,6 +4,7 @@ import { createClient } from '@/utils/supabase/client';
 import { useEffect, useState } from 'react';
 import { AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import LearnButton from './LearnButton';
+import Link from 'next/link';
 
 export default function WordWrapper({ userId, word }: { userId: string; word: any }) {
   const supabase = createClient();
@@ -52,6 +53,7 @@ export default function WordWrapper({ userId, word }: { userId: string; word: an
             <li key={ex}>{ex}</li>
           ))}
         </ul>
+        <Link href={`/courses/${word.course_id}/units/${word.unit_id}/learn/${word.id}`}>Go for learn</Link>
         <LearnButton userId={userId} word={word} isLearned={isLearned} setIsLearned={setIsLearned} />
       </AccordionContent>
     </AccordionItem>
