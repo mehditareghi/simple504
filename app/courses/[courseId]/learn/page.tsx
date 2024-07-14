@@ -1,4 +1,3 @@
-// app/courses/[courseId]/learn/page.tsx
 import { createClient } from '@/utils/supabase/server';
 import LearningSession from './LearningSession';
 import { redirect } from 'next/navigation';

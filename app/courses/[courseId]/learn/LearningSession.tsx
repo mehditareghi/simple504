@@ -8,11 +8,9 @@ import Step3 from './StepComponents/Step3';
 import Step4 from './StepComponents/Step4';
 import Step5 from './StepComponents/Step5';
 import Step6 from './StepComponents/Step6';
-import Step7 from './StepComponents/Step7'; // New Step7 for pronunciation
-import Step8 from './StepComponents/Step8'; // Renamed from Step7
-import Step9 from './StepComponents/Step9'; // New Step9 for typing the word
-// _app.tsx or LearningSession.tsx
-import 'regenerator-runtime/runtime';
+import Step7 from './StepComponents/Step7';
+import Step8 from './StepComponents/Step8';
+import Step9 from './StepComponents/Step9';
 
 interface Word {
   id: string;
