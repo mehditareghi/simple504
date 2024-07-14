@@ -52,7 +52,7 @@ export default function EnrollButton({ userId, courseId }: { userId: string | un
   }
 
   return isEnrolled ? (
-    <Button asChild variant='outline' className='w-full'>
+    <Button asChild className='w-full'>
       <Link
         href={`/courses/${courseId}`}
         className='py-2 px-3 flex rounded-md no-underline bg-btn-background hover:bg-btn-background-hover'

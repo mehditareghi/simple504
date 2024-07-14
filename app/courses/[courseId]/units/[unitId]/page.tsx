@@ -1,14 +1,14 @@
 import { createClient } from '@/utils/supabase/server';
-import { Accordion } from '@/components/ui/accordion';
-import WordWrapper from '@/app/courses/components/WordWrapper';
 import { redirect } from 'next/navigation';
+import WordWrapper from '@/app/courses/components/WordWrapper';
 
 interface Params {
+  courseId: string;
   unitId: string;
 }
 
 export default async function CoursePage({ params }: { params: Params }) {
-  const { unitId } = params;
+  const { courseId, unitId } = params;
   const supabase = createClient();
 
   const {
@@ -27,17 +27,13 @@ export default async function CoursePage({ params }: { params: Params }) {
   const { data, error } = await supabase.from('words').select('*').match({ unit_id: unitId });
 
   if (error) {
-    console.error('Error fetching courses:', error);
+    console.error('Error fetching words:', error);
     return; // Handle the error according to your app's flow
   }
 
   return (
-    <div className='flex-1 w-full flex flex-col gap-10 items-start'>
-      <Accordion type='multiple' className='w-full'>
-        {data.map((word) => (
-          <WordWrapper key={word.id} userId={user.id} word={word} />
-        ))}
-      </Accordion>
+    <div className="flex-1 w-full flex flex-col gap-6 items-center p-6">
+      <WordWrapper words={data} />
     </div>
   );
 }

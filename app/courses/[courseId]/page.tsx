@@ -1,7 +1,4 @@
-import DeployButton from '@/components/DeployButton';
-import AuthButton from '@/components/AuthButton';
 import { createClient } from '@/utils/supabase/server';
-import Header from '@/components/Header';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
@@ -22,11 +19,6 @@ export default async function CoursePage({ params }: { params: Params }) {
 
   if (!user) {
     return redirect('/login');
-  }
-
-  if (!user) {
-    console.error('No user is logged in.');
-    return; // Handle the case where no user is logged in
   }
 
   // Fetch units for the course
@@ -54,31 +46,47 @@ export default async function CoursePage({ params }: { params: Params }) {
   const userUnitProgressMap = new Map(userUnitProgress.map((uup) => [uup.unit_id, uup]));
 
   return (
-    <div className='flex-1 w-full flex flex-col gap-10 items-center'>
-      <div className='flex w-full gap-4 flex-wrap items-center justify-center'>
+    <div className='container mx-auto py-10'>
+      <Card className='mb-8'>
+        <CardHeader>
+          <CardTitle className='text-2xl font-bold'>Course Overview</CardTitle>
+          <CardDescription className='text-gray-600'>
+            Start a learning session to continue your progress in this course.
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <Button asChild className='w-full'>
+            <Link href={`/courses/${courseId}/learn`} className='px-4 py-2'>
+              Start Learning Session
+            </Link>
+          </Button>
+        </CardContent>
+      </Card>
+      <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6'>
         {units.map((unit) => {
-          const userProgress = (userUnitProgressMap.get(unit.id).progress / unit.word_count) * 100;
+          const userProgress = userUnitProgressMap.get(unit.id)
+            ? (userUnitProgressMap.get(unit.id).progress / unit.word_count) * 100
+            : 0;
 
           return (
-            <Card key={unit.id} className={`w-[240px]`}>
+            <Card key={unit.id} className='hover:shadow-lg transition-shadow duration-200'>
               <CardHeader>
-                <CardTitle>{unit.title}</CardTitle>
-                <CardDescription>{unit.word_count} words</CardDescription>
+                <CardTitle className='text-xl font-bold'>{unit.title}</CardTitle>
+                <CardDescription className='text-gray-600'>{unit.word_count} words</CardDescription>
               </CardHeader>
               <CardContent>
-                <p>{unit.content}</p>
+                <p className='text-sm text-gray-500 mb-4'>{unit.content}</p>
                 <Progress
                   value={userProgress}
-                  className={`${userProgress === 100 ? 'bg-green-500' : userProgress === 0 ? '' : 'bg-orange-500'}`}
+                  className={`${
+                    userProgress === 100 ? 'bg-green-500' : userProgress > 0 ? 'bg-orange-500' : ''
+                  }`}
                 />
               </CardContent>
               <CardFooter>
                 <Button asChild className='w-full'>
-                  <Link
-                    href={`/courses/${courseId}/units/${unit.id}`}
-                    className='py-2 px-3 flex rounded-md no-underline bg-btn-background hover:bg-btn-background-hover'
-                  >
-                    {userProgress === 100 ? 'Review' : userProgress === 0 ? 'Start' : 'Continue'}
+                  <Link href={`/courses/${courseId}/units/${unit.id}`} className='py-2 px-3 flex rounded-md no-underline'>
+                    View Unit Details
                   </Link>
                 </Button>
               </CardFooter>

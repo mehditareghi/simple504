@@ -31,7 +31,7 @@ const fetchSession = async (userId: string, courseId: string): Promise<SessionDa
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({ userId, maxWords: 10, newWordsCount: 3 }),
+    body: JSON.stringify({ userId, courseId,  maxWords: 10, newWordsCount: 3 }),
   });
 
   if (!response.ok) {
@@ -90,7 +90,7 @@ export default function LearningSession({ courseId, userId }: LearningSessionPro
     const initializeSession = async () => {
       try {
         console.log('Initializing session for user:', userId);
-        const sessionData = await fetchSession(userId);
+        const sessionData = await fetchSession(userId, courseId);
         setSessionId(sessionData.sessionId);
         setWords(sessionData.words || []);
       } catch (error) {
@@ -170,7 +170,7 @@ export default function LearningSession({ courseId, userId }: LearningSessionPro
 
   return (
     <div>
-      <h1>Learning Session</h1>
+      <h1 className='text-3xl font-bold text-gray-800 mb-4 text-center'>Learning Session</h1>
       {renderCurrentStep()}
     </div>
   );
