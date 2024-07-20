@@ -46,7 +46,7 @@ export default async function LearnPage({ params }: Params) {
   }
 
   const firstWordResponse = await fetch(
-    process.env.URl + "/api/words/get-next-word",
+    process.env.URL + "/api/words/get-next-word",
     {
       method: "POST",
       headers: {
