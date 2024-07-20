@@ -1,6 +1,6 @@
 "use client";
 
-import { FC, useState } from "react";
+import { FC, useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -42,23 +42,28 @@ const pulse = keyframes({
 const Step7: FC<Step7Props> = ({ word, onNext, setCorrectAnswers }) => {
   const supabase = createClient();
   const [submitted, setSubmitted] = useState(false);
+  const [isCorrect, setIsCorrect] = useState<boolean | null>(null);
 
   const { transcript, listening, browserSupportsSpeechRecognition } =
     useSpeechRecognition();
 
-  if (!browserSupportsSpeechRecognition) {
-    return <span>Browser does not support speech recognition.</span>;
-  }
+  useEffect(() => {
+    if (!browserSupportsSpeechRecognition) {
+      console.warn("Browser does not support speech recognition.");
+    }
+  }, [browserSupportsSpeechRecognition]);
 
   const onSubmit = async () => {
+    const correct =
+      transcript.toLowerCase().trim() === word.words.word.toLowerCase();
     let updatePattern = {};
-    if (transcript.toLowerCase().trim() === word.words.word.toLowerCase()) {
+    if (correct) {
       updatePattern = { step: 8 };
     } else {
       updatePattern = { show_first_step: true };
     }
 
-    const { data, error } = await supabase
+    const { error } = await supabase
       .from("user_word_progress")
       .update(updatePattern)
       .match({ word_id: word.word_id, user_id: word.user_id });
@@ -66,11 +71,8 @@ const Step7: FC<Step7Props> = ({ word, onNext, setCorrectAnswers }) => {
       console.error("Error updating user_word_progress", error);
     }
     setSubmitted(true);
-    setCorrectAnswers((prev) =>
-      transcript.toLowerCase().trim() === word.words.word.toLowerCase()
-        ? prev + 1
-        : prev - 1,
-    );
+    setIsCorrect(correct);
+    setCorrectAnswers((prev) => (correct ? prev + 1 : prev - 1));
   };
 
   const handleMouseDown = () => {
@@ -97,7 +99,9 @@ const Step7: FC<Step7Props> = ({ word, onNext, setCorrectAnswers }) => {
             onMouseDown={handleMouseDown}
             onMouseUp={handleMouseUp}
             onMouseLeave={handleMouseUp}
-            className={`flex items-center gap-2 ${listening ? "animate-pulse" : ""}`}
+            className={`flex items-center gap-2 ${
+              listening ? "animate-pulse" : ""
+            }`}
             style={listening ? { animation: `${pulse} 1s infinite` } : {}}
           >
             <SpeakerLoudIcon className="w-5 h-5" />
@@ -106,10 +110,18 @@ const Step7: FC<Step7Props> = ({ word, onNext, setCorrectAnswers }) => {
         </div>
         <p className="mt-4">
           Spoken word:{" "}
-          <span className="font-bold">{transcript.toLowerCase().trim()}</span>
+          <span
+            className={`font-bold ${isCorrect === false ? "text-red-500" : "text-green-500"}`}
+          >
+            {transcript.toLowerCase().trim()}
+          </span>
         </p>
         <Separator className="my-4" />
-        <Button onClick={submitted ? onNext : onSubmit} className="w-full">
+        <Button
+          onClick={submitted ? onNext : onSubmit}
+          className="w-full"
+          disabled={listening || !transcript}
+        >
           {submitted ? "Next" : "Submit"}
         </Button>
       </CardContent>

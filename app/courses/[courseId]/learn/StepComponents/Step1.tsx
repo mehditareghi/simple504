@@ -36,7 +36,6 @@ const pulse = keyframes({
 
 const Step1: FC<Step1Props> = ({ word, onNext, setCorrectAnswers }) => {
   const supabase = createClient();
-  console.log(word);
   const [isSpeaking, setIsSpeaking] = useState(false);
   const [submitted, setSubmitted] = useState(false);
 
@@ -56,7 +55,7 @@ const Step1: FC<Step1Props> = ({ word, onNext, setCorrectAnswers }) => {
     } else {
       updatePattern = { step: 2 };
     }
-    const { data, error } = await supabase
+    const { error } = await supabase
       .from("user_word_progress")
       .update(updatePattern)
       .match({ word_id: word.word_id, user_id: word.user_id });
@@ -72,7 +71,9 @@ const Step1: FC<Step1Props> = ({ word, onNext, setCorrectAnswers }) => {
       <CardHeader>
         <CardTitle>
           <div className="flex items-center space-x-2">
-            <span>{word.words.word}</span>
+            <span className={submitted ? "text-green-500" : ""}>
+              {word.words.word}
+            </span>
             <button
               onClick={handlePlayAudio}
               className="text-blue-500 hover:text-blue-700 focus:outline-none"

@@ -40,6 +40,7 @@ const Step4: FC<Step4Props> = ({
   const [selectedOption, setSelectedOption] = useState<string | null>(null);
   const [options, setOptions] = useState<string[]>([]);
   const [loading, setLoading] = useState(true);
+  const [correctOption, setCorrectOption] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchOtherWords = async () => {
@@ -71,13 +72,16 @@ const Step4: FC<Step4Props> = ({
 
   const onSubmit = async () => {
     let updatePattern = {};
-    if (selectedOption === word.words.word) {
+    const isCorrect = selectedOption === word.words.word;
+    if (isCorrect) {
       updatePattern = { step: 5 };
+      setCorrectOption(selectedOption);
     } else {
       updatePattern = { show_first_step: true };
+      setCorrectOption(word.words.word);
     }
 
-    const { data, error } = await supabase
+    const { error } = await supabase
       .from("user_word_progress")
       .update(updatePattern)
       .match({ word_id: word.word_id, user_id: word.user_id });
@@ -85,9 +89,7 @@ const Step4: FC<Step4Props> = ({
       console.error("Error updating user_word_progress", error);
     }
     setSubmitted(true);
-    setCorrectAnswers((prev) =>
-      selectedOption === word.words.word ? prev + 1 : prev - 1,
-    );
+    setCorrectAnswers((prev) => (isCorrect ? prev + 1 : prev - 1));
   };
 
   const selectExample = (examples: string[], word: string): string => {
@@ -135,14 +137,27 @@ const Step4: FC<Step4Props> = ({
               key={index}
               variant="outline"
               onClick={() => setSelectedOption(option)}
-              className="w-full text-left py-2 px-4 rounded-md border border-gray-300 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              className={`w-full text-left py-2 px-4 rounded-md border border-gray-300 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-indigo-500 ${
+                selectedOption === option ? "bg-gray-100" : ""
+              } ${
+                submitted &&
+                (option === correctOption
+                  ? "bg-green-100"
+                  : selectedOption === option
+                    ? "bg-red-100"
+                    : "")
+              }`}
             >
               {option}
             </Button>
           ))}
         </div>
         <Separator className="my-4" />
-        <Button onClick={submitted ? onNext : onSubmit} className="w-full">
+        <Button
+          onClick={submitted ? onNext : onSubmit}
+          className="w-full"
+          disabled={!selectedOption}
+        >
           {submitted ? "Next" : "Submit"}
         </Button>
       </CardContent>

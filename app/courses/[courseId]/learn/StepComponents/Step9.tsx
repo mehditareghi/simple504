@@ -3,7 +3,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -52,6 +51,7 @@ interface Step9Props {
 const Step9: React.FC<Step9Props> = ({ word, onNext, setCorrectAnswers }) => {
   const supabase = createClient();
   const [submitted, setSubmitted] = useState(false);
+  const [isCorrect, setIsCorrect] = useState<boolean | null>(null);
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -64,26 +64,23 @@ const Step9: React.FC<Step9Props> = ({ word, onNext, setCorrectAnswers }) => {
       onNext();
       return;
     }
-    let updatePattern = {};
-    if (data.typedWord.trim().toLowerCase() === word.words.word.toLowerCase()) {
-      updatePattern = { step: 10, completed: true };
-    } else {
-      updatePattern = { show_first_step: true };
-    }
+    const correct =
+      data.typedWord.trim().toLowerCase() === word.words.word.toLowerCase();
+    let updatePattern = correct
+      ? { step: 10, completed: true }
+      : { show_first_step: true };
 
     const { error } = await supabase
       .from("user_word_progress")
       .update(updatePattern)
       .match({ word_id: word.word_id, user_id: word.user_id });
+
     if (error) {
       console.error("Error updating user_word_progress", error);
     }
     setSubmitted(true);
-    setCorrectAnswers((prev) =>
-      data.typedWord.trim().toLowerCase() === word.words.word.toLowerCase()
-        ? prev + 1
-        : prev - 1,
-    );
+    setIsCorrect(correct);
+    setCorrectAnswers((prev) => (correct ? prev + 1 : prev - 1));
   };
 
   return (
@@ -104,7 +101,17 @@ const Step9: React.FC<Step9Props> = ({ word, onNext, setCorrectAnswers }) => {
                 <FormItem>
                   <FormLabel>Type the word</FormLabel>
                   <FormControl>
-                    <Input placeholder="Type the word" {...field} />
+                    <Input
+                      placeholder="Type the word"
+                      {...field}
+                      className={
+                        isCorrect === false
+                          ? "border-red-500"
+                          : isCorrect === true
+                            ? "border-green-500"
+                            : ""
+                      }
+                    />
                   </FormControl>
                   <FormDescription>
                     Type the word that matches the given definitions
@@ -117,7 +124,7 @@ const Step9: React.FC<Step9Props> = ({ word, onNext, setCorrectAnswers }) => {
             <Button
               type="submit"
               className="w-full"
-              onClick={form.handleSubmit(onSubmit)}
+              disabled={!form.watch("typedWord")}
             >
               {submitted ? "Next" : "Submit"}
             </Button>

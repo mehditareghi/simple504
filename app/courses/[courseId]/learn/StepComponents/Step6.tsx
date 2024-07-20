@@ -48,6 +48,7 @@ const Step6: FC<Step6Props> = ({
   const [options, setOptions] = useState<string[]>([]);
   const [loading, setLoading] = useState(true);
   const [isSpeaking, setIsSpeaking] = useState(false);
+  const [correctOption, setCorrectOption] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchOtherDefinitions = async () => {
@@ -64,23 +65,19 @@ const Step6: FC<Step6Props> = ({
           return;
         }
 
-        // Extract definitions from the fetched words
         const otherDefinitions = data.map((w: { definitions: string[] }) =>
           w.definitions.join("; "),
         );
 
-        // Select three random definitions from the other words
         const incorrectDefinitions = otherDefinitions.sort(
           () => 0.5 - Math.random(),
         );
 
-        // Combine the correct definition with the incorrect ones
         const allOptions = [
           ...incorrectDefinitions,
           word.words.definitions.join("; "),
         ];
 
-        // Shuffle the options
         setOptions(allOptions.sort(() => 0.5 - Math.random()));
       } catch (error) {
         console.error("Error fetching other definitions:", error);
@@ -94,13 +91,16 @@ const Step6: FC<Step6Props> = ({
 
   const onSubmit = async () => {
     let updatePattern = {};
-    if (selectedOption === word.words.definitions.join("; ")) {
+    const isCorrect = selectedOption === word.words.definitions.join("; ");
+    if (isCorrect) {
       updatePattern = { step: 7 };
+      setCorrectOption(selectedOption);
     } else {
       updatePattern = { show_first_step: true };
+      setCorrectOption(word.words.definitions.join("; "));
     }
 
-    const { data, error } = await supabase
+    const { error } = await supabase
       .from("user_word_progress")
       .update(updatePattern)
       .match({ word_id: word.word_id, user_id: word.user_id });
@@ -108,19 +108,13 @@ const Step6: FC<Step6Props> = ({
       console.error("Error updating user_word_progress", error);
     }
     setSubmitted(true);
-    setCorrectAnswers((prev) =>
-      selectedOption === word.words.definitions.join("; ")
-        ? prev + 1
-        : prev - 1,
-    );
+    setCorrectAnswers((prev) => (isCorrect ? prev + 1 : prev - 1));
   };
 
   const handlePlayAudio = () => {
     const utterance = new SpeechSynthesisUtterance(word.words.word);
     setIsSpeaking(true);
-    utterance.onend = () => {
-      setIsSpeaking(false);
-    };
+    utterance.onend = () => setIsSpeaking(false);
     speechSynthesis.speak(utterance);
   };
 
@@ -170,14 +164,27 @@ const Step6: FC<Step6Props> = ({
               key={index}
               variant="outline"
               onClick={() => setSelectedOption(option)}
-              className="w-full text-left py-2 px-4 rounded-md border border-gray-300 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              className={`w-full text-left py-2 px-4 rounded-md border border-gray-300 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-indigo-500 ${
+                selectedOption === option ? "bg-gray-100" : ""
+              } ${
+                submitted &&
+                (option === correctOption
+                  ? "bg-green-100"
+                  : selectedOption === option
+                    ? "bg-red-100"
+                    : "")
+              }`}
             >
               {option}
             </Button>
           ))}
         </div>
         <Separator className="my-4" />
-        <Button onClick={submitted ? onNext : onSubmit} className="w-full">
+        <Button
+          onClick={submitted ? onNext : onSubmit}
+          className="w-full"
+          disabled={!selectedOption}
+        >
           {submitted ? "Next" : "Submit"}
         </Button>
       </CardContent>
