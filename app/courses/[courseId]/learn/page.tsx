@@ -26,16 +26,13 @@ export default async function LearnPage({ params }: Params) {
   }
 
   // Fetch possible session length
-  const response = await fetch(
-    "http://localhost:3000/api/possible-session-length",
-    {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ userId: user.id, courseId }),
+  const response = await fetch(process.env.URL + "/api/possible-session-length", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
     },
-  );
+    body: JSON.stringify({ userId: user.id, courseId }),
+  });
 
   const { sessionLength } = await response.json();
 

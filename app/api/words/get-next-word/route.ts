@@ -106,7 +106,7 @@ export async function POST(req: NextRequest) {
         step,
         show_first_step,
         completed,
-        words:words(id, order, word, definitions, examples, units:units(id, course_id, order))
+        words!inner(id, order, word, definitions, examples, units!inner(id, course_id, order))
       `,
       )
       .eq("user_id", userId)
@@ -121,7 +121,7 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const nextWord = getNextWord(userWords as Word[]);
+    const nextWord = getNextWord(userWords);
 
     return NextResponse.json(nextWord);
   } catch (error) {

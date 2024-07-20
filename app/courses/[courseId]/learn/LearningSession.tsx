@@ -13,7 +13,7 @@ import Step8 from "./StepComponents/Step8";
 import Step9 from "./StepComponents/Step9";
 
 const getNextWord = async (userId: string, courseId: string) => {
-  const response = await fetch("/api/words/get-next-word", {
+  const response = await fetch(process.env.URL + "/api/words/get-next-word", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
