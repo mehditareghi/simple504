@@ -55,7 +55,7 @@ const Step6: FC<Step6Props> = ({
       try {
         const { data, error } = await supabase
           .from("random_words")
-          .select(`word, definitions, course_id`)
+          .select(`word, definitions`)
           .eq("course_id", courseId)
           .neq("word", word.words.word)
           .limit(3);

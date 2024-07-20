@@ -11,10 +11,8 @@ export async function POST(req: Request) {
       .from("user_word_progress")
       .select(
         `
-        user_id,
         step,
         show_first_step,
-        completed,
         words!inner(units!inner(course_id))
       `,
       )

@@ -21,7 +21,6 @@ interface Word {
 
 const getNextWord = (userWords: Word[]): Word | null => {
   if (userWords.length === 0) {
-    console.log("No words available.");
     return null;
   }
 
@@ -35,7 +34,6 @@ const getNextWord = (userWords: Word[]): Word | null => {
   // Check if there is a word with show_first_step true and return it
   const showFirstStepWord = sortedWords.find((word) => word.show_first_step);
   if (showFirstStepWord) {
-    console.log("Returning word with show_first_step true");
     return showFirstStepWord;
   }
 
@@ -46,7 +44,6 @@ const getNextWord = (userWords: Word[]): Word | null => {
 
   if (allStepsSame) {
     // Return the record with the lowest order
-    console.log("All steps are the same, returning the first word");
     return sortedWords[0];
   }
 
@@ -58,9 +55,6 @@ const getNextWord = (userWords: Word[]): Word | null => {
   if (step4Word && !step2or3Word) {
     const step1Words = sortedWords.filter((word) => word.step === 1);
     if (step1Words.length > 0) {
-      console.log(
-        "Step 4 found and no step 2 or 3, returning the first step 1 word",
-      );
       return step1Words[0];
     }
   }
@@ -71,10 +65,6 @@ const getNextWord = (userWords: Word[]): Word | null => {
     for (let j = i + 1; j < sortedWords.length; j++) {
       const nextWord = sortedWords[j];
       if (currentWord.step + 1 - nextWord.step <= 3) {
-        console.log(
-          "Found a suitable word based on step difference condition:",
-          currentWord,
-        );
         return currentWord;
       }
     }
@@ -83,12 +73,10 @@ const getNextWord = (userWords: Word[]): Word | null => {
   // If no word meets the condition, return the first word with step 1
   const step1Word = sortedWords.find((word) => word.step === 1);
   if (step1Word) {
-    console.log("Returning the first step 1 word");
     return step1Word;
   }
 
   // If no step 1 word exists, return the first word in sorted order
-  console.log("Returning the first word in sorted order");
   return sortedWords[0];
 };
 
@@ -105,7 +93,6 @@ export async function POST(req: NextRequest) {
         user_id,
         step,
         show_first_step,
-        completed,
         words!inner(id, order, word, definitions, examples, units!inner(id, course_id, order))
       `,
       )

@@ -1,10 +1,14 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import { Card, CardHeader, CardTitle, CardContent, CardFooter } from '@/components/ui/card';
-import { SpeakerLoudIcon, EyeOpenIcon, EyeClosedIcon } from '@radix-ui/react-icons';
-import { Button } from '@/components/ui/button';
-import { Separator } from '@/components/ui/separator';
+import { useState } from "react";
+import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
+import {
+  SpeakerLoudIcon,
+  EyeOpenIcon,
+  EyeClosedIcon,
+} from "@radix-ui/react-icons";
+import { Button } from "@/components/ui/button";
+import { Separator } from "@/components/ui/separator";
 
 interface Word {
   id: string;
@@ -32,7 +36,9 @@ export default function WordWrapper({ words }: WordWrapperProps) {
           <Card key={word.id} className="border rounded-lg shadow-sm">
             <CardHeader className="flex justify-between items-center bg-gray-50 p-4">
               <div className="flex items-center space-x-2">
-                <CardTitle className="text-xl font-semibold">{word.word}</CardTitle>
+                <CardTitle className="text-xl font-semibold">
+                  {word.word}
+                </CardTitle>
                 <button
                   onClick={(e) => {
                     e.stopPropagation();
@@ -46,9 +52,15 @@ export default function WordWrapper({ words }: WordWrapperProps) {
               <Button
                 variant="ghost"
                 size="icon"
-                onClick={() => setSelectedWordId(word.id === selectedWordId ? null : word.id)}
+                onClick={() =>
+                  setSelectedWordId(word.id === selectedWordId ? null : word.id)
+                }
               >
-                {word.id === selectedWordId ? <EyeClosedIcon className="w-5 h-5" /> : <EyeOpenIcon className="w-5 h-5" />}
+                {word.id === selectedWordId ? (
+                  <EyeClosedIcon className="w-5 h-5" />
+                ) : (
+                  <EyeOpenIcon className="w-5 h-5" />
+                )}
               </Button>
             </CardHeader>
             {word.id === selectedWordId && (
