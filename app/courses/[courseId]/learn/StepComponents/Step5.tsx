@@ -54,9 +54,9 @@ const Step5: FC<Step5Props> = ({
     const fetchOtherWords = async () => {
       try {
         const { data, error } = await supabase
-          .from("words")
-          .select("word, units!inner(course_id)")
-          .filter("units.course_id", "eq", courseId)
+          .from("random_words")
+          .select("word, course_id")
+          .eq("course_id", courseId)
           .neq("word", word.words.word)
           .limit(3);
 
