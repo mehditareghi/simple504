@@ -1,30 +1,50 @@
-import { FC, useEffect, useState } from 'react';
-import { createClient } from '@/utils/supabase/client';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
-import { SpeakerLoudIcon } from '@radix-ui/react-icons';
-import { Separator } from '@/components/ui/separator';
-import { keyframes } from '@stitches/react';
+import { FC, useEffect, useState } from "react";
+import { createClient } from "@/utils/supabase/client";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+} from "@/components/ui/card";
+import { SpeakerLoudIcon } from "@radix-ui/react-icons";
+import { Separator } from "@/components/ui/separator";
+import { keyframes } from "@stitches/react";
 
 interface Step3Props {
   word: {
-    id: string;
-    word: string;
-    definitions: string[];
-    examples: string[];
+    word_id: string;
+    user_id: string;
+    step: number;
+    show_first_step: boolean;
+    completed: boolean;
+    words: {
+      word: string;
+      definitions: string[];
+      examples: string[];
+    };
   };
-  onAnswer: (correct: boolean) => void;
+  onNext: () => void;
   courseId: string;
+  setCorrectAnswers: (correctAnswers: number) => void;
 }
 
 const supabase = createClient();
 
 const pulse = keyframes({
-  '0%, 100%': { transform: 'scale(1)', opacity: 1 },
-  '50%': { transform: 'scale(1.2)', opacity: 0.8 },
+  "0%, 100%": { transform: "scale(1)", opacity: 1 },
+  "50%": { transform: "scale(1.2)", opacity: 0.8 },
 });
 
-const Step3: FC<Step3Props> = ({ word, onAnswer, courseId }) => {
+const Step3: FC<Step3Props> = ({
+  word,
+  onNext,
+  courseId,
+  setCorrectAnswers,
+}) => {
+  const [submitted, setSubmitted] = useState(false);
+  const [selectedOption, setSelectedOption] = useState<string | null>(null);
   const [options, setOptions] = useState<string[]>([]);
   const [loading, setLoading] = useState(true);
   const [isSpeaking, setIsSpeaking] = useState(false);
@@ -33,22 +53,22 @@ const Step3: FC<Step3Props> = ({ word, onAnswer, courseId }) => {
     const fetchOtherWords = async () => {
       try {
         const { data, error } = await supabase
-          .from('words')
-          .select('word, units!inner(course_id)')
-          .filter('units.course_id', 'eq', courseId)
-          .neq('word', word.word)
+          .from("words")
+          .select("word, units!inner(course_id)")
+          .filter("units.course_id", "eq", courseId)
+          .neq("word", word.words.word)
           .limit(3);
 
         if (error) {
-          console.error('Error fetching other words:', error);
+          console.error("Error fetching other words:", error);
           return;
         }
 
         const otherWords = data.map((w: { word: string }) => w.word);
-        const allOptions = [...otherWords, word.word];
+        const allOptions = [...otherWords, word.words.word];
         setOptions(allOptions.sort(() => 0.5 - Math.random()));
       } catch (error) {
-        console.error('Error fetching other words:', error);
+        console.error("Error fetching other words:", error);
       } finally {
         setLoading(false);
       }
@@ -57,12 +77,31 @@ const Step3: FC<Step3Props> = ({ word, onAnswer, courseId }) => {
     fetchOtherWords();
   }, [courseId, word]);
 
-  const handleAnswer = (selectedOption: string) => {
-    onAnswer(selectedOption === word.word);
+  const onSubmit = async () => {
+    let updatePattern = {};
+    if (selectedOption === word.words.word) {
+      updatePattern = { step: 4 };
+    } else {
+      updatePattern = { show_first_step: true };
+    }
+
+    const { data, error } = await supabase
+      .from("user_word_progress")
+      .update(updatePattern)
+      .match({ word_id: word.word_id, user_id: word.user_id });
+    if (error) {
+      console.error("Error updating user_word_progress", error);
+    }
+    setSubmitted(true);
+    setCorrectAnswers((prev) =>
+      selectedOption === word.words.word ? prev + 1 : prev - 1,
+    );
   };
 
   const handlePlayAudio = () => {
-    const utterance = new SpeechSynthesisUtterance(word.definitions.join('; '));
+    const utterance = new SpeechSynthesisUtterance(
+      word.words.definitions.join("; "),
+    );
     setIsSpeaking(true);
     utterance.onend = () => setIsSpeaking(false);
     speechSynthesis.speak(utterance);
@@ -87,10 +126,13 @@ const Step3: FC<Step3Props> = ({ word, onAnswer, courseId }) => {
     <Card className="p-6 bg-white rounded-lg shadow-lg space-y-4">
       <CardHeader className="mb-4">
         <CardTitle className="text-2xl font-bold text-gray-800 flex items-center space-x-2">
-          <span>{word.definitions.join('; ')}</span>
-          <button onClick={handlePlayAudio} className="text-blue-500 hover:text-blue-700 focus:outline-none">
+          <span>{word.words.definitions.join("; ")}</span>
+          <button
+            onClick={handlePlayAudio}
+            className="text-blue-500 hover:text-blue-700 focus:outline-none"
+          >
             <SpeakerLoudIcon
-              className={`cursor-pointer ${isSpeaking ? 'animate-pulse' : ''}`}
+              className={`w-5 h-5 ${isSpeaking ? "animate-pulse" : ""}`}
               style={isSpeaking ? { animation: `${pulse} 1s infinite` } : {}}
             />
           </button>
@@ -105,13 +147,19 @@ const Step3: FC<Step3Props> = ({ word, onAnswer, courseId }) => {
             <Button
               key={index}
               variant="outline"
-              onClick={() => handleAnswer(option)}
-              className="w-full text-left py-2 px-4 rounded-md border border-gray-300 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              onClick={() => setSelectedOption(option)}
+              className={`w-full text-left py-2 px-4 rounded-md border border-gray-300 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-indigo-500 ${
+                selectedOption === option ? "bg-gray-100" : ""
+              }`}
             >
               {option}
             </Button>
           ))}
         </div>
+        <Separator className="my-4" />
+        <Button onClick={submitted ? onNext : onSubmit} className="w-full">
+          {submitted ? "Next" : "Submit"}
+        </Button>
       </CardContent>
     </Card>
   );

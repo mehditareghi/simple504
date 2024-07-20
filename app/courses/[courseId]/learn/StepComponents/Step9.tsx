@@ -1,10 +1,10 @@
-'use client';
+"use client";
 
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useForm } from 'react-hook-form';
-import { z } from 'zod';
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
 
-import { Button } from '@/components/ui/button';
+import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
@@ -13,41 +13,77 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from '@/components/ui/form';
-import { Input } from '@/components/ui/input';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+} from "@/components/ui/card";
+import { createClient } from "@/utils/supabase/client";
+import { useState } from "react";
+import { Separator } from "@/components/ui/separator";
 
 const formSchema = z.object({
   typedWord: z.string().min(1, {
-    message: 'Please type the word.',
+    message: "Please type the word.",
   }),
 });
 
 interface Step9Props {
   word: {
-    id: string;
-    word: string;
-    definitions: string[];
-    examples: string[];
+    word_id: string;
+    user_id: string;
+    step: number;
+    show_first_step: boolean;
+    completed: boolean;
+    words: {
+      word: string;
+      definitions: string[];
+      examples: string[];
+    };
   };
-  onAnswer: (correct: boolean) => void;
+  onNext: () => void;
+  setCorrectAnswers: (correctAnswers: number) => void;
 }
 
-const Step9: React.FC<Step9Props> = ({ word, onAnswer }) => {
+const Step9: React.FC<Step9Props> = ({ word, onNext, setCorrectAnswers }) => {
+  const supabase = createClient();
+  const [submitted, setSubmitted] = useState(false);
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      typedWord: '',
+      typedWord: "",
     },
   });
 
-  const onSubmit = (data: z.infer<typeof formSchema>) => {
-    if (data.typedWord.trim().toLowerCase() === word.word.toLowerCase()) {
-      onAnswer(true);
-    } else {
-      onAnswer(false);
+  const onSubmit = async (data: z.infer<typeof formSchema>) => {
+    if (submitted) {
+      onNext();
+      return;
     }
-    form.reset();
+    let updatePattern = {};
+    if (data.typedWord.trim().toLowerCase() === word.words.word.toLowerCase()) {
+      updatePattern = { step: 10, completed: true };
+    } else {
+      updatePattern = { show_first_step: true };
+    }
+
+    const { error } = await supabase
+      .from("user_word_progress")
+      .update(updatePattern)
+      .match({ word_id: word.word_id, user_id: word.user_id });
+    if (error) {
+      console.error("Error updating user_word_progress", error);
+    }
+    setSubmitted(true);
+    setCorrectAnswers((prev) =>
+      data.typedWord.trim().toLowerCase() === word.words.word.toLowerCase()
+        ? prev + 1
+        : prev - 1,
+    );
   };
 
   return (
@@ -56,7 +92,7 @@ const Step9: React.FC<Step9Props> = ({ word, onAnswer }) => {
         <CardTitle className="text-2xl font-bold text-gray-800">
           Type the word for the given definitions:
         </CardTitle>
-        <CardDescription>{word.definitions.join('; ')}</CardDescription>
+        <CardDescription>{word.words.definitions.join("; ")}</CardDescription>
       </CardHeader>
       <CardContent>
         <Form {...form}>
@@ -70,13 +106,20 @@ const Step9: React.FC<Step9Props> = ({ word, onAnswer }) => {
                   <FormControl>
                     <Input placeholder="Type the word" {...field} />
                   </FormControl>
-                  <FormDescription>Type the word that matches the given definitions</FormDescription>
+                  <FormDescription>
+                    Type the word that matches the given definitions
+                  </FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
             />
-            <Button type="submit" className="w-full">
-              Submit
+            <Separator className="my-4" />
+            <Button
+              type="submit"
+              className="w-full"
+              onClick={form.handleSubmit(onSubmit)}
+            >
+              {submitted ? "Next" : "Submit"}
             </Button>
           </form>
         </Form>

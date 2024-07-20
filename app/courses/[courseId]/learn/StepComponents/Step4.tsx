@@ -1,22 +1,43 @@
-import { FC, useEffect, useState } from 'react';
-import { createClient } from '@/utils/supabase/client';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+import { FC, useEffect, useState } from "react";
+import { createClient } from "@/utils/supabase/client";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+} from "@/components/ui/card";
+import { Separator } from "@/components/ui/separator";
 
 interface Step4Props {
   word: {
-    id: string;
-    word: string;
-    definitions: string[];
-    examples: string[];
+    word_id: string;
+    user_id: string;
+    step: number;
+    show_first_step: boolean;
+    completed: boolean;
+    words: {
+      word: string;
+      definitions: string[];
+      examples: string[];
+    };
   };
-  onAnswer: (correct: boolean) => void;
+  onNext: () => void;
   courseId: string;
+  setCorrectAnswers: (correctAnswers: number) => void;
 }
 
 const supabase = createClient();
 
-const Step4: FC<Step4Props> = ({ word, onAnswer, courseId }) => {
+const Step4: FC<Step4Props> = ({
+  word,
+  onNext,
+  courseId,
+  setCorrectAnswers,
+}) => {
+  const [submitted, setSubmitted] = useState(false);
+  const [selectedOption, setSelectedOption] = useState<string | null>(null);
   const [options, setOptions] = useState<string[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -24,22 +45,22 @@ const Step4: FC<Step4Props> = ({ word, onAnswer, courseId }) => {
     const fetchOtherWords = async () => {
       try {
         const { data, error } = await supabase
-          .from('words')
-          .select('word, units!inner(course_id)')
-          .filter('units.course_id', 'eq', courseId)
-          .neq('word', word.word)
+          .from("words")
+          .select("word, units!inner(course_id)")
+          .filter("units.course_id", "eq", courseId)
+          .neq("word", word.words.word)
           .limit(3);
 
         if (error) {
-          console.error('Error fetching other words:', error);
+          console.error("Error fetching other words:", error);
           return;
         }
 
         const otherWords = data.map((w: { word: string }) => w.word);
-        const allOptions = [...otherWords, word.word];
+        const allOptions = [...otherWords, word.words.word];
         setOptions(allOptions.sort(() => 0.5 - Math.random()));
       } catch (error) {
-        console.error('Error fetching other words:', error);
+        console.error("Error fetching other words:", error);
       } finally {
         setLoading(false);
       }
@@ -48,21 +69,38 @@ const Step4: FC<Step4Props> = ({ word, onAnswer, courseId }) => {
     fetchOtherWords();
   }, [courseId, word]);
 
+  const onSubmit = async () => {
+    let updatePattern = {};
+    if (selectedOption === word.words.word) {
+      updatePattern = { step: 5 };
+    } else {
+      updatePattern = { show_first_step: true };
+    }
+
+    const { data, error } = await supabase
+      .from("user_word_progress")
+      .update(updatePattern)
+      .match({ word_id: word.word_id, user_id: word.user_id });
+    if (error) {
+      console.error("Error updating user_word_progress", error);
+    }
+    setSubmitted(true);
+    setCorrectAnswers((prev) =>
+      selectedOption === word.words.word ? prev + 1 : prev - 1,
+    );
+  };
+
   const selectExample = (examples: string[], word: string): string => {
     for (let example of examples) {
-      const regex = new RegExp(`\\b${word}\\b`, 'i');
+      const regex = new RegExp(`\\b${word}\\b`, "i");
       if (regex.test(example)) {
-        return example.replace(word, '______');
+        return example.replace(word, "______");
       }
     }
-    return examples[0].replace(word, '______');
+    return examples[0].replace(word, "______");
   };
 
-  const example = selectExample(word.examples, word.word);
-
-  const handleAnswer = (selectedOption: string) => {
-    onAnswer(selectedOption === word.word);
-  };
+  const example = selectExample(word.words.examples, word.words.word);
 
   if (loading) {
     return (
@@ -85,7 +123,9 @@ const Step4: FC<Step4Props> = ({ word, onAnswer, courseId }) => {
         <CardTitle className="text-2xl font-bold text-gray-800 flex items-center space-x-2">
           <span>Complete the Sentence</span>
         </CardTitle>
-        <CardDescription>Select the correct word to complete the sentence.</CardDescription>
+        <CardDescription>
+          Select the correct word to complete the sentence.
+        </CardDescription>
       </CardHeader>
       <CardContent>
         <div className="space-y-4">
@@ -94,13 +134,17 @@ const Step4: FC<Step4Props> = ({ word, onAnswer, courseId }) => {
             <Button
               key={index}
               variant="outline"
-              onClick={() => handleAnswer(option)}
+              onClick={() => setSelectedOption(option)}
               className="w-full text-left py-2 px-4 rounded-md border border-gray-300 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-indigo-500"
             >
               {option}
             </Button>
           ))}
         </div>
+        <Separator className="my-4" />
+        <Button onClick={submitted ? onNext : onSubmit} className="w-full">
+          {submitted ? "Next" : "Submit"}
+        </Button>
       </CardContent>
     </Card>
   );

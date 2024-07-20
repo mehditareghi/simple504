@@ -1,176 +1,204 @@
-'use client';
+"use client";
 
-import { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
-import Step1 from './StepComponents/Step1';
-import Step2 from './StepComponents/Step2';
-import Step3 from './StepComponents/Step3';
-import Step4 from './StepComponents/Step4';
-import Step5 from './StepComponents/Step5';
-import Step6 from './StepComponents/Step6';
-import Step7 from './StepComponents/Step7';
-import Step8 from './StepComponents/Step8';
-import Step9 from './StepComponents/Step9';
+import { useEffect, useState } from "react";
+import { Progress } from "@/components/ui/progress";
+import Step1 from "./StepComponents/Step1";
+import Step2 from "./StepComponents/Step2";
+import Step3 from "./StepComponents/Step3";
+import Step4 from "./StepComponents/Step4";
+import Step5 from "./StepComponents/Step5";
+import Step6 from "./StepComponents/Step6";
+import Step7 from "./StepComponents/Step7";
+import Step8 from "./StepComponents/Step8";
+import Step9 from "./StepComponents/Step9";
 
-interface Word {
-  id: string;
-  word: string;
-  definitions: string[];
-  examples: string[];
-}
-
-interface SessionData {
-  sessionId: string;
-  targetCorrectAnswers: number;
-  words: Word[];
-}
-
-const fetchSession = async (userId: string, courseId: string): Promise<SessionData> => {
-  const response = await fetch('/api/create-session', {
-    method: 'POST',
+const getNextWord = async (userId: string, courseId: string) => {
+  const response = await fetch("/api/words/get-next-word", {
+    method: "POST",
     headers: {
-      'Content-Type': 'application/json',
+      "Content-Type": "application/json",
     },
-    body: JSON.stringify({ userId, courseId,  maxWords: 10, newWordsCount: 3 }),
+    body: JSON.stringify({ userId, courseId }),
   });
 
   if (!response.ok) {
-    throw new Error('Failed to create session');
-  }
-
-  return response.json();
-};
-
-const progressSession = async (sessionId: string, wordId: string, correct: boolean, step: number) => {
-  const response = await fetch('/api/progress-session', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({ sessionId, wordId, correct, step }),
-  });
-
-  if (!response.ok) {
-    throw new Error('Failed to progress session');
-  }
-
-  return response.json();
-};
-
-const completeSession = async (sessionId: string, userId: string) => {
-  const response = await fetch('/api/complete-session', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({ sessionId, userId }),
-  });
-
-  if (!response.ok) {
-    throw new Error('Failed to complete session');
+    throw new Error("Failed to get the next word");
   }
 
   return response.json();
 };
 
 interface LearningSessionProps {
-  courseId: string;
   userId: string;
+  courseId: string;
+  sessionLength: number;
+  firstWord: any;
 }
 
-export default function LearningSession({ courseId, userId }: LearningSessionProps) {
-  const router = useRouter();
-  const [sessionId, setSessionId] = useState<string | null>(null);
-  const [words, setWords] = useState<Word[]>([]);
-  const [currentWordIndex, setCurrentWordIndex] = useState(0);
-  const [currentStep, setCurrentStep] = useState(1);
-  const [loading, setLoading] = useState(true);
+export default function LearningSession({
+  userId,
+  courseId,
+  sessionLength,
+  firstWord,
+}: LearningSessionProps) {
+  const [progress, setProgress] = useState(0);
+  const [correctAnswers, setCorrectAnswers] = useState(0);
+  const [currentWord, setCurrentWord] = useState(firstWord);
+  const [currentStep, setCurrentStep] = useState(
+    firstWord.show_first_step ? 1 : firstWord.step,
+  );
+  const [showResult, setShowResult] = useState(false);
 
   useEffect(() => {
-    const initializeSession = async () => {
-      try {
-        console.log('Initializing session for user:', userId);
-        const sessionData = await fetchSession(userId, courseId);
-        setSessionId(sessionData.sessionId);
-        setWords(sessionData.words || []);
-      } catch (error) {
-        console.error('Failed to initialize session:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    initializeSession();
-  }, [userId]);
+    setProgress((correctAnswers / sessionLength) * 100);
+  }, [correctAnswers]);
 
   const handleNextStep = async () => {
-    if (!sessionId || !words[currentWordIndex]) return;
-
-    const wordId = words[currentWordIndex].id;
-    const nextStep = currentStep + 1;
-
-    await progressSession(sessionId, wordId, true, nextStep);
-    setCurrentStep(nextStep);
-  };
-
-  const handleAnswer = async (correct: boolean) => {
-    console.log('Handling answer:', { correct, sessionId, wordId: words[currentWordIndex]?.id });
-    if (!sessionId || !words[currentWordIndex]) return;
-
-    const wordId = words[currentWordIndex].id;
-    await progressSession(sessionId, wordId, correct, currentStep);
-    if (correct) {
-      if (currentStep < 9) {
-        setCurrentStep(currentStep + 1);
-      } else {
-        if (currentWordIndex < words.length - 1) {
-          setCurrentWordIndex(currentWordIndex + 1);
-          setCurrentStep(1);
-        } else {
-          await completeSession(sessionId, userId);
-          router.push(`/courses/${courseId}`);
-        }
-      }
-    } else {
-      setCurrentStep(1);
+    try {
+      const nextWordData = await getNextWord(userId, courseId);
+      setCurrentWord(nextWordData);
+      setCurrentStep(nextWordData.show_first_step ? 1 : nextWordData.step);
+    } catch (error) {
+      console.error("Failed to fetch the next word:", error);
     }
   };
 
+  useEffect(() => {
+    if (progress === 100) {
+      setTimeout(() => setShowResult(true), 1500);
+    }
+  }, [progress]);
+
   const renderCurrentStep = () => {
-    const word = words[currentWordIndex];
-    console.log(`Rendering step ${currentStep} for word: ${word.word}`);
+    if (!currentWord) return null;
+    console.log("currentWord", currentWord);
+
+    console.log(
+      `Rendering step ${currentStep} for word: ${currentWord.words.word}`,
+    );
+
+    // Check if show_first_step is true and render step 1
+    if (currentWord.show_first_step) {
+      return (
+        <Step1
+          word={currentWord}
+          onNext={handleNextStep}
+          setCorrectAnswers={setCorrectAnswers}
+        />
+      );
+    }
+
     switch (currentStep) {
       case 1:
-        return <Step1 word={word} onNext={handleNextStep} />;
+        return (
+          <Step1
+            word={currentWord}
+            onNext={handleNextStep}
+            setCorrectAnswers={setCorrectAnswers}
+          />
+        );
       case 2:
-        return <Step2 word={word} onAnswer={handleAnswer} courseId={courseId} />;
+        return (
+          <Step2
+            word={currentWord}
+            onNext={handleNextStep}
+            courseId={courseId}
+            setCorrectAnswers={setCorrectAnswers}
+          />
+        );
       case 3:
-        return <Step3 word={word} onAnswer={handleAnswer} courseId={courseId} />;
+        return (
+          <Step3
+            word={currentWord}
+            onNext={handleNextStep}
+            courseId={courseId}
+            setCorrectAnswers={setCorrectAnswers}
+          />
+        );
       case 4:
-        return <Step4 word={word} onAnswer={handleAnswer} courseId={courseId} />;
+        return (
+          <Step4
+            word={currentWord}
+            onNext={handleNextStep}
+            courseId={courseId}
+            setCorrectAnswers={setCorrectAnswers}
+          />
+        );
       case 5:
-        return <Step5 word={word} onAnswer={handleAnswer} courseId={courseId} />;
+        return (
+          <Step5
+            word={currentWord}
+            onNext={handleNextStep}
+            courseId={courseId}
+            setCorrectAnswers={setCorrectAnswers}
+          />
+        );
       case 6:
-        return <Step6 word={word} onAnswer={handleAnswer} courseId={courseId} />;
+        return (
+          <Step6
+            word={currentWord}
+            onNext={handleNextStep}
+            courseId={courseId}
+            setCorrectAnswers={setCorrectAnswers}
+          />
+        );
       case 7:
-        return <Step7 word={word} onAnswer={handleAnswer} />;
+        return (
+          <Step7
+            word={currentWord}
+            onNext={handleNextStep}
+            setCorrectAnswers={setCorrectAnswers}
+          />
+        );
       case 8:
-        return <Step8 word={word} onAnswer={handleAnswer} />;
+        return (
+          <Step8
+            word={currentWord}
+            onNext={handleNextStep}
+            setCorrectAnswers={setCorrectAnswers}
+          />
+        );
       case 9:
-        return <Step9 word={word} onAnswer={handleAnswer} />;
+        return (
+          <Step9
+            word={currentWord}
+            onNext={handleNextStep}
+            setCorrectAnswers={setCorrectAnswers}
+          />
+        );
       // Add other cases for different steps
       default:
         return null;
     }
   };
 
-  if (loading) return <div>Loading...</div>;
+  if (!currentWord) return <div>No words available for this session</div>;
 
-  if (!words.length) return <div>No words available for this session</div>;
+  if (showResult)
+    return (
+      <div>
+        <p>
+          Well done! You did it. Now you can go to course page and see your
+          overall progress.
+        </p>
+      </div>
+    );
 
   return (
     <div>
-      <h1 className='text-3xl font-bold text-gray-800 mb-4 text-center'>Learning Session</h1>
+      <h1 className="text-3xl font-bold text-gray-800 mb-4 text-center">
+        Learning Session
+      </h1>
+      <Progress
+        value={progress}
+        className={`${
+          progress === 100
+            ? "bg-green-500"
+            : progress > 0
+              ? "bg-orange-500"
+              : ""
+        }`}
+      />
       {renderCurrentStep()}
     </div>
   );

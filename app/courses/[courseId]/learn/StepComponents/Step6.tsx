@@ -1,29 +1,50 @@
-import { FC, useEffect, useState } from 'react';
-import { createClient } from '@/utils/supabase/client';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
-import { SpeakerLoudIcon } from '@radix-ui/react-icons';
-import { keyframes } from '@stitches/react';
+import { FC, useEffect, useState } from "react";
+import { createClient } from "@/utils/supabase/client";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+} from "@/components/ui/card";
+import { SpeakerLoudIcon } from "@radix-ui/react-icons";
+import { keyframes } from "@stitches/react";
+import { Separator } from "@/components/ui/separator";
 
 interface Step6Props {
   word: {
-    id: string;
-    word: string;
-    definitions: string[];
-    examples: string[];
+    word_id: string;
+    user_id: string;
+    step: number;
+    show_first_step: boolean;
+    completed: boolean;
+    words: {
+      word: string;
+      definitions: string[];
+      examples: string[];
+    };
   };
-  onAnswer: (correct: boolean) => void;
+  onNext: () => void;
   courseId: string;
+  setCorrectAnswers: (correctAnswers: number) => void;
 }
 
 const supabase = createClient();
 
 const pulse = keyframes({
-  '0%, 100%': { transform: 'scale(1)', opacity: 1 },
-  '50%': { transform: 'scale(1.2)', opacity: 0.8 },
+  "0%, 100%": { transform: "scale(1)", opacity: 1 },
+  "50%": { transform: "scale(1.2)", opacity: 0.8 },
 });
 
-const Step6: FC<Step6Props> = ({ word, onAnswer, courseId }) => {
+const Step6: FC<Step6Props> = ({
+  word,
+  onNext,
+  courseId,
+  setCorrectAnswers,
+}) => {
+  const [submitted, setSubmitted] = useState(false);
+  const [selectedOption, setSelectedOption] = useState<string | null>(null);
   const [options, setOptions] = useState<string[]>([]);
   const [loading, setLoading] = useState(true);
   const [isSpeaking, setIsSpeaking] = useState(false);
@@ -32,30 +53,37 @@ const Step6: FC<Step6Props> = ({ word, onAnswer, courseId }) => {
     const fetchOtherDefinitions = async () => {
       try {
         const { data, error } = await supabase
-          .from('words')
+          .from("words")
           .select(`word, definitions, units!inner(course_id)`)
-          .filter('units.course_id', 'eq', courseId)
-          .neq('word', word.word)
+          .filter("units.course_id", "eq", courseId)
+          .neq("word", word.words.word)
           .limit(3);
 
         if (error) {
-          console.error('Error fetching other definitions:', error);
+          console.error("Error fetching other definitions:", error);
           return;
         }
 
         // Extract definitions from the fetched words
-        const otherDefinitions = data.map((w: { definitions: string[] }) => w.definitions.join('; '));
+        const otherDefinitions = data.map((w: { definitions: string[] }) =>
+          w.definitions.join("; "),
+        );
 
         // Select three random definitions from the other words
-        const incorrectDefinitions = otherDefinitions.sort(() => 0.5 - Math.random());
+        const incorrectDefinitions = otherDefinitions.sort(
+          () => 0.5 - Math.random(),
+        );
 
         // Combine the correct definition with the incorrect ones
-        const allOptions = [...incorrectDefinitions, word.definitions.join('; ')];
+        const allOptions = [
+          ...incorrectDefinitions,
+          word.words.definitions.join("; "),
+        ];
 
         // Shuffle the options
         setOptions(allOptions.sort(() => 0.5 - Math.random()));
       } catch (error) {
-        console.error('Error fetching other definitions:', error);
+        console.error("Error fetching other definitions:", error);
       } finally {
         setLoading(false);
       }
@@ -64,17 +92,36 @@ const Step6: FC<Step6Props> = ({ word, onAnswer, courseId }) => {
     fetchOtherDefinitions();
   }, [courseId, word]);
 
+  const onSubmit = async () => {
+    let updatePattern = {};
+    if (selectedOption === word.words.definitions.join("; ")) {
+      updatePattern = { step: 7 };
+    } else {
+      updatePattern = { show_first_step: true };
+    }
+
+    const { data, error } = await supabase
+      .from("user_word_progress")
+      .update(updatePattern)
+      .match({ word_id: word.word_id, user_id: word.user_id });
+    if (error) {
+      console.error("Error updating user_word_progress", error);
+    }
+    setSubmitted(true);
+    setCorrectAnswers((prev) =>
+      selectedOption === word.words.definitions.join("; ")
+        ? prev + 1
+        : prev - 1,
+    );
+  };
+
   const handlePlayAudio = () => {
-    const utterance = new SpeechSynthesisUtterance(word.word);
+    const utterance = new SpeechSynthesisUtterance(word.words.word);
     setIsSpeaking(true);
     utterance.onend = () => {
       setIsSpeaking(false);
     };
     speechSynthesis.speak(utterance);
-  };
-
-  const handleAnswer = (selectedOption: string) => {
-    onAnswer(selectedOption === word.definitions.join('; '));
   };
 
   if (loading) {
@@ -96,9 +143,14 @@ const Step6: FC<Step6Props> = ({ word, onAnswer, courseId }) => {
     <Card className="p-6 bg-white rounded-lg shadow-lg space-y-4">
       <CardHeader className="mb-4">
         <CardTitle className="text-2xl font-bold text-gray-800 flex items-center space-x-2">
-          <span>Listen to the Pronunciation and Select the Correct Definition</span>
+          <span>
+            Listen to the Pronunciation and Select the Correct Definition
+          </span>
         </CardTitle>
-        <CardDescription>Click the speaker icon below to hear the word, then select the correct definition from the options.</CardDescription>
+        <CardDescription>
+          Click the speaker icon below to hear the word, then select the correct
+          definition from the options.
+        </CardDescription>
       </CardHeader>
       <CardContent>
         <div className="flex items-center justify-center mb-4">
@@ -107,7 +159,7 @@ const Step6: FC<Step6Props> = ({ word, onAnswer, courseId }) => {
             className="text-blue-500 hover:text-blue-700 focus:outline-none"
           >
             <SpeakerLoudIcon
-              className={`w-8 h-8 ${isSpeaking ? 'animate-pulse' : ''}`}
+              className={`w-8 h-8 ${isSpeaking ? "animate-pulse" : ""}`}
               style={isSpeaking ? { animation: `${pulse} 1s infinite` } : {}}
             />
           </button>
@@ -117,13 +169,17 @@ const Step6: FC<Step6Props> = ({ word, onAnswer, courseId }) => {
             <Button
               key={index}
               variant="outline"
-              onClick={() => handleAnswer(option)}
+              onClick={() => setSelectedOption(option)}
               className="w-full text-left py-2 px-4 rounded-md border border-gray-300 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-indigo-500"
             >
               {option}
             </Button>
           ))}
         </div>
+        <Separator className="my-4" />
+        <Button onClick={submitted ? onNext : onSubmit} className="w-full">
+          {submitted ? "Next" : "Submit"}
+        </Button>
       </CardContent>
     </Card>
   );

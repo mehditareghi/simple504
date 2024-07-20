@@ -1,10 +1,9 @@
-'use client';
+"use client";
 
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useForm } from 'react-hook-form';
-import { z } from 'zod';
-
-import { Button } from '@/components/ui/button';
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
@@ -13,46 +12,64 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from '@/components/ui/form';
-import { Input } from '@/components/ui/input';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
-import { SpeakerLoudIcon } from '@radix-ui/react-icons';
-import { keyframes } from '@stitches/react';
-import { useState } from 'react';
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+} from "@/components/ui/card";
+import { SpeakerLoudIcon } from "@radix-ui/react-icons";
+import { keyframes } from "@stitches/react";
+import { useState } from "react";
+import { createClient } from "@/utils/supabase/client";
+import { Separator } from "@/components/ui/separator";
 
 const formSchema = z.object({
   typedWord: z.string().min(1, {
-    message: 'Please type the word.',
+    message: "Please type the word.",
   }),
 });
 
 interface Step8Props {
   word: {
-    id: string;
-    word: string;
-    definitions: string[];
-    examples: string[];
+    word_id: string;
+    user_id: string;
+    step: number;
+    show_first_step: boolean;
+    completed: boolean;
+    words: {
+      word: string;
+      definitions: string[];
+      examples: string[];
+    };
   };
-  onAnswer: (correct: boolean) => void;
+  onNext: () => void;
+  setCorrectAnswers: (correctAnswers: number) => void;
 }
 
 const pulse = keyframes({
-  '0%, 100%': { transform: 'scale(1)', opacity: 1 },
-  '50%': { transform: 'scale(1.2)', opacity: 0.8 },
+  "0%, 100%": { transform: "scale(1)", opacity: 1 },
+  "50%": { transform: "scale(1.2)", opacity: 0.8 },
 });
 
-const Step8: React.FC<Step8Props> = ({ word, onAnswer }) => {
+const Step8: React.FC<Step8Props> = ({ word, onNext, setCorrectAnswers }) => {
+  const supabase = createClient();
+  const [submitted, setSubmitted] = useState(false);
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      typedWord: '',
+      typedWord: "",
     },
   });
 
   const [isSpeaking, setIsSpeaking] = useState(false);
 
   const handlePlayAudio = () => {
-    const utterance = new SpeechSynthesisUtterance(word.word);
+    const utterance = new SpeechSynthesisUtterance(word.words.word);
     setIsSpeaking(true);
     utterance.onend = () => {
       setIsSpeaking(false);
@@ -60,13 +77,31 @@ const Step8: React.FC<Step8Props> = ({ word, onAnswer }) => {
     speechSynthesis.speak(utterance);
   };
 
-  const onSubmit = (data: z.infer<typeof formSchema>) => {
-    if (data.typedWord.trim().toLowerCase() === word.word.toLowerCase()) {
-      onAnswer(true);
-    } else {
-      onAnswer(false);
+  const onSubmit = async (data: z.infer<typeof formSchema>) => {
+    if (submitted) {
+      onNext();
+      return;
     }
-    form.reset();
+    let updatePattern = {};
+    if (data.typedWord.trim().toLowerCase() === word.words.word.toLowerCase()) {
+      updatePattern = { step: 9 };
+    } else {
+      updatePattern = { show_first_step: true };
+    }
+
+    const { error } = await supabase
+      .from("user_word_progress")
+      .update(updatePattern)
+      .match({ word_id: word.word_id, user_id: word.user_id });
+    if (error) {
+      console.error("Error updating user_word_progress", error);
+    }
+    setSubmitted(true);
+    setCorrectAnswers((prev) =>
+      data.typedWord.trim().toLowerCase() === word.words.word.toLowerCase()
+        ? prev + 1
+        : prev - 1,
+    );
   };
 
   return (
@@ -76,9 +111,12 @@ const Step8: React.FC<Step8Props> = ({ word, onAnswer }) => {
           Type the word for the pronunciation:
         </CardTitle>
         <CardDescription>
-          <button onClick={handlePlayAudio} className="text-blue-500 hover:text-blue-700 focus:outline-none">
+          <button
+            onClick={handlePlayAudio}
+            className="text-blue-500 hover:text-blue-700 focus:outline-none"
+          >
             <SpeakerLoudIcon
-              className={`w-5 h-5 ${isSpeaking ? 'animate-pulse' : ''}`}
+              className={`w-5 h-5 ${isSpeaking ? "animate-pulse" : ""}`}
               style={isSpeaking ? { animation: `${pulse} 1s infinite` } : {}}
             />
           </button>
@@ -96,12 +134,21 @@ const Step8: React.FC<Step8Props> = ({ word, onAnswer }) => {
                   <FormControl>
                     <Input placeholder="Type the word" {...field} />
                   </FormControl>
-                  <FormDescription>Listen to the pronunciation and type the word</FormDescription>
+                  <FormDescription>
+                    Listen to the pronunciation and type the word
+                  </FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
             />
-            <Button type="submit" className="w-full">Submit</Button>
+            <Separator className="my-4" />
+            <Button
+              type="submit"
+              className="w-full"
+              onClick={form.handleSubmit(onSubmit)}
+            >
+              {submitted ? "Next" : "Submit"}
+            </Button>
           </form>
         </Form>
       </CardContent>
