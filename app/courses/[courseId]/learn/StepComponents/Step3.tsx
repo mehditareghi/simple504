@@ -99,9 +99,7 @@ const Step3: FC<Step3Props> = ({
   };
 
   const handlePlayAudio = () => {
-    const utterance = new SpeechSynthesisUtterance(
-      word.words.definitions.join("; "),
-    );
+    const utterance = new SpeechSynthesisUtterance(word.definitions.join("; "));
     setIsSpeaking(true);
     utterance.onend = () => setIsSpeaking(false);
     speechSynthesis.speak(utterance);

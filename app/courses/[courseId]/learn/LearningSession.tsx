@@ -1,7 +1,9 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Link from "next/link";
 import { Progress } from "@/components/ui/progress";
+import { Button } from "@/components/ui/button";
 import Step1 from "./StepComponents/Step1";
 import Step2 from "./StepComponents/Step2";
 import Step3 from "./StepComponents/Step3";
@@ -72,7 +74,6 @@ export default function LearningSession({
   const renderCurrentStep = () => {
     if (!currentWord) return null;
 
-    // Check if show_first_step is true and render step 1
     if (currentWord.show_first_step) {
       return (
         <Step1
@@ -161,7 +162,6 @@ export default function LearningSession({
             setCorrectAnswers={setCorrectAnswers}
           />
         );
-      // Add other cases for different steps
       default:
         return null;
     }
@@ -171,9 +171,17 @@ export default function LearningSession({
 
   if (showResult)
     return (
-      <div className="text-center mt-10">
+      <div className="text-center mt-10 space-y-4">
         <p className="text-xl font-bold">Well done! You did it.</p>
         <p>Now you can go to the course page and see your overall progress.</p>
+        <Button asChild className="w-full">
+          <Link
+            href={`/courses/${courseId}`}
+            className="py-2 px-3 flex justify-center items-center rounded-md no-underline bg-btn-background hover:bg-btn-background-hover text-white"
+          >
+            Go to Course Page
+          </Link>
+        </Button>
       </div>
     );
 
@@ -184,7 +192,13 @@ export default function LearningSession({
       </h1>
       <Progress
         value={progress}
-        className={`h-4 rounded ${progress === 100 ? "bg-green-500" : progress > 0 ? "bg-orange-500" : "bg-gray-300"}`}
+        className={`h-4 rounded ${
+          progress === 100
+            ? "bg-green-500"
+            : progress > 0
+              ? "bg-orange-500"
+              : "bg-gray-300"
+        }`}
       />
       <div className="text-right text-gray-500">
         {Math.round(progress)}% completed
