@@ -18,12 +18,10 @@ interface Step2Props {
     user_id: string;
     step: number;
     show_first_step: boolean;
-    completed: boolean;
-    words: {
-      word: string;
-      definitions: string[];
-      examples: string[];
-    };
+    course_id: string;
+    word: string;
+    definitions: string[];
+    examples: string[];
   };
   onNext: () => void;
   courseId: string;
@@ -57,7 +55,7 @@ const Step2: FC<Step2Props> = ({
           .from("random_words")
           .select("word, definitions")
           .eq("course_id", courseId)
-          .neq("word", word.words.word)
+          .neq("word", word.word)
           .limit(3);
 
         if (error) {
@@ -73,7 +71,7 @@ const Step2: FC<Step2Props> = ({
         );
         const allOptions = [
           ...incorrectDefinitions,
-          word.words.definitions.join("; "),
+          word.definitions.join("; "),
         ];
         setOptions(allOptions.sort(() => 0.5 - Math.random()));
       } catch (error) {
@@ -88,13 +86,13 @@ const Step2: FC<Step2Props> = ({
 
   const onSubmit = async () => {
     let updatePattern = {};
-    const isCorrect = selectedOption === word.words.definitions.join("; ");
+    const isCorrect = selectedOption === word.definitions.join("; ");
     if (isCorrect) {
       updatePattern = { step: 3 };
       setCorrectOption(selectedOption);
     } else {
       updatePattern = { show_first_step: true };
-      setCorrectOption(word.words.definitions.join("; "));
+      setCorrectOption(word.definitions.join("; "));
     }
 
     const { data, error } = await supabase
@@ -109,7 +107,7 @@ const Step2: FC<Step2Props> = ({
   };
 
   const handlePlayAudio = () => {
-    const utterance = new SpeechSynthesisUtterance(word.words.word);
+    const utterance = new SpeechSynthesisUtterance(word.word);
     setIsSpeaking(true);
     utterance.onend = () => setIsSpeaking(false);
     speechSynthesis.speak(utterance);
@@ -134,7 +132,7 @@ const Step2: FC<Step2Props> = ({
     <Card className="p-6 bg-white rounded-lg shadow-lg space-y-4">
       <CardHeader className="mb-4">
         <CardTitle className="text-2xl font-bold text-gray-800 flex items-center space-x-2">
-          <span>{word.words.word}</span>
+          <span>{word.word}</span>
           <button
             onClick={handlePlayAudio}
             className="text-blue-500 hover:text-blue-700 focus:outline-none"
@@ -146,7 +144,7 @@ const Step2: FC<Step2Props> = ({
           </button>
         </CardTitle>
         <CardDescription>
-          Choose the correct definition for the word "{word.words.word}".
+          Choose the correct definition for the word "{word.word}".
         </CardDescription>
       </CardHeader>
       <CardContent>

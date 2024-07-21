@@ -18,12 +18,10 @@ interface Step1Props {
     user_id: string;
     step: number;
     show_first_step: boolean;
-    completed: boolean;
-    words: {
-      word: string;
-      definitions: string[];
-      examples: string[];
-    };
+    course_id: string;
+    word: string;
+    definitions: string[];
+    examples: string[];
   };
   onNext: () => void;
   setCorrectAnswers: (correctAnswers: number) => void;
@@ -40,7 +38,7 @@ const Step1: FC<Step1Props> = ({ word, onNext, setCorrectAnswers }) => {
   const [submitted, setSubmitted] = useState(false);
 
   const handlePlayAudio = () => {
-    const utterance = new SpeechSynthesisUtterance(word.words.word);
+    const utterance = new SpeechSynthesisUtterance(word.word);
     setIsSpeaking(true);
     utterance.onend = () => {
       setIsSpeaking(false);
@@ -72,7 +70,7 @@ const Step1: FC<Step1Props> = ({ word, onNext, setCorrectAnswers }) => {
         <CardTitle>
           <div className="flex items-center space-x-2">
             <span className={submitted ? "text-green-500" : ""}>
-              {word.words.word}
+              {word.word}
             </span>
             <button
               onClick={handlePlayAudio}
@@ -93,7 +91,7 @@ const Step1: FC<Step1Props> = ({ word, onNext, setCorrectAnswers }) => {
               Definitions:
             </CardDescription>
             <ul className="list-disc list-inside">
-              {word.words.definitions.map((def) => (
+              {word.definitions.map((def) => (
                 <li key={def}>{def}</li>
               ))}
             </ul>
@@ -102,7 +100,7 @@ const Step1: FC<Step1Props> = ({ word, onNext, setCorrectAnswers }) => {
           <div>
             <CardDescription className="font-bold">Examples:</CardDescription>
             <ul className="list-disc list-inside">
-              {word.words.examples.map((ex) => (
+              {word.examples.map((ex) => (
                 <li key={ex}>{ex}</li>
               ))}
             </ul>

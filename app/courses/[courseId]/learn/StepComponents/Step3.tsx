@@ -18,12 +18,10 @@ interface Step3Props {
     user_id: string;
     step: number;
     show_first_step: boolean;
-    completed: boolean;
-    words: {
-      word: string;
-      definitions: string[];
-      examples: string[];
-    };
+    course_id: string;
+    word: string;
+    definitions: string[];
+    examples: string[];
   };
   onNext: () => void;
   courseId: string;
@@ -57,7 +55,7 @@ const Step3: FC<Step3Props> = ({
           .from("random_words")
           .select("word")
           .eq("course_id", courseId)
-          .neq("word", word.words.word)
+          .neq("word", word.word)
           .limit(3);
 
         if (error) {
@@ -66,7 +64,7 @@ const Step3: FC<Step3Props> = ({
         }
 
         const otherWords = data.map((w: { word: string }) => w.word);
-        const allOptions = [...otherWords, word.words.word];
+        const allOptions = [...otherWords, word.word];
         setOptions(allOptions.sort(() => 0.5 - Math.random()));
       } catch (error) {
         console.error("Error fetching other words:", error);
@@ -80,13 +78,13 @@ const Step3: FC<Step3Props> = ({
 
   const onSubmit = async () => {
     let updatePattern = {};
-    const isCorrect = selectedOption === word.words.word;
+    const isCorrect = selectedOption === word.word;
     if (isCorrect) {
       updatePattern = { step: 4 };
       setCorrectOption(selectedOption);
     } else {
       updatePattern = { show_first_step: true };
-      setCorrectOption(word.words.word);
+      setCorrectOption(word.word);
     }
 
     const { error } = await supabase
@@ -128,7 +126,7 @@ const Step3: FC<Step3Props> = ({
     <Card className="p-6 bg-white rounded-lg shadow-lg space-y-4">
       <CardHeader className="mb-4">
         <CardTitle className="text-2xl font-bold text-gray-800 flex items-center space-x-2">
-          <span>{word.words.definitions.join("; ")}</span>
+          <span>{word.definitions.join("; ")}</span>
           <button
             onClick={handlePlayAudio}
             className="text-blue-500 hover:text-blue-700 focus:outline-none"

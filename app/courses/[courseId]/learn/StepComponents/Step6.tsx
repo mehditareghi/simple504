@@ -18,12 +18,10 @@ interface Step6Props {
     user_id: string;
     step: number;
     show_first_step: boolean;
-    completed: boolean;
-    words: {
-      word: string;
-      definitions: string[];
-      examples: string[];
-    };
+    course_id: string;
+    word: string;
+    definitions: string[];
+    examples: string[];
   };
   onNext: () => void;
   courseId: string;
@@ -57,7 +55,7 @@ const Step6: FC<Step6Props> = ({
           .from("random_words")
           .select(`word, definitions`)
           .eq("course_id", courseId)
-          .neq("word", word.words.word)
+          .neq("word", word.word)
           .limit(3);
 
         if (error) {
@@ -75,7 +73,7 @@ const Step6: FC<Step6Props> = ({
 
         const allOptions = [
           ...incorrectDefinitions,
-          word.words.definitions.join("; "),
+          word.definitions.join("; "),
         ];
 
         setOptions(allOptions.sort(() => 0.5 - Math.random()));
@@ -91,13 +89,13 @@ const Step6: FC<Step6Props> = ({
 
   const onSubmit = async () => {
     let updatePattern = {};
-    const isCorrect = selectedOption === word.words.definitions.join("; ");
+    const isCorrect = selectedOption === word.definitions.join("; ");
     if (isCorrect) {
       updatePattern = { step: 7 };
       setCorrectOption(selectedOption);
     } else {
       updatePattern = { show_first_step: true };
-      setCorrectOption(word.words.definitions.join("; "));
+      setCorrectOption(word.definitions.join("; "));
     }
 
     const { error } = await supabase
@@ -112,7 +110,7 @@ const Step6: FC<Step6Props> = ({
   };
 
   const handlePlayAudio = () => {
-    const utterance = new SpeechSynthesisUtterance(word.words.word);
+    const utterance = new SpeechSynthesisUtterance(word.word);
     setIsSpeaking(true);
     utterance.onend = () => setIsSpeaking(false);
     speechSynthesis.speak(utterance);

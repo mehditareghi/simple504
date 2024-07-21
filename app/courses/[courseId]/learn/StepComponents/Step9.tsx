@@ -37,12 +37,10 @@ interface Step9Props {
     user_id: string;
     step: number;
     show_first_step: boolean;
-    completed: boolean;
-    words: {
-      word: string;
-      definitions: string[];
-      examples: string[];
-    };
+    course_id: string;
+    word: string;
+    definitions: string[];
+    examples: string[];
   };
   onNext: () => void;
   setCorrectAnswers: (correctAnswers: number) => void;
@@ -65,7 +63,7 @@ const Step9: React.FC<Step9Props> = ({ word, onNext, setCorrectAnswers }) => {
       return;
     }
     const correct =
-      data.typedWord.trim().toLowerCase() === word.words.word.toLowerCase();
+      data.typedWord.trim().toLowerCase() === word.word.toLowerCase();
     let updatePattern = correct
       ? { step: 10, completed: true }
       : { show_first_step: true };
@@ -89,7 +87,7 @@ const Step9: React.FC<Step9Props> = ({ word, onNext, setCorrectAnswers }) => {
         <CardTitle className="text-2xl font-bold text-gray-800">
           Type the word for the given definitions:
         </CardTitle>
-        <CardDescription>{word.words.definitions.join("; ")}</CardDescription>
+        <CardDescription>{word.definitions.join("; ")}</CardDescription>
       </CardHeader>
       <CardContent>
         <Form {...form}>

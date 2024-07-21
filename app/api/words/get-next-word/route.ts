@@ -3,67 +3,52 @@ import { NextRequest, NextResponse } from "next/server";
 
 interface Word {
   word_id: string;
+  user_id: string;
   step: number;
   show_first_step: boolean;
-  words: {
-    id: string;
-    order: number;
-    word: string;
-    definitions: string[];
-    examples: string[];
-    units: {
-      id: string;
-      course_id: string;
-      order: number;
-    };
-  };
+  course_id: string;
+  word: string;
+  definitions: string[];
+  examples: string[];
 }
 
 const getNextWord = (userWords: Word[]): Word | null => {
   if (userWords.length === 0) {
     return null;
   }
-
-  const sortedWords = userWords.sort((a, b) => {
-    if (a.words.units.order === b.words.units.order) {
-      return a.words.order - b.words.order;
-    }
-    return a.words.units.order - b.words.units.order;
-  });
-
   // Check if there is a word with show_first_step true and return it
-  const showFirstStepWord = sortedWords.find((word) => word.show_first_step);
+  const showFirstStepWord = userWords.find((word) => word.show_first_step);
   if (showFirstStepWord) {
     return showFirstStepWord;
   }
 
   // Check if all steps are the same
-  const allStepsSame = sortedWords.every(
-    (word) => word.step === sortedWords[0].step,
+  const allStepsSame = userWords.every(
+    (word) => word.step === userWords[0].step,
   );
 
   if (allStepsSame) {
     // Return the record with the lowest order
-    return sortedWords[0];
+    return userWords[0];
   }
 
   // Check if there is a word with step 4 and no words with step 2 or 3
-  const step4Word = sortedWords.find((word) => word.step === 4);
-  const step2or3Word = sortedWords.find(
+  const step4Word = userWords.find((word) => word.step === 4);
+  const step2or3Word = userWords.find(
     (word) => word.step === 2 || word.step === 3,
   );
   if (step4Word && !step2or3Word) {
-    const step1Words = sortedWords.filter((word) => word.step === 1);
+    const step1Words = userWords.filter((word) => word.step === 1);
     if (step1Words.length > 0) {
       return step1Words[0];
     }
   }
 
   // Check the condition for step differences without filtering out step 1 words
-  for (let i = 0; i < sortedWords.length; i++) {
-    const currentWord = sortedWords[i];
-    for (let j = i + 1; j < sortedWords.length; j++) {
-      const nextWord = sortedWords[j];
+  for (let i = 0; i < userWords.length; i++) {
+    const currentWord = userWords[i];
+    for (let j = i + 1; j < userWords.length; j++) {
+      const nextWord = userWords[j];
       if (currentWord.step + 1 - nextWord.step <= 3) {
         return currentWord;
       }
@@ -71,13 +56,13 @@ const getNextWord = (userWords: Word[]): Word | null => {
   }
 
   // If no word meets the condition, return the first word with step 1
-  const step1Word = sortedWords.find((word) => word.step === 1);
+  const step1Word = userWords.find((word) => word.step === 1);
   if (step1Word) {
     return step1Word;
   }
 
   // If no step 1 word exists, return the first word in sorted order
-  return sortedWords[0];
+  return userWords[0];
 };
 
 export async function POST(req: NextRequest) {
@@ -86,19 +71,23 @@ export async function POST(req: NextRequest) {
     const { userId, courseId } = await req.json();
 
     const { data: userWords, error: userWordsError } = await supabase
-      .from("user_word_progress")
+      .from("ordered_user_words")
       .select(
         `
         word_id,
         user_id,
         step,
         show_first_step,
-        words!inner(id, order, word, definitions, examples, units!inner(id, course_id, order))
+        course_id,
+        word, definitions, examples
       `,
       )
       .eq("user_id", userId)
-      .eq("words.units.course_id", courseId)
-      .eq("completed", false);
+      .eq("course_id", courseId)
+      .eq("completed", false)
+      .order("unit_order", { ascending: true })
+      .order("word_order", { ascending: true })
+      .limit(4);
 
     if (userWordsError) {
       console.error("Error fetching user words:", userWordsError);

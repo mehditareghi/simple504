@@ -16,12 +16,10 @@ interface Step4Props {
     user_id: string;
     step: number;
     show_first_step: boolean;
-    completed: boolean;
-    words: {
-      word: string;
-      definitions: string[];
-      examples: string[];
-    };
+    course_id: string;
+    word: string;
+    definitions: string[];
+    examples: string[];
   };
   onNext: () => void;
   courseId: string;
@@ -49,7 +47,7 @@ const Step4: FC<Step4Props> = ({
           .from("random_words")
           .select("word")
           .eq("course_id", courseId)
-          .neq("word", word.words.word)
+          .neq("word", word.word)
           .limit(3);
 
         if (error) {
@@ -58,7 +56,7 @@ const Step4: FC<Step4Props> = ({
         }
 
         const otherWords = data.map((w: { word: string }) => w.word);
-        const allOptions = [...otherWords, word.words.word];
+        const allOptions = [...otherWords, word.word];
         setOptions(allOptions.sort(() => 0.5 - Math.random()));
       } catch (error) {
         console.error("Error fetching other words:", error);
@@ -72,13 +70,13 @@ const Step4: FC<Step4Props> = ({
 
   const onSubmit = async () => {
     let updatePattern = {};
-    const isCorrect = selectedOption === word.words.word;
+    const isCorrect = selectedOption === word.word;
     if (isCorrect) {
       updatePattern = { step: 5 };
       setCorrectOption(selectedOption);
     } else {
       updatePattern = { show_first_step: true };
-      setCorrectOption(word.words.word);
+      setCorrectOption(word.word);
     }
 
     const { error } = await supabase
@@ -102,7 +100,7 @@ const Step4: FC<Step4Props> = ({
     return examples[0].replace(word, "______");
   };
 
-  const example = selectExample(word.words.examples, word.words.word);
+  const example = selectExample(word.examples, word.word);
 
   if (loading) {
     return (

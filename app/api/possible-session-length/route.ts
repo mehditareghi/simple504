@@ -6,7 +6,7 @@ export async function POST(req: Request) {
     const supabase = createClient();
     const { userId, courseId } = await req.json();
 
-    // Fetch the user's word progress for the specified course
+    // Fetch the user's word progress for the specified course, limited to 12 records
     const { data: userWords, error: userWordsError } = await supabase
       .from("user_word_progress")
       .select(
@@ -18,7 +18,8 @@ export async function POST(req: Request) {
       )
       .eq("user_id", userId)
       .eq("words.units.course_id", courseId)
-      .eq("completed", false);
+      .eq("completed", false)
+      .limit(12);
 
     if (userWordsError) {
       console.error("Error fetching user words:", userWordsError);
@@ -26,6 +27,11 @@ export async function POST(req: Request) {
         { error: userWordsError.message },
         { status: 400 },
       );
+    }
+
+    // If 12 records are fetched, set the session length to 12
+    if (userWords.length === 12) {
+      return NextResponse.json({ sessionLength: 12 }, { status: 200 });
     }
 
     // Calculate the possible session length
@@ -40,8 +46,8 @@ export async function POST(req: Request) {
     ).length;
     sessionLength += showFirstStepCount;
 
-    // Limit the session length to a maximum of 10
-    sessionLength = sessionLength > 10 ? 10 : sessionLength;
+    // Limit the session length to a maximum of 12
+    sessionLength = sessionLength > 12 ? 12 : sessionLength;
 
     return NextResponse.json({ sessionLength }, { status: 200 });
   } catch (error) {

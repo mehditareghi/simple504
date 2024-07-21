@@ -39,12 +39,10 @@ interface Step8Props {
     user_id: string;
     step: number;
     show_first_step: boolean;
-    completed: boolean;
-    words: {
-      word: string;
-      definitions: string[];
-      examples: string[];
-    };
+    course_id: string;
+    word: string;
+    definitions: string[];
+    examples: string[];
   };
   onNext: () => void;
   setCorrectAnswers: (correctAnswers: number) => void;
@@ -70,7 +68,7 @@ const Step8: React.FC<Step8Props> = ({ word, onNext, setCorrectAnswers }) => {
   const [isSpeaking, setIsSpeaking] = useState(false);
 
   const handlePlayAudio = () => {
-    const utterance = new SpeechSynthesisUtterance(word.words.word);
+    const utterance = new SpeechSynthesisUtterance(word.word);
     setIsSpeaking(true);
     utterance.onend = () => {
       setIsSpeaking(false);
@@ -85,7 +83,7 @@ const Step8: React.FC<Step8Props> = ({ word, onNext, setCorrectAnswers }) => {
     }
 
     const correct =
-      data.typedWord.trim().toLowerCase() === word.words.word.toLowerCase();
+      data.typedWord.trim().toLowerCase() === word.word.toLowerCase();
     let updatePattern = correct ? { step: 9 } : { show_first_step: true };
 
     const { error } = await supabase
