@@ -13,22 +13,8 @@ import Step6 from "./StepComponents/Step6";
 import Step7 from "./StepComponents/Step7";
 import Step8 from "./StepComponents/Step8";
 import Step9 from "./StepComponents/Step9";
-
-const getNextWord = async (userId: string, courseId: string) => {
-  const response = await fetch("/api/words/get-next-word", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({ userId, courseId }),
-  });
-
-  if (!response.ok) {
-    throw new Error("Failed to get the next word");
-  }
-
-  return response.json();
-};
+import { createClient } from "@/utils/supabase/client";
+import { getNextWord } from "@/utils/wordSelector";
 
 interface LearningSessionProps {
   userId: string;
@@ -43,6 +29,7 @@ export default function LearningSession({
   sessionLength,
   firstWord,
 }: LearningSessionProps) {
+  const supabase = createClient();
   const [progress, setProgress] = useState(0);
   const [correctAnswers, setCorrectAnswers] = useState(0);
   const [currentWord, setCurrentWord] = useState(firstWord);
@@ -57,7 +44,28 @@ export default function LearningSession({
 
   const handleNextStep = async () => {
     try {
-      const nextWordData = await getNextWord(userId, courseId);
+      const { data: userWords, error: userWordsError } = await supabase
+        .from("ordered_user_words")
+        .select(
+          `
+          word_id,
+          user_id,
+          step,
+          show_first_step,
+          course_id,
+          word, definitions, examples
+        `,
+        )
+        .eq("user_id", userId)
+        .eq("course_id", courseId)
+        .eq("completed", false)
+        .limit(4);
+
+      if (userWordsError) {
+        console.error("Error fetching user words:", userWordsError);
+      }
+
+      const nextWordData = getNextWord(userWords);
       setCurrentWord(nextWordData);
       setCurrentStep(nextWordData.show_first_step ? 1 : nextWordData.step);
     } catch (error) {

@@ -1,6 +1,7 @@
 import { createClient } from "@/utils/supabase/server";
 import LearningSession from "./LearningSession";
 import { redirect } from "next/navigation";
+import { getNextWord, getSessionLength } from "@/utils/wordSelector";
 
 interface Params {
   params: {
@@ -25,38 +26,38 @@ export default async function LearnPage({ params }: Params) {
     return; // Handle the case where no user is logged in
   }
 
-  // Fetch possible session length
-  const response = await fetch(process.env.URL + "/api/possible-session-length", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({ userId: user.id, courseId }),
-  });
+  const { data: userWords, error: userWordsError } = await supabase
+    .from("ordered_user_words")
+    .select(
+      `
+      word_id,
+      user_id,
+      step,
+      show_first_step,
+      course_id,
+      word, definitions, examples
+    `,
+    )
+    .eq("user_id", user.id)
+    .eq("course_id", courseId)
+    .eq("completed", false)
+    .limit(12);
 
-  const { sessionLength } = await response.json();
+  if (userWordsError) {
+    console.error("Error fetching user words:", userWordsError);
+  }
 
-  if (sessionLength === 0) {
+  const sessionLength = getSessionLength(userWords);
+
+  if (sessionLength === 0)
     return (
       <div>
         <h1>No words to learn</h1>
         <p>You have already learned all the words in this course.</p>
       </div>
     );
-  }
 
-  const firstWordResponse = await fetch(
-    process.env.URL + "/api/words/get-next-word",
-    {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ userId: user.id, courseId }),
-    },
-  );
-
-  const firstWord = await firstWordResponse.json();
+  const firstWord = getNextWord(userWords);
 
   return (
     <LearningSession

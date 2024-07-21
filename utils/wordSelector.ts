@@ -1,6 +1,3 @@
-import { createClient } from "@/utils/supabase/server";
-import { NextRequest, NextResponse } from "next/server";
-
 interface Word {
   word_id: string;
   user_id: string;
@@ -12,7 +9,7 @@ interface Word {
   examples: string[];
 }
 
-const getNextWord = (userWords: Word[]): Word | null => {
+export const getNextWord = (userWords: Word[]): Word | null => {
   if (userWords.length === 0) {
     return null;
   }
@@ -65,46 +62,25 @@ const getNextWord = (userWords: Word[]): Word | null => {
   return userWords[0];
 };
 
-export async function POST(req: NextRequest) {
-  try {
-    const supabase = createClient();
-    const { userId, courseId } = await req.json();
-
-    const { data: userWords, error: userWordsError } = await supabase
-      .from("ordered_user_words")
-      .select(
-        `
-        word_id,
-        user_id,
-        step,
-        show_first_step,
-        course_id,
-        word, definitions, examples
-      `,
-      )
-      .eq("user_id", userId)
-      .eq("course_id", courseId)
-      .eq("completed", false)
-      .order("unit_order", { ascending: true })
-      .order("word_order", { ascending: true })
-      .limit(4);
-
-    if (userWordsError) {
-      console.error("Error fetching user words:", userWordsError);
-      return NextResponse.json(
-        { error: userWordsError.message },
-        { status: 400 },
-      );
-    }
-
-    const nextWord = getNextWord(userWords);
-
-    return NextResponse.json(nextWord);
-  } catch (error) {
-    console.error("Unexpected error:", error);
-    return NextResponse.json(
-      { error: "Unexpected error occurred" },
-      { status: 500 },
-    );
+export const getSessionLength = (userWords: Word[]): number => {
+  if (userWords.length === 12) {
+    return 12;
   }
-}
+
+  // Calculate the possible session length
+  let sessionLength = userWords.reduce(
+    (sum, word) => sum + (10 - word.step),
+    0,
+  );
+
+  // Add 1 for each word with show_first_step set to true
+  const showFirstStepCount = userWords.filter(
+    (word) => word.show_first_step,
+  ).length;
+  sessionLength += showFirstStepCount;
+
+  // Limit the session length to a maximum of 12
+  sessionLength = sessionLength > 12 ? 12 : sessionLength;
+
+  return sessionLength;
+};
