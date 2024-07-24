@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from "react";
+import { FC, useState, useEffect } from "react";
 import { createClient } from "@/utils/supabase/client";
 import { Button } from "@/components/ui/button";
 import {
@@ -11,6 +11,7 @@ import {
 import { SpeakerLoudIcon } from "@radix-ui/react-icons";
 import { Separator } from "@/components/ui/separator";
 import { keyframes } from "@stitches/react";
+import { Progress } from "@/components/ui/progress";
 
 interface Step3Props {
   word: {
@@ -47,6 +48,9 @@ const Step3: FC<Step3Props> = ({
   const [loading, setLoading] = useState(true);
   const [isSpeaking, setIsSpeaking] = useState(false);
   const [correctOption, setCorrectOption] = useState<string | null>(null);
+  const [progress, setProgress] = useState(0);
+  const [isCorrect, setIsCorrect] = useState(false);
+  const [showProgressBar, setShowProgressBar] = useState(false);
 
   useEffect(() => {
     const fetchOtherWords = async () => {
@@ -77,9 +81,11 @@ const Step3: FC<Step3Props> = ({
   }, [courseId, word]);
 
   const onSubmit = async () => {
+    const isCorrectAnswer = selectedOption === word.word;
+    setIsCorrect(isCorrectAnswer);
     let updatePattern = {};
-    const isCorrect = selectedOption === word.word;
-    if (isCorrect) {
+
+    if (isCorrectAnswer) {
       updatePattern = { step: 4 };
       setCorrectOption(selectedOption);
     } else {
@@ -95,7 +101,11 @@ const Step3: FC<Step3Props> = ({
       console.error("Error updating user_word_progress", error);
     }
     setSubmitted(true);
-    setCorrectAnswers((prev) => (isCorrect ? prev + 1 : prev - 1));
+    setCorrectAnswers((prev) => (isCorrectAnswer ? prev + 1 : prev - 1));
+
+    if (isCorrectAnswer) {
+      setShowProgressBar(true);
+    }
   };
 
   const handlePlayAudio = () => {
@@ -103,6 +113,26 @@ const Step3: FC<Step3Props> = ({
     setIsSpeaking(true);
     utterance.onend = () => setIsSpeaking(false);
     speechSynthesis.speak(utterance);
+  };
+
+  useEffect(() => {
+    if (showProgressBar) {
+      const interval = setInterval(() => {
+        setProgress((prev) => {
+          if (prev >= 100) {
+            clearInterval(interval);
+            onNext();
+            return 100;
+          }
+          return prev + 10;
+        });
+      }, 100);
+    }
+  }, [showProgressBar, onNext]);
+
+  const handleNextClick = () => {
+    setShowProgressBar(true);
+    setProgress(0); // Reset progress for smooth transition
   };
 
   if (loading) {
@@ -162,13 +192,25 @@ const Step3: FC<Step3Props> = ({
           ))}
         </div>
         <Separator className="my-4" />
-        <Button
-          onClick={submitted ? onNext : onSubmit}
-          className="w-full"
-          disabled={!selectedOption}
-        >
-          {submitted ? "Next" : "Submit"}
-        </Button>
+        {submitted ? (
+          isCorrect ? (
+            <Progress value={progress} className="w-full bg-green-500" />
+          ) : showProgressBar ? (
+            <Progress value={progress} className="w-full bg-orange-500" />
+          ) : (
+            <Button onClick={handleNextClick} className="w-full">
+              Next
+            </Button>
+          )
+        ) : (
+          <Button
+            onClick={onSubmit}
+            className="w-full"
+            disabled={!selectedOption}
+          >
+            Submit
+          </Button>
+        )}
       </CardContent>
     </Card>
   );

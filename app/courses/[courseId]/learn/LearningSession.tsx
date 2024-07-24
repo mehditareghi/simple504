@@ -75,7 +75,7 @@ export default function LearningSession({
 
   useEffect(() => {
     if (progress === 100) {
-      setTimeout(() => setShowResult(true), 1500);
+      setTimeout(() => setShowResult(true), 1000);
     }
   }, [progress]);
 

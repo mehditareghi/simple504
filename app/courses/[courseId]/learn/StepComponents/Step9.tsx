@@ -22,8 +22,9 @@ import {
   CardDescription,
 } from "@/components/ui/card";
 import { createClient } from "@/utils/supabase/client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Separator } from "@/components/ui/separator";
+import { Progress } from "@/components/ui/progress";
 
 const formSchema = z.object({
   typedWord: z.string().min(1, {
@@ -50,6 +51,9 @@ const Step9: React.FC<Step9Props> = ({ word, onNext, setCorrectAnswers }) => {
   const supabase = createClient();
   const [submitted, setSubmitted] = useState(false);
   const [isCorrect, setIsCorrect] = useState<boolean | null>(null);
+  const [progress, setProgress] = useState(0);
+  const [showProgressBar, setShowProgressBar] = useState(false);
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -58,10 +62,11 @@ const Step9: React.FC<Step9Props> = ({ word, onNext, setCorrectAnswers }) => {
   });
 
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
-    if (submitted) {
+    if (submitted && isCorrect) {
       onNext();
       return;
     }
+
     const correct =
       data.typedWord.trim().toLowerCase() === word.word.toLowerCase();
     let updatePattern = correct
@@ -79,6 +84,30 @@ const Step9: React.FC<Step9Props> = ({ word, onNext, setCorrectAnswers }) => {
     setSubmitted(true);
     setIsCorrect(correct);
     setCorrectAnswers((prev) => (correct ? prev + 1 : prev - 1));
+
+    if (correct) {
+      setShowProgressBar(true);
+    }
+  };
+
+  useEffect(() => {
+    if (showProgressBar) {
+      const interval = setInterval(() => {
+        setProgress((prev) => {
+          if (prev >= 100) {
+            clearInterval(interval);
+            onNext();
+            return 100;
+          }
+          return prev + 10;
+        });
+      }, 100);
+    }
+  }, [showProgressBar, onNext]);
+
+  const handleNextClick = () => {
+    setShowProgressBar(true);
+    setProgress(0); // Reset progress for smooth transition
   };
 
   return (
@@ -119,13 +148,25 @@ const Step9: React.FC<Step9Props> = ({ word, onNext, setCorrectAnswers }) => {
               )}
             />
             <Separator className="my-4" />
-            <Button
-              type="submit"
-              className="w-full"
-              disabled={!form.watch("typedWord")}
-            >
-              {submitted ? "Next" : "Submit"}
-            </Button>
+            {submitted ? (
+              isCorrect ? (
+                <Progress value={progress} className="w-full bg-green-500" />
+              ) : showProgressBar ? (
+                <Progress value={progress} className="w-full bg-orange-500" />
+              ) : (
+                <Button onClick={handleNextClick} className="w-full">
+                  Next
+                </Button>
+              )
+            ) : (
+              <Button
+                type="submit"
+                className="w-full"
+                disabled={!form.watch("typedWord")}
+              >
+                Submit
+              </Button>
+            )}
           </form>
         </Form>
       </CardContent>

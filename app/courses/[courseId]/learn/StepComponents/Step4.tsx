@@ -9,6 +9,7 @@ import {
   CardDescription,
 } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
+import { Progress } from "@/components/ui/progress";
 
 interface Step4Props {
   word: {
@@ -39,6 +40,9 @@ const Step4: FC<Step4Props> = ({
   const [options, setOptions] = useState<string[]>([]);
   const [loading, setLoading] = useState(true);
   const [correctOption, setCorrectOption] = useState<string | null>(null);
+  const [progress, setProgress] = useState(0);
+  const [isCorrect, setIsCorrect] = useState(false);
+  const [showProgressBar, setShowProgressBar] = useState(false);
 
   useEffect(() => {
     const fetchOtherWords = async () => {
@@ -69,9 +73,11 @@ const Step4: FC<Step4Props> = ({
   }, [courseId, word]);
 
   const onSubmit = async () => {
+    const isCorrectAnswer = selectedOption === word.word;
+    setIsCorrect(isCorrectAnswer);
     let updatePattern = {};
-    const isCorrect = selectedOption === word.word;
-    if (isCorrect) {
+
+    if (isCorrectAnswer) {
       updatePattern = { step: 5 };
       setCorrectOption(selectedOption);
     } else {
@@ -87,7 +93,11 @@ const Step4: FC<Step4Props> = ({
       console.error("Error updating user_word_progress", error);
     }
     setSubmitted(true);
-    setCorrectAnswers((prev) => (isCorrect ? prev + 1 : prev - 1));
+    setCorrectAnswers((prev) => (isCorrectAnswer ? prev + 1 : prev - 1));
+
+    if (isCorrectAnswer) {
+      setShowProgressBar(true);
+    }
   };
 
   const selectExample = (examples: string[], word: string): string => {
@@ -101,6 +111,26 @@ const Step4: FC<Step4Props> = ({
   };
 
   const example = selectExample(word.examples, word.word);
+
+  useEffect(() => {
+    if (showProgressBar) {
+      const interval = setInterval(() => {
+        setProgress((prev) => {
+          if (prev >= 100) {
+            clearInterval(interval);
+            onNext();
+            return 100;
+          }
+          return prev + 10;
+        });
+      }, 100);
+    }
+  }, [showProgressBar, onNext]);
+
+  const handleNextClick = () => {
+    setShowProgressBar(true);
+    setProgress(0); // Reset progress for smooth transition
+  };
 
   if (loading) {
     return (
@@ -151,13 +181,25 @@ const Step4: FC<Step4Props> = ({
           ))}
         </div>
         <Separator className="my-4" />
-        <Button
-          onClick={submitted ? onNext : onSubmit}
-          className="w-full"
-          disabled={!selectedOption}
-        >
-          {submitted ? "Next" : "Submit"}
-        </Button>
+        {submitted ? (
+          isCorrect ? (
+            <Progress value={progress} className="w-full bg-green-500" />
+          ) : showProgressBar ? (
+            <Progress value={progress} className="w-full bg-orange-500" />
+          ) : (
+            <Button onClick={handleNextClick} className="w-full">
+              Next
+            </Button>
+          )
+        ) : (
+          <Button
+            onClick={onSubmit}
+            className="w-full"
+            disabled={!selectedOption}
+          >
+            Submit
+          </Button>
+        )}
       </CardContent>
     </Card>
   );

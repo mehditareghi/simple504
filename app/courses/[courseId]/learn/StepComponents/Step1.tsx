@@ -1,4 +1,4 @@
-import { FC, useState } from "react";
+import { FC, useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -11,6 +11,7 @@ import { Separator } from "@/components/ui/separator";
 import { SpeakerLoudIcon } from "@radix-ui/react-icons";
 import { keyframes } from "@stitches/react";
 import { createClient } from "@/utils/supabase/client";
+import { Progress } from "@/components/ui/progress";
 
 interface Step1Props {
   word: {
@@ -36,6 +37,7 @@ const Step1: FC<Step1Props> = ({ word, onNext, setCorrectAnswers }) => {
   const supabase = createClient();
   const [isSpeaking, setIsSpeaking] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const [progress, setProgress] = useState(0);
 
   const handlePlayAudio = () => {
     const utterance = new SpeechSynthesisUtterance(word.word);
@@ -63,6 +65,21 @@ const Step1: FC<Step1Props> = ({ word, onNext, setCorrectAnswers }) => {
     setSubmitted(true);
     setCorrectAnswers((prev) => prev + 1);
   };
+
+  useEffect(() => {
+    if (submitted) {
+      const interval = setInterval(() => {
+        setProgress((prev) => {
+          if (prev >= 100) {
+            clearInterval(interval);
+            onNext();
+            return 100;
+          }
+          return prev + 10;
+        });
+      }, 100);
+    }
+  }, [submitted, onNext]);
 
   return (
     <Card>
@@ -106,9 +123,13 @@ const Step1: FC<Step1Props> = ({ word, onNext, setCorrectAnswers }) => {
             </ul>
           </div>
           <Separator />
-          <Button onClick={submitted ? onNext : onSubmit} className="w-full">
-            {submitted ? "Next" : "Understood"}
-          </Button>
+          {submitted ? (
+            <Progress value={progress} className="w-full bg-green-500" />
+          ) : (
+            <Button onClick={onSubmit} className="w-full">
+              Understood
+            </Button>
+          )}
         </div>
       </CardContent>
     </Card>

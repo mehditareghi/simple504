@@ -16,6 +16,7 @@ import SpeechRecognition, {
 import { keyframes } from "@stitches/react";
 import { createClient } from "@/utils/supabase/client";
 import { Separator } from "@/components/ui/separator";
+import { Progress } from "@/components/ui/progress";
 
 interface Step7Props {
   word: {
@@ -41,6 +42,8 @@ const Step7: FC<Step7Props> = ({ word, onNext, setCorrectAnswers }) => {
   const supabase = createClient();
   const [submitted, setSubmitted] = useState(false);
   const [isCorrect, setIsCorrect] = useState<boolean | null>(null);
+  const [progress, setProgress] = useState(0);
+  const [showProgressBar, setShowProgressBar] = useState(false);
 
   const { transcript, listening, browserSupportsSpeechRecognition } =
     useSpeechRecognition();
@@ -70,6 +73,30 @@ const Step7: FC<Step7Props> = ({ word, onNext, setCorrectAnswers }) => {
     setSubmitted(true);
     setIsCorrect(correct);
     setCorrectAnswers((prev) => (correct ? prev + 1 : prev - 1));
+
+    if (correct) {
+      setShowProgressBar(true);
+    }
+  };
+
+  useEffect(() => {
+    if (showProgressBar) {
+      const interval = setInterval(() => {
+        setProgress((prev) => {
+          if (prev >= 100) {
+            clearInterval(interval);
+            onNext();
+            return 100;
+          }
+          return prev + 10;
+        });
+      }, 100);
+    }
+  }, [showProgressBar, onNext]);
+
+  const handleNextClick = () => {
+    setShowProgressBar(true);
+    setProgress(0); // Reset progress for smooth transition
   };
 
   const handleStartListening = () => {
@@ -114,13 +141,25 @@ const Step7: FC<Step7Props> = ({ word, onNext, setCorrectAnswers }) => {
           </span>
         </p>
         <Separator className="my-4" />
-        <Button
-          onClick={submitted ? onNext : onSubmit}
-          className="w-full"
-          disabled={listening || !transcript}
-        >
-          {submitted ? "Next" : "Submit"}
-        </Button>
+        {submitted ? (
+          isCorrect ? (
+            <Progress value={progress} className="w-full bg-green-500" />
+          ) : showProgressBar ? (
+            <Progress value={progress} className="w-full bg-orange-500" />
+          ) : (
+            <Button onClick={handleNextClick} className="w-full">
+              Next
+            </Button>
+          )
+        ) : (
+          <Button
+            onClick={onSubmit}
+            className="w-full"
+            disabled={listening || !transcript}
+          >
+            Submit
+          </Button>
+        )}
       </CardContent>
     </Card>
   );
