@@ -1,4 +1,4 @@
-import { FC, useState, useEffect } from "react";
+import { FC, useState, useEffect, Dispatch, SetStateAction } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -25,7 +25,7 @@ interface Step1Props {
     examples: string[];
   };
   onNext: () => void;
-  setCorrectAnswers: (correctAnswers: number) => void;
+  setCorrectAnswers: Dispatch<SetStateAction<number>>;
 }
 
 const pulse = keyframes({
@@ -37,7 +37,7 @@ const Step1: FC<Step1Props> = ({ word, onNext, setCorrectAnswers }) => {
   const supabase = createClient();
   const [isSpeaking, setIsSpeaking] = useState(false);
   const [submitted, setSubmitted] = useState(false);
-  const [progress, setProgress] = useState(0);
+  const [progress, setProgress] = useState<number>(0);
 
   const handlePlayAudio = () => {
     const utterance = new SpeechSynthesisUtterance(word.word);
@@ -63,7 +63,7 @@ const Step1: FC<Step1Props> = ({ word, onNext, setCorrectAnswers }) => {
       console.error("Error updating user_word_progress", error);
     }
     setSubmitted(true);
-    setCorrectAnswers((prev) => prev + 1);
+    setCorrectAnswers((prev: number) => prev + 1);
   };
 
   useEffect(() => {

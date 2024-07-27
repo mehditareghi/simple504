@@ -1,4 +1,4 @@
-import { FC, useState, useEffect } from "react";
+import { FC, useState, useEffect, Dispatch, SetStateAction } from "react";
 import { createClient } from "@/utils/supabase/client";
 import { Button } from "@/components/ui/button";
 import {
@@ -26,7 +26,7 @@ interface Step2Props {
   };
   onNext: () => void;
   courseId: string;
-  setCorrectAnswers: (correctAnswers: number) => void;
+  setCorrectAnswers: Dispatch<SetStateAction<number>>;
 }
 
 const supabase = createClient();

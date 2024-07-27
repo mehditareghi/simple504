@@ -23,7 +23,7 @@ import {
 } from "@/components/ui/card";
 import { SpeakerLoudIcon } from "@radix-ui/react-icons";
 import { keyframes } from "@stitches/react";
-import { useState, useEffect } from "react";
+import { useState, useEffect, Dispatch, SetStateAction } from "react";
 import { createClient } from "@/utils/supabase/client";
 import { Separator } from "@/components/ui/separator";
 import { Progress } from "@/components/ui/progress";
@@ -46,7 +46,7 @@ interface Step8Props {
     examples: string[];
   };
   onNext: () => void;
-  setCorrectAnswers: (correctAnswers: number) => void;
+  setCorrectAnswers: Dispatch<SetStateAction<number>>;
 }
 
 const pulse = keyframes({

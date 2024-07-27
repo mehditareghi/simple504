@@ -30,7 +30,7 @@ export default function LearningSession({
   firstWord,
 }: LearningSessionProps) {
   const supabase = createClient();
-  const [progress, setProgress] = useState(0);
+  const [progress, setProgress] = useState<number>(0);
   const [correctAnswers, setCorrectAnswers] = useState(0);
   const [currentWord, setCurrentWord] = useState(firstWord);
   const [currentStep, setCurrentStep] = useState(

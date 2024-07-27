@@ -1,6 +1,6 @@
 "use client";
 
-import { FC, useState, useEffect } from "react";
+import { FC, useState, useEffect, Dispatch, SetStateAction } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -30,7 +30,7 @@ interface Step7Props {
     examples: string[];
   };
   onNext: () => void;
-  setCorrectAnswers: (correctAnswers: number) => void;
+  setCorrectAnswers: Dispatch<SetStateAction<number>>;
 }
 
 const pulse = keyframes({

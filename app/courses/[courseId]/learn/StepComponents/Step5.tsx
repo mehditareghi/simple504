@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { createClient } from "@/utils/supabase/client";
-import { FC, useEffect, useState } from "react";
+import { Dispatch, FC, SetStateAction, useEffect, useState } from "react";
 import {
   Card,
   CardContent,
@@ -26,7 +26,7 @@ interface Step5Props {
   };
   onNext: () => void;
   courseId: string;
-  setCorrectAnswers: (correctAnswers: number) => void;
+  setCorrectAnswers: Dispatch<SetStateAction<number>>;
 }
 
 const supabase = createClient();

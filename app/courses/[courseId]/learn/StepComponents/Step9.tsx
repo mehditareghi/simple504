@@ -22,7 +22,7 @@ import {
   CardDescription,
 } from "@/components/ui/card";
 import { createClient } from "@/utils/supabase/client";
-import { useState, useEffect } from "react";
+import { useState, useEffect, Dispatch, SetStateAction } from "react";
 import { Separator } from "@/components/ui/separator";
 import { Progress } from "@/components/ui/progress";
 
@@ -44,7 +44,7 @@ interface Step9Props {
     examples: string[];
   };
   onNext: () => void;
-  setCorrectAnswers: (correctAnswers: number) => void;
+  setCorrectAnswers: Dispatch<SetStateAction<number>>;
 }
 
 const Step9: React.FC<Step9Props> = ({ word, onNext, setCorrectAnswers }) => {
