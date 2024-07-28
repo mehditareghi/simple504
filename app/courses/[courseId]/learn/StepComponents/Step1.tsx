@@ -8,10 +8,16 @@ import {
   CardDescription,
 } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import { SpeakerLoudIcon } from "@radix-ui/react-icons";
+import { SpeakerLoudIcon, Cross2Icon } from "@radix-ui/react-icons";
 import { keyframes } from "@stitches/react";
 import { createClient } from "@/utils/supabase/client";
 import { Progress } from "@/components/ui/progress";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 interface Step1Props {
   word: {
@@ -46,6 +52,17 @@ const Step1: FC<Step1Props> = ({ word, onNext, setCorrectAnswers }) => {
       setIsSpeaking(false);
     };
     speechSynthesis.speak(utterance);
+  };
+
+  const onIgnore = async () => {
+    const { error } = await supabase
+      .from("user_word_progress")
+      .update({ completed: true })
+      .match({ word_id: word.word_id, user_id: word.user_id });
+    if (error) {
+      console.error("Error marking word as completed", error);
+    }
+    setSubmitted(true);
   };
 
   const onSubmit = async () => {
@@ -85,19 +102,40 @@ const Step1: FC<Step1Props> = ({ word, onNext, setCorrectAnswers }) => {
     <Card>
       <CardHeader>
         <CardTitle>
-          <div className="flex items-center space-x-2">
-            <span className={submitted ? "text-green-500" : ""}>
-              {word.word}
-            </span>
-            <button
-              onClick={handlePlayAudio}
-              className="text-blue-500 hover:text-blue-700 focus:outline-none"
-            >
-              <SpeakerLoudIcon
-                className={`w-5 h-5 ${isSpeaking ? "animate-pulse" : ""}`}
-                style={isSpeaking ? { animation: `${pulse} 1s infinite` } : {}}
-              />
-            </button>
+          <div className="flex justify-between w-full">
+            <div className="flex items-center space-x-2">
+              <span className={submitted ? "text-green-500" : ""}>
+                {word.word}
+              </span>
+              <button
+                onClick={handlePlayAudio}
+                className="text-blue-500 hover:text-blue-700 focus:outline-none"
+              >
+                <SpeakerLoudIcon
+                  className={`w-5 h-5 ${isSpeaking ? "animate-pulse" : ""}`}
+                  style={
+                    isSpeaking ? { animation: `${pulse} 1s infinite` } : {}
+                  }
+                />
+              </button>
+            </div>
+            {!word.show_first_step && (
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <button
+                      onClick={onIgnore}
+                      className="text-gray-500 hover:text-gray-700 focus:outline-none"
+                    >
+                      <Cross2Icon className="w-5 h-5" />
+                    </button>
+                  </TooltipTrigger>
+                  <TooltipContent side="top" align="center">
+                    Ignore this word
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
+            )}
           </div>
         </CardTitle>
       </CardHeader>
