@@ -35,7 +35,7 @@ export default async function LearnPage({ params }: Params) {
       step,
       show_first_step,
       course_id,
-      word, definitions, examples
+      word, definitions, examples, image_base64
     `,
     )
     .eq("user_id", user.id)
@@ -46,6 +46,8 @@ export default async function LearnPage({ params }: Params) {
   if (userWordsError) {
     console.error("Error fetching user words:", userWordsError);
   }
+
+  console.log(userWords);
 
   const sessionLength = getSessionLength(userWords);
 
