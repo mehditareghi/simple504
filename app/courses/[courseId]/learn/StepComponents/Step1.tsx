@@ -96,6 +96,12 @@ const Step1: FC<Step1Props> = ({ word, onNext, setCorrectAnswers }) => {
         });
       }, 100);
     }
+    return () => {
+      if (progress >= 100) {
+        setSubmitted(false);
+        setProgress(0);
+      }
+    };
   }, [submitted, onNext]);
 
   return (
