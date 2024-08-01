@@ -7,7 +7,6 @@ interface Word {
   word: string;
   definitions: string[];
   examples: string[];
-  image_base64: string;
 }
 
 export const getNextWord = (userWords: Word[]): Word | null => {

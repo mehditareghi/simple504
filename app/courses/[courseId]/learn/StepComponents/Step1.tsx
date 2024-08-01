@@ -30,7 +30,6 @@ interface Step1Props {
     word: string;
     definitions: string[];
     examples: string[];
-    image_base64: string;
   };
   onNext: () => void;
   setCorrectAnswers: Dispatch<SetStateAction<number>>;
@@ -46,7 +45,6 @@ const Step1: FC<Step1Props> = ({ word, onNext, setCorrectAnswers }) => {
   const [isSpeaking, setIsSpeaking] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [progress, setProgress] = useState<number>(0);
-  console.log("hi there", word.image_base64);
 
   const handlePlayAudio = () => {
     const utterance = new SpeechSynthesisUtterance(word.word);
@@ -169,15 +167,13 @@ const Step1: FC<Step1Props> = ({ word, onNext, setCorrectAnswers }) => {
               ))}
             </ul>
           </div>
-          {word.image_base64 && (
-            <Image
-              src={`data:image/webp;base64,${word.image_base64}`}
-              alt={word.word}
-              width={1000}
-              height={1000}
-              className="w-full rounded-md"
-            />
-          )}
+          <Image
+            src={`${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/courses/${word.course_id}/images/${word.word}.webp}`}
+            alt={word.word}
+            width={1000}
+            height={1000}
+            className="w-full rounded-md"
+          />
           <Separator />
           {submitted ? (
             <Progress value={progress} className="w-full bg-green-500" />

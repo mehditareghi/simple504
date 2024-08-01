@@ -53,7 +53,7 @@ export default function LearningSession({
           step,
           show_first_step,
           course_id,
-          word, definitions, examples, image_base64
+          word, definitions, examples
         `,
         )
         .eq("user_id", userId)
