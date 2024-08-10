@@ -30,7 +30,7 @@ export default async function AuthButton() {
     <div className="flex items-center gap-4">
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Avatar className="cursor-pointer w-8 h-8 bg-blue-500 flex items-center justify-center">
+          <Avatar className="cursor-pointer w-8 h-8 bg-blue-500 dark:bg-blue-600 flex items-center justify-center">
             <span className="text-white text-sm">
               {user.email.charAt(0).toUpperCase()}
             </span>

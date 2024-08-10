@@ -35,12 +35,12 @@ export default async function ProtectedPage() {
     <div className="flex-1 w-full flex flex-col items-center">
       <Card className="w-full max-w-4xl">
         <CardHeader className="flex flex-col items-center">
-          <Avatar className="mb-4 w-24 h-24 bg-blue-500 flex items-center justify-center">
+          <Avatar className="mb-4 w-24 h-24 bg-blue-500 dark:bg-blue-600 flex items-center justify-center">
             <span className="text-white text-3xl">
               {user.email.charAt(0).toUpperCase()}
             </span>
           </Avatar>
-          <CardTitle className="text-3xl font-bold text-gray-800">
+          <CardTitle className="text-3xl font-bold text-slate-800 dark:text-slate-100">
             {user.email}
           </CardTitle>
           <CardDescription className="text-gray-500">
@@ -52,23 +52,29 @@ export default async function ProtectedPage() {
         </CardHeader>
         <CardContent className="space-y-6">
           <div>
-            <h2 className="text-xl font-semibold text-gray-700">
+            <h2 className="text-xl font-semibold text-slate-700 dark:text-slate-200">
               Account Info
             </h2>
             <Separator className="my-3" />
             <div className="space-y-2">
               <div className="flex justify-between">
-                <span className="text-gray-600">Email:</span>
+                <span className="text-slate-600 dark:text-slate-300">
+                  Email:
+                </span>
                 <Badge>{user.email}</Badge>
               </div>
               <div className="flex justify-between">
-                <span className="text-gray-600">User ID:</span>
+                <span className="text-slate-600 dark:text-slate-300">
+                  User ID:
+                </span>
                 <Badge>{user.id}</Badge>
               </div>
             </div>
           </div>
           <div>
-            <h2 className="text-xl font-semibold text-gray-700">Settings</h2>
+            <h2 className="text-xl font-semibold text-slate-700 dark:text-slate-200">
+              Settings
+            </h2>
             <Separator className="my-3" />
             <Button variant="ghost" className="w-full">
               Manage Account

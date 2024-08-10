@@ -97,9 +97,9 @@ export default async function CoursePage({ params }: { params: Params }) {
                   value={userProgress}
                   className={`${
                     userProgress === 100
-                      ? "bg-green-500"
+                      ? "bg-green-400 dark:bg-green-600"
                       : userProgress > 0
-                        ? "bg-orange-500"
+                        ? "bg-yellow-400 dark:bg-yellow-600"
                         : ""
                   }`}
                 />

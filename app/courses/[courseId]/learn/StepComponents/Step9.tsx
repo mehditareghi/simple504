@@ -111,7 +111,7 @@ const Step9: React.FC<Step9Props> = ({ word, onNext, setCorrectAnswers }) => {
   };
 
   return (
-    <Card className="p-6 bg-white rounded-lg shadow-lg space-y-4">
+    <Card className="p-6 rounded-lg shadow-lg space-y-4">
       <CardHeader className="mb-4">
         <CardTitle className="text-2xl font-bold text-gray-800">
           Type the word for the given definitions:
@@ -150,9 +150,15 @@ const Step9: React.FC<Step9Props> = ({ word, onNext, setCorrectAnswers }) => {
             <Separator className="my-4" />
             {submitted ? (
               isCorrect ? (
-                <Progress value={progress} className="w-full bg-green-500" />
+                <Progress
+                  value={progress}
+                  className="w-full bg-green-400 dark:bg-green-600"
+                />
               ) : showProgressBar ? (
-                <Progress value={progress} className="w-full bg-orange-500" />
+                <Progress
+                  value={progress}
+                  className="w-full bg-yellow-400 dark:bg-yellow-"
+                />
               ) : (
                 <Button onClick={handleNextClick} className="w-full">
                   Next

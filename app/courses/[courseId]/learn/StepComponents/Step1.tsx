@@ -179,7 +179,10 @@ const Step1: FC<Step1Props> = ({ word, onNext, setCorrectAnswers }) => {
           />
           <Separator />
           {submitted ? (
-            <Progress value={progress} className="w-full bg-green-500" />
+            <Progress
+              value={progress}
+              className="w-full bg-green-400 dark:bg-green-600"
+            />
           ) : (
             <Button onClick={onSubmit} className="w-full">
               Understood

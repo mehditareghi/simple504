@@ -34,7 +34,7 @@ export default function WordWrapper({ words }: WordWrapperProps) {
       <div className="flex flex-col w-full max-w-4xl gap-4">
         {words.map((word) => (
           <Card key={word.id} className="border rounded-lg shadow-sm">
-            <CardHeader className="flex justify-between items-center bg-gray-50 p-4">
+            <CardHeader className="flex justify-between items-center p-4">
               <div className="flex items-center space-x-2">
                 <CardTitle className="text-xl font-semibold">
                   {word.word}

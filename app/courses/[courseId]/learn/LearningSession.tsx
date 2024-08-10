@@ -194,18 +194,16 @@ export default function LearningSession({
     );
 
   return (
-    <div className="max-w-3xl mx-auto p-6 bg-white rounded-lg space-y-6">
-      <h1 className="text-3xl font-bold text-gray-800 mb-4 text-center">
-        Learning Session
-      </h1>
+    <div className="max-w-3xl mx-auto p-6 rounded-lg space-y-6">
+      <h1 className="text-3xl font-bold mb-4 text-center">Learning Session</h1>
       <Progress
         value={progress}
         className={`h-4 rounded ${
           progress === 100
-            ? "bg-green-500"
+            ? "bg-green-400 dark:bg-green-600"
             : progress > 0
-              ? "bg-orange-500"
-              : "bg-gray-300"
+              ? "bg-yellow-400 dark:bg-yellow-600"
+              : ""
         }`}
       />
       <div className="text-right text-gray-500">

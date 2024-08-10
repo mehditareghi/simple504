@@ -134,7 +134,7 @@ const Step4: FC<Step4Props> = ({
 
   if (loading) {
     return (
-      <Card className="p-6 bg-white rounded-lg shadow-lg space-y-4">
+      <Card className="p-6 rounded-lg shadow-lg space-y-4">
         <CardContent>
           <div className="space-y-4">
             <div className="bg-gray-300 animate-pulse h-10 w-3/4 mx-auto rounded"></div>
@@ -148,7 +148,7 @@ const Step4: FC<Step4Props> = ({
   }
 
   return (
-    <Card className="p-6 bg-white rounded-lg shadow-lg space-y-4">
+    <Card className="p-6 rounded-lg shadow-lg space-y-4">
       <CardHeader className="mb-4">
         <CardTitle className="text-2xl font-bold text-gray-800 flex items-center space-x-2">
           <span>Complete the Sentence</span>
@@ -183,9 +183,15 @@ const Step4: FC<Step4Props> = ({
         <Separator className="my-4" />
         {submitted ? (
           isCorrect ? (
-            <Progress value={progress} className="w-full bg-green-500" />
+            <Progress
+              value={progress}
+              className="w-full bg-green-400 dark:bg-green-600"
+            />
           ) : showProgressBar ? (
-            <Progress value={progress} className="w-full bg-orange-500" />
+            <Progress
+              value={progress}
+              className="w-full bg-yellow-400 dark:bg-yellow-600"
+            />
           ) : (
             <Button onClick={handleNextClick} className="w-full">
               Next

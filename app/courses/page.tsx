@@ -63,10 +63,10 @@ export default async function CoursesPage() {
                     value={(userCourse.progress / course.word_count) * 100}
                     className={`${
                       (userCourse.progress / course.word_count) * 100 === 100
-                        ? "bg-green-500"
+                        ? "bg-green-400 dark:bg-green-600"
                         : (userCourse.progress / course.word_count) * 100 === 0
                           ? ""
-                          : "bg-orange-500"
+                          : "bg-yellow-400 dark:bg-yellow-600"
                     }`}
                   />
                 )}
