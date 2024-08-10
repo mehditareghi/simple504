@@ -1,6 +1,15 @@
 import { createClient } from "@/utils/supabase/server";
 import Link from "next/link";
 import { redirect } from "next/navigation";
+import { Avatar } from "@/components/ui/avatar";
+import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { User, LogOut } from "lucide-react";
 
 export default async function AuthButton() {
   const supabase = createClient();
@@ -19,12 +28,31 @@ export default async function AuthButton() {
 
   return user ? (
     <div className="flex items-center gap-4">
-      Hey, {user.email}!
-      <form action={signOut}>
-        <button className="py-2 px-4 rounded-md no-underline bg-btn-background hover:bg-btn-background-hover">
-          Logout
-        </button>
-      </form>
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <Avatar className="cursor-pointer w-8 h-8 bg-blue-500 flex items-center justify-center">
+            <span className="text-white text-sm">
+              {user.email.charAt(0).toUpperCase()}
+            </span>
+          </Avatar>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent className="w-48">
+          <DropdownMenuItem asChild>
+            <Link href="/profile" className="flex items-center gap-2">
+              <User className="w-4 h-4" />
+              <span>Profile</span>
+            </Link>
+          </DropdownMenuItem>
+          <DropdownMenuItem asChild>
+            <form action={signOut}>
+              <button className="flex items-center gap-2 w-full text-left">
+                <LogOut className="w-4 h-4" />
+                <span>Logout</span>
+              </button>
+            </form>
+          </DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
     </div>
   ) : (
     <Link
