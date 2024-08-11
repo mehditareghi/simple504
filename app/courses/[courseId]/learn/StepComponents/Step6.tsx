@@ -164,7 +164,7 @@ const Step6: FC<Step6Props> = ({
   return (
     <Card className="p-6 rounded-lg shadow-lg space-y-4">
       <CardHeader className="mb-4">
-        <CardTitle className="text-2xl font-bold text-gray-800 flex items-center space-x-2">
+        <CardTitle className="text-2xl font-bold text-slate-800 dark:text-slate-200 flex items-center space-x-2">
           <span>
             Listen to the Pronunciation and Select the Correct Definition
           </span>
@@ -192,14 +192,16 @@ const Step6: FC<Step6Props> = ({
               key={index}
               variant="outline"
               onClick={() => setSelectedOption(option)}
-              className={`w-full text-left py-2 px-4 rounded-md border border-gray-300 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-indigo-500 ${
-                selectedOption === option ? "bg-gray-100" : ""
+              className={`w-full text-left py-2 px-4 rounded-md border border-slate-300 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 ${
+                selectedOption === option
+                  ? "bg-slate-100 dark:bg-slate-900"
+                  : ""
               } ${
                 submitted &&
                 (option === correctOption
-                  ? "bg-green-100"
+                  ? "bg-green-100 dark:bg-green-900 border-green-300 dark:border-green-700"
                   : selectedOption === option
-                    ? "bg-red-100"
+                    ? "bg-red-100 dark:bg-red-900 border-red-300 dark:border-red-700"
                     : "")
               }`}
             >

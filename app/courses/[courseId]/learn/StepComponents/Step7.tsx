@@ -110,7 +110,7 @@ const Step7: FC<Step7Props> = ({ word, onNext, setCorrectAnswers }) => {
   return (
     <Card className="p-6 rounded-lg shadow-lg space-y-4">
       <CardHeader className="mb-4">
-        <CardTitle className="text-2xl font-bold text-gray-800">
+        <CardTitle className="text-2xl font-bold text-slate-800 dark:text-slate-200">
           Pronounce the word: {word.word}
         </CardTitle>
         <CardDescription>
@@ -135,7 +135,7 @@ const Step7: FC<Step7Props> = ({ word, onNext, setCorrectAnswers }) => {
         <p className="mt-4">
           Spoken word:{" "}
           <span
-            className={`font-bold ${isCorrect === false ? "text-red-500" : "text-green-500"}`}
+            className={`font-bold ${isCorrect === false ? "text-red-400 dark:text-red-500" : "text-green-400 dark:text-green-500"}`}
           >
             {transcript.toLowerCase().trim()}
           </span>

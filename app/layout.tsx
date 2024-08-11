@@ -31,7 +31,7 @@ export default function RootLayout({
                   href="/"
                   className="no-underline text-foreground hover:underline"
                 >
-                  Home
+                  frendere
                 </Link>
                 <div className="flex items-center gap-4">
                   <ThemeToggle /> {/* Add the ThemeToggle here */}

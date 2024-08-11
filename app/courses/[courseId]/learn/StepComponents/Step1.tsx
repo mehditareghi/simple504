@@ -111,9 +111,7 @@ const Step1: FC<Step1Props> = ({ word, onNext, setCorrectAnswers }) => {
         <CardTitle>
           <div className="flex justify-between w-full">
             <div className="flex items-center space-x-2">
-              <span className={submitted ? "text-green-500" : ""}>
-                {word.word}
-              </span>
+              <span>{word.word}</span>
               <button
                 onClick={handlePlayAudio}
                 className="text-blue-500 hover:text-blue-700 focus:outline-none"

@@ -130,7 +130,7 @@ const Step8: React.FC<Step8Props> = ({ word, onNext, setCorrectAnswers }) => {
   return (
     <Card className="p-6 rounded-lg shadow-lg space-y-4">
       <CardHeader className="mb-4">
-        <CardTitle className="text-2xl font-bold text-gray-800">
+        <CardTitle className="text-2xl font-bold text-slate-800 dark:text-slate-200">
           Type the word for the pronunciation:
         </CardTitle>
         <CardDescription>
@@ -160,9 +160,9 @@ const Step8: React.FC<Step8Props> = ({ word, onNext, setCorrectAnswers }) => {
                       {...field}
                       className={
                         isCorrect === false
-                          ? "border-red-500"
+                          ? "border-red-300 dark:border-red-700"
                           : isCorrect === true
-                            ? "border-green-500"
+                            ? "border-green-300 dark:border-green-700"
                             : ""
                       }
                     />
