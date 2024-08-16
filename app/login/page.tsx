@@ -3,8 +3,11 @@ import { headers } from "next/headers";
 import { createClient } from "@/utils/supabase/server";
 import { redirect } from "next/navigation";
 import { SubmitButton } from "./submit-button";
+import { Card, CardHeader, CardContent, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Separator } from "@/components/ui/separator";
 
-export default function Login({
+export default async function Login({
   searchParams,
 }: {
   searchParams: { message: string };
@@ -22,7 +25,7 @@ export default function Login({
     });
 
     if (error) {
-      console.log(error.message)
+      console.log(error.message);
       return redirect("/login?message=Could not authenticate user");
     }
 
@@ -53,68 +56,76 @@ export default function Login({
   };
 
   return (
-    <div className="flex-1 flex flex-col w-full px-8 sm:max-w-md justify-center gap-2">
-      <Link
-        href="/"
-        className="absolute left-20 top-20 py-2 px-4 rounded-md no-underline text-foreground bg-btn-background hover:bg-btn-background-hover flex items-center group text-sm"
-      >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="24"
-          height="24"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          className="mr-2 h-4 w-4 transition-transform group-hover:-translate-x-1"
-        >
-          <polyline points="15 18 9 12 15 6" />
-        </svg>{" "}
-        Back
-      </Link>
+    <div className="flex-1 flex flex-col items-center justify-center px-4 py-12 sm:px-6 lg:px-8">
+      <Card className="w-full max-w-md space-y-8">
+        <CardHeader className="text-center">
+          <CardTitle className="text-2xl font-bold">Welcome</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <form className="flex flex-col space-y-6">
+            <div className="space-y-4">
+              <div>
+                <label
+                  className="block text-sm font-medium text-foreground"
+                  htmlFor="email"
+                >
+                  Email
+                </label>
+                <Input
+                  id="email"
+                  name="email"
+                  type="email"
+                  placeholder="you@example.com"
+                  className="mt-1"
+                  required
+                />
+              </div>
 
-      <form className="flex-1 flex flex-col w-full justify-center gap-2 text-foreground">
-        <label className="text-md" htmlFor="email">
-          Email
-        </label>
-        <input
-          className="rounded-md px-4 py-2 bg-inherit border mb-6"
-          name="email"
-          placeholder="you@example.com"
-          required
-        />
-        <label className="text-md" htmlFor="password">
-          Password
-        </label>
-        <input
-          className="rounded-md px-4 py-2 bg-inherit border mb-6"
-          type="password"
-          name="password"
-          placeholder="••••••••"
-          required
-        />
-        <SubmitButton
-          formAction={signIn}
-          className="bg-green-700 rounded-md px-4 py-2 text-foreground mb-2"
-          pendingText="Signing In..."
-        >
-          Sign In
-        </SubmitButton>
-        <SubmitButton
-          formAction={signUp}
-          className="border border-foreground/20 rounded-md px-4 py-2 text-foreground mb-2"
-          pendingText="Signing Up..."
-        >
-          Sign Up
-        </SubmitButton>
+              <div>
+                <label
+                  className="block text-sm font-medium text-foreground"
+                  htmlFor="password"
+                >
+                  Password
+                </label>
+                <Input
+                  id="password"
+                  name="password"
+                  type="password"
+                  placeholder="••••••••"
+                  className="mt-1"
+                  required
+                />
+              </div>
+            </div>
+
+            <Separator />
+
+            <div className="space-y-4">
+              <SubmitButton
+                formAction={signIn}
+                pendingText="Signing In..."
+                className="w-full"
+              >
+                Sign In
+              </SubmitButton>
+              <SubmitButton
+                formAction={signUp}
+                variant="outline"
+                pendingText="Signing Up..."
+                className="w-full"
+              >
+                Sign Up
+              </SubmitButton>
+            </div>
+          </form>
+        </CardContent>
         {searchParams?.message && (
           <p className="mt-4 p-4 bg-foreground/10 text-foreground text-center">
             {searchParams.message}
           </p>
         )}
-      </form>
+      </Card>
     </div>
   );
 }
