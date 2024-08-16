@@ -3,7 +3,7 @@ import "./globals.css";
 import { Toaster } from "@/components/ui/sonner";
 import AuthButton from "@/components/AuthButton";
 import Link from "next/link";
-import ThemeToggle from "@/components/ThemeToggle"; // Import the ThemeToggle component
+import ThemeToggle from "@/components/ThemeToggle";
 
 const defaultUrl = process.env.VERCEL_URL
   ? `https://${process.env.VERCEL_URL}`
@@ -11,8 +11,9 @@ const defaultUrl = process.env.VERCEL_URL
 
 export const metadata = {
   metadataBase: new URL(defaultUrl),
-  title: "Next.js and Supabase Starter Kit",
-  description: "The fastest way to build apps with Next.js and Supabase",
+  title: "Frendere - Your Language Learning Companion",
+  description:
+    "Master new languages with Frendere's interactive lessons, tracking, and community support.",
 };
 
 export default function RootLayout({
@@ -31,10 +32,10 @@ export default function RootLayout({
                   href="/"
                   className="no-underline text-foreground hover:underline"
                 >
-                  frendere
+                  Frendere
                 </Link>
                 <div className="flex items-center gap-4">
-                  <ThemeToggle /> {/* Add the ThemeToggle here */}
+                  <ThemeToggle />
                   <AuthButton />
                 </div>
               </div>
@@ -44,17 +45,26 @@ export default function RootLayout({
               <main className="flex-1 flex flex-col gap-6">{children}</main>
             </div>
 
-            <footer className="w-full border-t border-t-slate-200 dark:border-t-slate-800 p-8 flex justify-center text-center text-xs">
-              <p>
-                Powered by{" "}
-                <a
-                  href="https://supabase.com/?utm_source=create-next-app&utm_medium=template&utm_term=nextjs"
-                  target="_blank"
-                  className="font-bold hover:underline"
-                  rel="noreferrer"
-                >
-                  Supabase
-                </a>
+            <footer className="w-full border-t border-t-slate-200 dark:border-t-slate-800 p-8">
+              <div className="max-w-4xl mx-auto flex flex-col md:flex-row items-center justify-center gap-6 text-center md:text-left">
+                <p className="text-sm">
+                  &copy; {new Date().getFullYear()} Frendere. All rights
+                  reserved.
+                </p>
+                <div className="flex gap-4">
+                  <Link href="/about" className="text-sm hover:underline">
+                    About Us
+                  </Link>
+                  <Link href="/privacy" className="text-sm hover:underline">
+                    Privacy Policy
+                  </Link>
+                  <Link href="/contact" className="text-sm hover:underline">
+                    Contact
+                  </Link>
+                </div>
+              </div>
+              <p className="text-center text-sm mt-4">
+                Designed with care by the Frendere team.
               </p>
             </footer>
           </div>
