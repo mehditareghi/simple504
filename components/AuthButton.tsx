@@ -9,7 +9,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { User, LogOut } from "lucide-react";
+import { Settings, User, LogOut } from "lucide-react";
 
 export default async function AuthButton() {
   const supabase = createClient();
@@ -43,6 +43,14 @@ export default async function AuthButton() {
               <span>Profile</span>
             </Link>
           </DropdownMenuItem>
+          {user.user_metadata.role && user.user_metadata.role === "admin" && (
+            <DropdownMenuItem asChild>
+              <Link href="/admin-dashboard" className="flex items-center gap-2">
+                <Settings className="w-4 h-4" />
+                <span>Admin Dashboard</span>
+              </Link>
+            </DropdownMenuItem>
+          )}
           <DropdownMenuItem asChild>
             <form action={signOut}>
               <button className="flex items-center gap-2 w-full text-left">
