@@ -1,6 +1,6 @@
 // components/Breadcrumbs.tsx
 "use client";
-import { Fragment } from "React";
+import { Fragment } from "react";
 import { usePathname } from "next/navigation";
 import {
   Breadcrumb,
