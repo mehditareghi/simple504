@@ -157,7 +157,7 @@ const Step9: React.FC<Step9Props> = ({ word, onNext, setCorrectAnswers }) => {
               ) : showProgressBar ? (
                 <Progress
                   value={progress}
-                  className="w-full bg-yellow-400 dark:bg-yellow-"
+                  className="w-full bg-red-400 dark:bg-red-600"
                 />
               ) : (
                 <Button onClick={handleNextClick} className="w-full">

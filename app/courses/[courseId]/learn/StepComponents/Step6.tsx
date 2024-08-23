@@ -219,7 +219,7 @@ const Step6: FC<Step6Props> = ({
           ) : showProgressBar ? (
             <Progress
               value={progress}
-              className="w-full bg-yellow-400 dark:bg-yellow-600"
+              className="w-full bg-red-400 dark:bg-red-600"
             />
           ) : (
             <Button onClick={handleNextClick} className="w-full">

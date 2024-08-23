@@ -1,5 +1,8 @@
+"use client";
+
 import { Dispatch, FC, SetStateAction, useEffect, useState } from "react";
 import { createClient } from "@/utils/supabase/client";
+import { useDrag, useDrop } from "react-dnd";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -43,6 +46,8 @@ const Step4: FC<Step4Props> = ({
   const [progress, setProgress] = useState(0);
   const [isCorrect, setIsCorrect] = useState(false);
   const [showProgressBar, setShowProgressBar] = useState(false);
+
+  const ITEM_TYPE = "WORD_OPTION";
 
   useEffect(() => {
     const fetchOtherWords = async () => {
@@ -132,6 +137,45 @@ const Step4: FC<Step4Props> = ({
     setProgress(0); // Reset progress for smooth transition
   };
 
+  const [{ isOver }, drop] = useDrop({
+    accept: ITEM_TYPE,
+    drop: (item: { word: string }) => setSelectedOption(item.word),
+    collect: (monitor) => ({
+      isOver: monitor.isOver(),
+    }),
+  });
+
+  const DragOption = ({ option }: { option: string }) => {
+    const [{ isDragging }, drag] = useDrag({
+      type: ITEM_TYPE,
+      item: { word: option },
+      collect: (monitor) => ({
+        isDragging: monitor.isDragging(),
+      }),
+    });
+
+    const isCorrectAnswer = submitted && option === word.word;
+    const isWrongAnswer =
+      submitted && selectedOption === option && option !== word.word;
+
+    return (
+      <div
+        ref={drag}
+        className={`inline-block py-1 px-2 rounded-lg shadow-md border transition-transform transform ${
+          isDragging ? "scale-105 opacity-50" : "hover:scale-110 opacity-100"
+        } ${
+          isCorrectAnswer
+            ? "bg-green-100 dark:bg-green-900 border-green-300 dark:border-green-700 text-green-700 dark:text-green-300"
+            : isWrongAnswer
+              ? "bg-red-100 border-red-400 text-red-800"
+              : "bg-white dark:bg-slate-800 border-slate-300 dark:border-slate-700 text-slate-700 dark:text-slate-300"
+        } ${selectedOption === option ? "hidden" : "block"}`}
+      >
+        <span>{option}</span>
+      </div>
+    );
+  };
+
   if (loading) {
     return (
       <Card className="p-6 rounded-lg shadow-lg space-y-4">
@@ -151,35 +195,39 @@ const Step4: FC<Step4Props> = ({
     <Card className="p-6 rounded-lg shadow-lg space-y-4">
       <CardHeader className="mb-4">
         <CardTitle className="text-2xl font-bold text-slate-800 dark:text-slate-200 flex items-center space-x-2">
-          <span>Complete the Sentence</span>
+          <span>Drag and Drop the Correct Word</span>
         </CardTitle>
         <CardDescription>
-          Select the correct word to complete the sentence.
+          Drag the correct word into the blank space to complete the sentence.
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <div className="space-y-4">
-          <p className="text-lg">{example}</p>
+        <p className="text-lg">
+          {example.split("______").map((segment, index) => (
+            <span key={index}>
+              {segment}
+              {index < example.split("______").length - 1 && (
+                <span
+                  ref={drop}
+                  className={`inline-block rounded-lg px-2 mx-1 py-1 border shadow-md text-base ${
+                    isCorrect
+                      ? "bg-green-100 dark:bg-green-900 border-green-300 dark:border-green-700 text-green-700 dark:text-green-300"
+                      : submitted && !isCorrect
+                        ? "bg-red-100 dark:bg-red-900 border-red-300 dark:border-red-700 text-red-700 dark:text-red-300"
+                        : "bg-white dark:bg-slate-800 border-slate-300 dark:border-slate-700"
+                  }`}
+                >
+                  {selectedOption ||
+                    "\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0"}
+                </span>
+              )}
+            </span>
+          ))}
+        </p>
+        <Separator className="my-4" />
+        <div className="flex flex-wrap gap-4 justify-center">
           {options.map((option, index) => (
-            <Button
-              key={index}
-              variant="outline"
-              onClick={() => setSelectedOption(option)}
-              className={`w-full text-left py-2 px-4 rounded-md border border-slate-300 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 ${
-                selectedOption === option
-                  ? "bg-slate-100 dark:bg-slate-900"
-                  : ""
-              } ${
-                submitted &&
-                (option === correctOption
-                  ? "bg-green-100 dark:bg-green-900 border-green-300 dark:border-green-700"
-                  : selectedOption === option
-                    ? "bg-red-100 dark:bg-red-900 border-red-300 dark:border-red-700"
-                    : "")
-              }`}
-            >
-              {option}
-            </Button>
+            <DragOption key={index} option={option} />
           ))}
         </div>
         <Separator className="my-4" />
@@ -192,7 +240,7 @@ const Step4: FC<Step4Props> = ({
           ) : showProgressBar ? (
             <Progress
               value={progress}
-              className="w-full bg-yellow-400 dark:bg-yellow-600"
+              className="w-full bg-red-400 dark:bg-red-600"
             />
           ) : (
             <Button onClick={handleNextClick} className="w-full">
