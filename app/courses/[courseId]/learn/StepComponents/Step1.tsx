@@ -40,6 +40,7 @@ interface Step1Props {
     definitions: string[];
     examples: string[];
     note: string | null;
+    phonetics: string;
   };
   onNext: () => void;
   setCorrectAnswers: Dispatch<SetStateAction<number>>;
@@ -135,6 +136,9 @@ const Step1: FC<Step1Props> = ({ word, onNext, setCorrectAnswers }) => {
           <div className="flex justify-between w-full">
             <div className="flex items-center space-x-2">
               <span>{word.word}</span>
+              <span className="text-slate-500 dark:text-slate-500 font-normal">
+                {word.phonetics}
+              </span>
               <button
                 onClick={handlePlayAudio}
                 className="text-blue-500 hover:text-blue-700 focus:outline-none"

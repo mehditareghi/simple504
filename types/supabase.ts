@@ -300,6 +300,7 @@ export type Database = {
           definitions: Json | null
           examples: Json | null
           note: string | null
+          phonetics: string | null
           show_first_step: boolean | null
           step: number | null
           unit_id: string | null

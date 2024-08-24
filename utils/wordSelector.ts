@@ -8,6 +8,7 @@ interface Word {
   definitions: string[];
   examples: string[];
   note: string;
+  phonetics: string;
 }
 
 export const getNextWord = (userWords: Word[]): Word | null => {
