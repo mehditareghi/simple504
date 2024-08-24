@@ -53,13 +53,13 @@ export default function LearningSession({
           step,
           show_first_step,
           course_id,
-          word, definitions, examples
+          word, definitions, examples, note
         `,
         )
         .eq("user_id", userId)
         .eq("course_id", courseId)
         .eq("completed", false)
-        .limit(4);
+        .limit(12);
 
       if (userWordsError) {
         console.error("Error fetching user words:", userWordsError);

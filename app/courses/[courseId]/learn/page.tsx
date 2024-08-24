@@ -35,7 +35,7 @@ export default async function LearnPage({ params }: Params) {
       step,
       show_first_step,
       course_id,
-      word, definitions, examples
+      word, definitions, examples, note
     `,
     )
     .eq("user_id", user.id)

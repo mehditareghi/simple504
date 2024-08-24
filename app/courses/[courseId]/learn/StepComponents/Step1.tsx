@@ -19,6 +19,15 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import Image from "next/image";
+import {
+  Dialog,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
 
 interface Step1Props {
   word: {
@@ -30,6 +39,7 @@ interface Step1Props {
     word: string;
     definitions: string[];
     examples: string[];
+    note: string | null;
   };
   onNext: () => void;
   setCorrectAnswers: Dispatch<SetStateAction<number>>;
@@ -45,6 +55,8 @@ const Step1: FC<Step1Props> = ({ word, onNext, setCorrectAnswers }) => {
   const [isSpeaking, setIsSpeaking] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [progress, setProgress] = useState<number>(0);
+  const [note, setNote] = useState<string | null>(word.note);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   const handlePlayAudio = () => {
     const utterance = new SpeechSynthesisUtterance(word.word);
@@ -82,6 +94,17 @@ const Step1: FC<Step1Props> = ({ word, onNext, setCorrectAnswers }) => {
     }
     setSubmitted(true);
     setCorrectAnswers((prev: number) => prev + 1);
+  };
+
+  const handleSaveNote = async () => {
+    const { error } = await supabase
+      .from("user_word_progress")
+      .update({ note })
+      .match({ word_id: word.word_id, user_id: word.user_id });
+    if (error) {
+      console.error("Error updating note", error);
+    }
+    setIsDialogOpen(false);
   };
 
   useEffect(() => {
@@ -175,6 +198,39 @@ const Step1: FC<Step1Props> = ({ word, onNext, setCorrectAnswers }) => {
             height={1000}
             className="w-full rounded-md"
           />
+          <Separator />
+          {note && (
+            <>
+              <CardDescription className="font-bold">
+                Your Note:
+              </CardDescription>
+              <p>{note}</p>
+            </>
+          )}
+
+          <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+            <DialogTrigger asChild>
+              <Button variant="outline">
+                {note ? "Edit Note" : "Add Note"}
+              </Button>
+            </DialogTrigger>
+            <DialogContent>
+              <DialogHeader>
+                <DialogTitle>
+                  {note ? "Edit Your Note" : "Add a Note"}
+                </DialogTitle>
+              </DialogHeader>
+              <Input
+                value={note || ""}
+                onChange={(e) => setNote(e.target.value)}
+                placeholder="Write your note here..."
+              />
+              <DialogFooter>
+                <Button onClick={handleSaveNote}>Save</Button>
+              </DialogFooter>
+            </DialogContent>
+          </Dialog>
+
           <Separator />
           {submitted ? (
             <Progress
