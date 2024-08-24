@@ -9,11 +9,10 @@ import {
   CardTitle,
   CardDescription,
 } from "@/components/ui/card";
-import { SpeakerLoudIcon } from "@radix-ui/react-icons";
+import { MicIcon, Loader2Icon } from "lucide-react";
 import SpeechRecognition, {
   useSpeechRecognition,
 } from "react-speech-recognition";
-import { keyframes } from "@stitches/react";
 import { createClient } from "@/utils/supabase/client";
 import { Separator } from "@/components/ui/separator";
 import { Progress } from "@/components/ui/progress";
@@ -32,11 +31,6 @@ interface Step7Props {
   onNext: () => void;
   setCorrectAnswers: Dispatch<SetStateAction<number>>;
 }
-
-const pulse = keyframes({
-  "0%, 100%": { transform: "scale(1)", opacity: 1 },
-  "50%": { transform: "scale(1.2)", opacity: 0.8 },
-});
 
 const Step7: FC<Step7Props> = ({ word, onNext, setCorrectAnswers }) => {
   const supabase = createClient();
@@ -114,28 +108,34 @@ const Step7: FC<Step7Props> = ({ word, onNext, setCorrectAnswers }) => {
           Pronounce the word: {word.word}
         </CardTitle>
         <CardDescription>
-          Hold the button below and pronounce the word clearly.
+          Press and hold the microphone icon, then pronounce the word clearly.
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <div className="flex gap-3 items-center">
+        <div className="flex gap-3 items-center justify-center">
           <Button
             onMouseDown={handleStartListening}
             onMouseUp={handleStopListening}
             onMouseLeave={handleStopListening}
             onTouchStart={handleStartListening}
             onTouchEnd={handleStopListening}
-            className={`flex items-center gap-2 ${listening ? "animate-pulse" : ""}`}
-            style={listening ? { animation: `${pulse} 1s infinite` } : {}}
+            className="flex items-center justify-center p-4 rounded-full bg-blue-600 dark:bg-blue-600 hover:bg-blue-700 dark:hover:bg-blue-500"
           >
-            <SpeakerLoudIcon className="w-5 h-5" />
-            {listening ? "Listening..." : "Hold to Pronounce"}
+            {listening ? (
+              <Loader2Icon className="w-6 h-6 animate-spin text-white" />
+            ) : (
+              <MicIcon className="w-6 h-6 text-white" />
+            )}
           </Button>
         </div>
-        <p className="mt-4">
+        <p className="mt-4 text-center">
           Spoken word:{" "}
           <span
-            className={`font-bold ${isCorrect === false ? "text-red-400 dark:text-red-500" : "text-green-400 dark:text-green-500"}`}
+            className={`font-bold ${
+              isCorrect === false
+                ? "text-red-400 dark:text-red-500"
+                : "text-green-400 dark:text-green-500"
+            }`}
           >
             {transcript.toLowerCase().trim()}
           </span>
