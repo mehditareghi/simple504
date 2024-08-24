@@ -137,14 +137,6 @@ const Step4: FC<Step4Props> = ({
     setProgress(0); // Reset progress for smooth transition
   };
 
-  const [{ isOver }, drop] = useDrop({
-    accept: ITEM_TYPE,
-    drop: (item: { word: string }) => setSelectedOption(item.word),
-    collect: (monitor) => ({
-      isOver: monitor.isOver(),
-    }),
-  });
-
   const DragOption = ({ option }: { option: string }) => {
     const [{ isDragging }, drag] = useDrag({
       type: ITEM_TYPE,
@@ -154,6 +146,12 @@ const Step4: FC<Step4Props> = ({
       }),
     });
 
+    const handleClick = () => {
+      if (!submitted) {
+        setSelectedOption(option);
+      }
+    };
+
     const isCorrectAnswer = submitted && option === word.word;
     const isWrongAnswer =
       submitted && selectedOption === option && option !== word.word;
@@ -161,7 +159,8 @@ const Step4: FC<Step4Props> = ({
     return (
       <div
         ref={drag}
-        className={`inline-block py-1 px-2 rounded-lg shadow-md border transition-transform transform ${
+        onClick={handleClick}
+        className={`inline-block py-1 px-2 rounded-lg shadow-md border transition-transform transform cursor-pointer ${
           isDragging ? "scale-105 opacity-50" : "hover:scale-110 opacity-100"
         } ${
           isCorrectAnswer
@@ -175,6 +174,14 @@ const Step4: FC<Step4Props> = ({
       </div>
     );
   };
+
+  const [{ isOver }, drop] = useDrop({
+    accept: ITEM_TYPE,
+    drop: (item: { word: string }) => setSelectedOption(item.word),
+    collect: (monitor) => ({
+      isOver: monitor.isOver(),
+    }),
+  });
 
   if (loading) {
     return (
@@ -195,10 +202,11 @@ const Step4: FC<Step4Props> = ({
     <Card className="p-6 rounded-lg shadow-lg space-y-4">
       <CardHeader className="mb-4">
         <CardTitle className="text-2xl font-bold text-slate-800 dark:text-slate-200 flex items-center space-x-2">
-          <span>Drag and Drop the Correct Word</span>
+          <span>Select or Drag the Correct Word</span>
         </CardTitle>
         <CardDescription>
-          Drag the correct word into the blank space to complete the sentence.
+          Click or drag the correct word into the blank space to complete the
+          sentence.
         </CardDescription>
       </CardHeader>
       <CardContent>
