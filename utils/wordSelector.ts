@@ -9,6 +9,7 @@ interface Word {
   examples: string[];
   note: string;
   phonetics: string;
+  image: string;
 }
 
 export const getNextWord = (userWords: Word[]): Word | null => {

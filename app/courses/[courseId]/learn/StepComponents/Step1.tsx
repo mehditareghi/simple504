@@ -41,6 +41,7 @@ interface Step1Props {
     examples: string[];
     note: string | null;
     phonetics: string;
+    image: string;
   };
   onNext: () => void;
   setCorrectAnswers: Dispatch<SetStateAction<number>>;
@@ -193,10 +194,7 @@ const Step1: FC<Step1Props> = ({ word, onNext, setCorrectAnswers }) => {
             </ul>
           </div>
           <Image
-            src={`${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/courses/${word.course_id}/images/${word.word}.webp`.replace(
-              "%7D",
-              "",
-            )}
+            src={word.image}
             alt={word.word}
             width={1000}
             height={1000}

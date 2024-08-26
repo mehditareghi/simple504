@@ -249,6 +249,7 @@ export type Database = {
           definitions: Json
           examples: Json
           id: string
+          image: string | null
           order: number
           phonetics: string | null
           unit_id: string
@@ -259,6 +260,7 @@ export type Database = {
           definitions: Json
           examples: Json
           id?: string
+          image?: string | null
           order: number
           phonetics?: string | null
           unit_id: string
@@ -269,6 +271,7 @@ export type Database = {
           definitions?: Json
           examples?: Json
           id?: string
+          image?: string | null
           order?: number
           phonetics?: string | null
           unit_id?: string
@@ -299,6 +302,7 @@ export type Database = {
           course_id: string | null
           definitions: Json | null
           examples: Json | null
+          image: string | null
           note: string | null
           phonetics: string | null
           show_first_step: boolean | null
