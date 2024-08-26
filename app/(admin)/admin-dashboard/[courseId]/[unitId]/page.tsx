@@ -1,6 +1,9 @@
 import { createClient } from "@/utils/supabase/server";
 import { redirect } from "next/navigation";
 import { WordCard } from "@/components/WordCard";
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
+import { PlusIcon } from "lucide-react";
 
 interface Params {
   courseId: string;
@@ -8,7 +11,7 @@ interface Params {
 }
 
 export default async function CoursePage({ params }: { params: Params }) {
-  const { unitId } = params;
+  const { courseId, unitId } = params;
   const supabase = createClient();
 
   const {
@@ -39,6 +42,15 @@ export default async function CoursePage({ params }: { params: Params }) {
 
   return (
     <div className="flex-1 w-full flex flex-col gap-6 items-center p-6">
+      <div className="flex justify-between items-center mb-6">
+        <h1 className="text-3xl font-bold">Unit Details</h1>
+        <Button asChild variant="default" className="flex items-center gap-2">
+          <Link href={`/admin-dashboard/${courseId}/${unitId}/new-word`}>
+            <PlusIcon className="w-4 h-4" />
+            Add New Word
+          </Link>
+        </Button>
+      </div>
       {data.map((wordData) => (
         <WordCard key={wordData.id} wordData={wordData} />
       ))}

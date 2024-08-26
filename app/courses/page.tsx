@@ -20,7 +20,8 @@ export default async function CoursesPage() {
   // Fetch courses
   const { data: courses, error: coursesError } = await supabase
     .from("courses")
-    .select("id, name, description, word_count");
+    .select("id, name, description, word_count")
+    .match({ published: true });
   if (coursesError) {
     console.error("Error fetching courses:", coursesError);
     return; // Handle the error according to your app's flow
