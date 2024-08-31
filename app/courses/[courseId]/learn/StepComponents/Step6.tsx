@@ -148,7 +148,7 @@ const Step6: FC<Step6Props> = ({
 
   if (loading) {
     return (
-      <Card className="p-6 rounded-lg shadow-lg space-y-4">
+      <Card className="p-6 rounded-lg space-y-4">
         <CardContent>
           <div className="space-y-4">
             <div className="bg-gray-300 animate-pulse h-10 w-3/4 mx-auto rounded"></div>
@@ -162,9 +162,9 @@ const Step6: FC<Step6Props> = ({
   }
 
   return (
-    <Card className="p-6 rounded-lg shadow-lg space-y-4">
+    <Card className="p-6 rounded-lg space-y-4">
       <CardHeader className="mb-4">
-        <CardTitle className="text-2xl font-bold text-slate-800 dark:text-slate-200 flex items-center space-x-2">
+        <CardTitle className="text-2xl font-bold items-center space-x-2">
           <span>
             Listen to the Pronunciation and Select the Correct Definition
           </span>
@@ -178,7 +178,7 @@ const Step6: FC<Step6Props> = ({
         <div className="flex items-center justify-center mb-4">
           <button
             onClick={handlePlayAudio}
-            className="text-blue-500 hover:text-blue-700 focus:outline-none"
+            className="text-primary-9 hover:text-primary-10 focus:outline-none"
           >
             <SpeakerLoudIcon
               className={`w-8 h-8 ${isSpeaking ? "animate-pulse" : ""}`}
@@ -192,16 +192,14 @@ const Step6: FC<Step6Props> = ({
               key={index}
               variant="outline"
               onClick={() => setSelectedOption(option)}
-              className={`w-full text-left py-2 px-4 rounded-md border border-slate-300 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 ${
-                selectedOption === option
-                  ? "bg-slate-100 dark:bg-slate-900"
-                  : ""
+              className={`w-full py-2 px-4 bg-neutral-3 text-neutral-12 rounded-md border border-neutral-6 hover:bg-neutral-4 hover:border-neutral-8 active:bg-neutral-5 ${
+                selectedOption === option ? "bg-neutral-4 border-neutral-8" : ""
               } ${
                 submitted &&
                 (option === correctOption
-                  ? "bg-green-100 dark:bg-green-900 border-green-300 dark:border-green-700"
+                  ? "bg-success-4 border-success-8"
                   : selectedOption === option
-                    ? "bg-red-100 dark:bg-red-900 border-red-300 dark:border-red-700"
+                    ? "bg-error-4 border-error-8"
                     : "")
               }`}
             >

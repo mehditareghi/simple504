@@ -23,15 +23,12 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className={GeistSans.className}>
-      <body className="bg-white dark:bg-slate-950 text-slate-950 dark:text-slate-50">
+      <body className="bg-neutral-1 text-neutral-11">
         <div className="min-h-screen flex flex-col items-center">
           <div className="flex-1 w-full flex flex-col gap-20 items-center">
-            <nav className="w-full flex justify-center border-b border-b-slate-200 dark:border-b-slate-800 h-16">
+            <nav className="w-full flex justify-center border-b border-b-neutral-6 h-16">
               <div className="w-full max-w-4xl flex justify-between items-center p-3 text-sm">
-                <Link
-                  href="/"
-                  className="no-underline text-foreground hover:underline"
-                >
+                <Link href="/" className="no-underline hover:underline">
                   Frendere
                 </Link>
                 <div className="flex items-center gap-4">
@@ -45,7 +42,7 @@ export default function RootLayout({
               <main className="flex-1 flex flex-col gap-6">{children}</main>
             </div>
 
-            <footer className="w-full border-t border-t-slate-200 dark:border-t-slate-800 p-8">
+            <footer className="w-full border-t border-t-neutral-6 p-8">
               <div className="max-w-4xl mx-auto flex flex-col md:flex-row items-center justify-center gap-6 text-center md:text-left">
                 <p className="text-sm">
                   &copy; {new Date().getFullYear()} Frendere. All rights

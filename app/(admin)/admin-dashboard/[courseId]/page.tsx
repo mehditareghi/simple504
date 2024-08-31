@@ -59,17 +59,12 @@ export default async function AdminDashboard({ params }: { params: Params }) {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {units.map((unit) => {
           return (
-            <Card
-              key={unit.id}
-              className="hover:shadow-lg transition-shadow duration-200"
-            >
+            <Card key={unit.id}>
               <CardHeader>
                 <CardTitle className="text-xl font-bold">
                   {unit.title}
                 </CardTitle>
-                <CardDescription className="text-gray-600">
-                  {unit.word_count} words
-                </CardDescription>
+                <CardDescription>{unit.word_count} words</CardDescription>
               </CardHeader>
               <CardFooter>
                 <Button asChild className="w-full">

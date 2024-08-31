@@ -69,16 +69,13 @@ export default async function NewUnit({ params }: { params: Params }) {
     <div className="flex-1 flex flex-col items-center justify-center px-4 py-12 sm:px-6 lg:px-8">
       <Card className="w-full max-w-md space-y-8">
         <CardHeader className="text-center">
-          <CardTitle className="text-2xl font-bold">Add new word</CardTitle>
+          <CardTitle className="H3">Add new word</CardTitle>
         </CardHeader>
         <CardContent>
           <form className="flex flex-col space-y-6">
             <div className="space-y-4">
               <div>
-                <label
-                  className="block text-sm font-medium text-foreground"
-                  htmlFor="word"
-                >
+                <label className="block text-sm font-medium" htmlFor="word">
                   Word
                 </label>
                 <Input
@@ -92,7 +89,7 @@ export default async function NewUnit({ params }: { params: Params }) {
               </div>
               <div>
                 <label
-                  className="block text-sm font-medium text-foreground"
+                  className="block text-sm font-medium"
                   htmlFor="phonetics"
                 >
                   Phonetics
@@ -109,7 +106,7 @@ export default async function NewUnit({ params }: { params: Params }) {
 
               <div>
                 <label
-                  className="block text-sm font-medium text-foreground"
+                  className="block text-sm font-medium"
                   htmlFor="definitions"
                 >
                   Definitions (one per line)
@@ -122,10 +119,7 @@ export default async function NewUnit({ params }: { params: Params }) {
                 />
               </div>
               <div>
-                <label
-                  className="block text-sm font-medium text-foreground"
-                  htmlFor="examples"
-                >
+                <label className="block text-sm font-medium" htmlFor="examples">
                   Examples (one per line)
                 </label>
                 <Textarea
@@ -138,7 +132,7 @@ export default async function NewUnit({ params }: { params: Params }) {
 
               <div>
                 <label
-                  className="block text-sm font-medium text-foreground"
+                  className="block text-sm font-medium"
                   htmlFor="description"
                 >
                   Order
@@ -155,10 +149,7 @@ export default async function NewUnit({ params }: { params: Params }) {
               </div>
 
               <div>
-                <label
-                  className="block text-sm font-medium text-foreground"
-                  htmlFor="image"
-                >
+                <label className="block text-sm font-medium" htmlFor="image">
                   Image
                 </label>
                 <Input
@@ -172,10 +163,7 @@ export default async function NewUnit({ params }: { params: Params }) {
               </div>
 
               <div className="hidden">
-                <label
-                  className="block text-sm font-medium text-foreground"
-                  htmlFor="unit_id"
-                >
+                <label className="block text-sm font-medium" htmlFor="unit_id">
                   Unit ID
                 </label>
                 <Input

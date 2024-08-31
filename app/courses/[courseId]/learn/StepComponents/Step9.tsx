@@ -111,9 +111,9 @@ const Step9: React.FC<Step9Props> = ({ word, onNext, setCorrectAnswers }) => {
   };
 
   return (
-    <Card className="p-6 rounded-lg shadow-lg space-y-4">
+    <Card className="p-6 rounded-lg space-y-4">
       <CardHeader className="mb-4">
-        <CardTitle className="text-2xl font-bold text-slate-800 dark:text-slate-200">
+        <CardTitle className="text-2xl font-bold">
           Type the word for the given definitions:
         </CardTitle>
         <CardDescription>{word.definitions.join("; ")}</CardDescription>

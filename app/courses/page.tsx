@@ -46,15 +46,12 @@ export default async function CoursesPage() {
         {courses.map((course) => {
           const userCourse = userCourseMap && userCourseMap.get(course.id);
           return (
-            <Card
-              key={course.id}
-              className="hover:shadow-lg transition-shadow duration-200"
-            >
+            <Card key={course.id} className="">
               <CardHeader>
                 <CardTitle className="text-xl font-bold">
                   {course.name}
                 </CardTitle>
-                <CardDescription className="text-gray-600">
+                <CardDescription className="">
                   {course.description}
                 </CardDescription>
               </CardHeader>

@@ -137,12 +137,12 @@ const Step1: FC<Step1Props> = ({ word, onNext, setCorrectAnswers }) => {
           <div className="flex justify-between w-full">
             <div className="flex items-center space-x-2">
               <span>{word.word}</span>
-              <span className="text-slate-500 dark:text-slate-500 font-normal">
+              <span className="text-neutral-11 font-normal">
                 {word.phonetics}
               </span>
               <button
                 onClick={handlePlayAudio}
-                className="text-blue-500 hover:text-blue-700 focus:outline-none"
+                className="text-primary-9 hover:text-primary-10 focus:outline-none"
               >
                 <SpeakerLoudIcon
                   className={`w-5 h-5 ${isSpeaking ? "animate-pulse" : ""}`}
@@ -158,7 +158,7 @@ const Step1: FC<Step1Props> = ({ word, onNext, setCorrectAnswers }) => {
                   <TooltipTrigger asChild>
                     <button
                       onClick={onIgnore}
-                      className="text-gray-500 hover:text-gray-700 focus:outline-none"
+                      className="text-neutral-11 hover:text-neutral-12 focus:outline-none"
                     >
                       <Cross2Icon className="w-5 h-5" />
                     </button>

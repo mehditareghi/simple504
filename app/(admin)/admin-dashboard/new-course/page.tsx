@@ -45,16 +45,13 @@ export default async function NewCourse() {
     <div className="flex-1 flex flex-col items-center justify-center px-4 py-12 sm:px-6 lg:px-8">
       <Card className="w-full max-w-md space-y-8">
         <CardHeader className="text-center">
-          <CardTitle className="text-2xl font-bold">Add new course</CardTitle>
+          <CardTitle className="H3">Add new course</CardTitle>
         </CardHeader>
         <CardContent>
           <form className="flex flex-col space-y-6">
             <div className="space-y-4">
               <div>
-                <label
-                  className="block text-sm font-medium text-foreground"
-                  htmlFor="name"
-                >
+                <label className="block text-sm font-medium" htmlFor="name">
                   Name
                 </label>
                 <Input

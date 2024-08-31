@@ -60,7 +60,7 @@ export default async function CoursePage({ params }: { params: Params }) {
       <Card className="mb-8">
         <CardHeader>
           <CardTitle className="text-2xl font-bold">Course Overview</CardTitle>
-          <CardDescription className="text-gray-600">
+          <CardDescription>
             Start a learning session to continue your progress in this course.
           </CardDescription>
         </CardHeader>
@@ -80,17 +80,12 @@ export default async function CoursePage({ params }: { params: Params }) {
             : 0;
 
           return (
-            <Card
-              key={unit.id}
-              className="hover:shadow-lg transition-shadow duration-200"
-            >
+            <Card key={unit.id}>
               <CardHeader>
                 <CardTitle className="text-xl font-bold">
                   {unit.title}
                 </CardTitle>
-                <CardDescription className="text-gray-600">
-                  {unit.word_count} words
-                </CardDescription>
+                <CardDescription>{unit.word_count} words</CardDescription>
               </CardHeader>
               <CardContent>
                 <Progress
@@ -105,7 +100,7 @@ export default async function CoursePage({ params }: { params: Params }) {
                 />
               </CardContent>
               <CardFooter>
-                <Button asChild className="w-full">
+                <Button asChild variant="outline" className="w-full">
                   <Link
                     href={`/courses/${courseId}/units/${unit.id}`}
                     className="py-2 px-3 flex rounded-md no-underline"

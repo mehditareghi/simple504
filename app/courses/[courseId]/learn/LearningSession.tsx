@@ -195,7 +195,9 @@ export default function LearningSession({
 
   return (
     <div className="max-w-3xl mx-auto p-6 rounded-lg space-y-6">
-      <h1 className="text-3xl font-bold mb-4 text-center">Learning Session</h1>
+      <h1 className="text-3xl font-bold mb-4 text-primary-12 text-center">
+        Learning Session
+      </h1>
       <Progress
         value={progress}
         className={`h-4 rounded ${

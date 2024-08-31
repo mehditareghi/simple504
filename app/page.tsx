@@ -16,10 +16,8 @@ export default function Index() {
     <div className="flex-1 w-full flex flex-col gap-12 items-center justify-center">
       {/* Hero Section */}
       <section className="text-center flex flex-col items-center gap-6">
-        <h1 className="text-5xl lg:text-6xl font-bold text-foreground">
-          Welcome to Frendere
-        </h1>
-        <p className="text-lg lg:text-xl text-muted-foreground max-w-2xl">
+        <h1 className="H1">Welcome to Frendere</h1>
+        <p className="text-lg lg:text-xl max-w-2xl">
           Master new languages effortlessly with interactive lessons, real-time
           tracking, and community support.
         </p>
@@ -37,41 +35,41 @@ export default function Index() {
 
       {/* Features Section */}
       <section className="w-full flex flex-col gap-12 mt-16">
-        <h2 className="text-4xl lg:text-5xl font-bold text-center text-foreground">
-          Why Frendere?
-        </h2>
+        <h2 className="H2">Why Frendere?</h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          <Card className="hover:shadow-lg transition-shadow duration-300 text-center">
+          <Card className="text-center">
             <CardHeader>
-              <BookOpen className="w-12 h-12 text-primary mx-auto mb-4" />
-              <CardTitle className="text-2xl">Interactive Lessons</CardTitle>
+              <BookOpen className="w-12 h-12 text-primary-9 mx-auto mb-4" />
+              <CardTitle className="text-2xl">
+                Engaging Interactive Lessons
+              </CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-muted-foreground">
+              <p className="">
                 Engage with lessons that adapt to your learning style, ensuring
                 you grasp each concept with ease.
               </p>
             </CardContent>
           </Card>
-          <Card className="hover:shadow-lg transition-shadow duration-300 text-center">
+          <Card className="text-center">
             <CardHeader>
-              <LineChart className="w-12 h-12 text-primary mx-auto mb-4" />
+              <LineChart className="w-12 h-12 text-primary-9 mx-auto mb-4" />
               <CardTitle className="text-2xl">Track Your Progress</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-muted-foreground">
+              <p className="">
                 Monitor your growth with real-time analytics and personalized
                 feedback on your journey to fluency.
               </p>
             </CardContent>
           </Card>
-          <Card className="hover:shadow-lg transition-shadow duration-300 text-center">
+          <Card className="text-center">
             <CardHeader>
-              <Users className="w-12 h-12 text-primary mx-auto mb-4" />
+              <Users className="w-12 h-12 text-primary-9 mx-auto mb-4" />
               <CardTitle className="text-2xl">Community Support</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-muted-foreground">
+              <p className="">
                 Connect with fellow learners, share tips, and stay motivated
                 through a supportive community.
               </p>
@@ -84,12 +82,12 @@ export default function Index() {
       <section className="w-full max-w-4xl mt-16">
         <Card className="text-center">
           <CardHeader>
-            <CardTitle className="text-3xl font-bold text-foreground">
+            <CardTitle className="text-3xl font-bold">
               Join Our Newsletter
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-muted-foreground mb-6">
+            <p className="mb-6">
               Get the latest updates, tips, and more directly to your inbox.
             </p>
             <div className="flex flex-col md:flex-row gap-4 justify-center items-center">
@@ -108,10 +106,8 @@ export default function Index() {
 
       {/* Call to Action Section */}
       <section className="w-full flex flex-col items-center gap-8 mt-16">
-        <h2 className="text-4xl lg:text-5xl font-bold text-center text-foreground">
-          Ready to Get Started?
-        </h2>
-        <p className="text-lg lg:text-xl text-muted-foreground text-center max-w-lg">
+        <h2 className="H2">Ready to Get Started?</h2>
+        <p className="text-lg lg:text-xl text-center max-w-lg">
           Sign up today and unlock the full potential of your language learning
           journey.
         </p>
@@ -126,9 +122,7 @@ export default function Index() {
 
       {/* Badges Section */}
       <section className="w-full max-w-4xl mt-16 text-center">
-        <h3 className="text-3xl font-bold text-foreground">
-          Trusted by Learners Worldwide
-        </h3>
+        <h3 className="H3">Trusted by Learners Worldwide</h3>
         <div className="flex flex-wrap gap-4 justify-center mt-6">
           <Badge variant="secondary">5M+ Users</Badge>
           <Badge variant="secondary">4.8 Rating</Badge>

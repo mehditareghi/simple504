@@ -160,14 +160,14 @@ const Step4: FC<Step4Props> = ({
       <div
         ref={drag}
         onClick={handleClick}
-        className={`inline-block py-1 px-2 rounded-lg shadow-md border transition-transform transform cursor-pointer ${
+        className={`inline-block py-1 px-2 rounded-lg border transition-transform transform cursor-pointer ${
           isDragging ? "scale-105 opacity-50" : "hover:scale-110 opacity-100"
         } ${
           isCorrectAnswer
             ? "bg-green-100 dark:bg-green-900 border-green-300 dark:border-green-700 text-green-700 dark:text-green-300"
             : isWrongAnswer
               ? "bg-red-100 border-red-400 text-red-800"
-              : "bg-white dark:bg-slate-800 border-slate-300 dark:border-slate-700 text-slate-700 dark:text-slate-300"
+              : "bg-neutral-4 border-neutral-6 text-neutral-12"
         } ${selectedOption === option ? "hidden" : "block"}`}
       >
         <span>{option}</span>
@@ -185,7 +185,7 @@ const Step4: FC<Step4Props> = ({
 
   if (loading) {
     return (
-      <Card className="p-6 rounded-lg shadow-lg space-y-4">
+      <Card className="p-6 rounded-lg space-y-4">
         <CardContent>
           <div className="space-y-4">
             <div className="bg-gray-300 animate-pulse h-10 w-3/4 mx-auto rounded"></div>
@@ -199,9 +199,9 @@ const Step4: FC<Step4Props> = ({
   }
 
   return (
-    <Card className="p-6 rounded-lg shadow-lg space-y-4">
+    <Card className="p-6 rounded-lg space-y-4">
       <CardHeader className="mb-4">
-        <CardTitle className="text-2xl font-bold text-slate-800 dark:text-slate-200 flex items-center space-x-2">
+        <CardTitle className="text-2xl font-bold flex items-center space-x-2">
           <span>Select or Drag the Correct Word</span>
         </CardTitle>
         <CardDescription>
@@ -217,12 +217,12 @@ const Step4: FC<Step4Props> = ({
               {index < example.split("______").length - 1 && (
                 <span
                   ref={drop}
-                  className={`inline-block rounded-lg px-2 mx-1 py-1 border shadow-md text-base ${
+                  className={`inline-block rounded-lg px-2 mx-1 py-1 border text-base ${
                     isCorrect
                       ? "bg-green-100 dark:bg-green-900 border-green-300 dark:border-green-700 text-green-700 dark:text-green-300"
                       : submitted && !isCorrect
                         ? "bg-red-100 dark:bg-red-900 border-red-300 dark:border-red-700 text-red-700 dark:text-red-300"
-                        : "bg-white dark:bg-slate-800 border-slate-300 dark:border-slate-700"
+                        : "bg-neutral-4 border-neutral-6"
                   }`}
                 >
                   {selectedOption ||

@@ -65,10 +65,7 @@ export default async function Login({
           <form className="flex flex-col space-y-6">
             <div className="space-y-4">
               <div>
-                <label
-                  className="block text-sm font-medium text-foreground"
-                  htmlFor="email"
-                >
+                <label className="block text-sm font-medium" htmlFor="email">
                   Email
                 </label>
                 <Input
@@ -82,10 +79,7 @@ export default async function Login({
               </div>
 
               <div>
-                <label
-                  className="block text-sm font-medium text-foreground"
-                  htmlFor="password"
-                >
+                <label className="block text-sm font-medium" htmlFor="password">
                   Password
                 </label>
                 <Input
@@ -121,9 +115,7 @@ export default async function Login({
           </form>
         </CardContent>
         {searchParams?.message && (
-          <p className="mt-4 p-4 bg-foreground/10 text-foreground text-center">
-            {searchParams.message}
-          </p>
+          <p className="mt-4 p-4 text-center">{searchParams.message}</p>
         )}
       </Card>
     </div>

@@ -69,8 +69,8 @@ export default async function ProtectedPage() {
     <div className="flex-1 w-full flex flex-col items-center">
       <Card className="w-full max-w-4xl p-6">
         <CardHeader className="flex flex-col items-center text-center">
-          <Avatar className="mb-4 w-24 h-24 bg-blue-500 dark:bg-blue-600 flex items-center justify-center rounded-full shadow-lg">
-            <span className="text-white text-3xl">
+          <Avatar className="mb-4 w-24 h-24 bg-primary-9 flex items-center justify-center rounded-full shadow-lg">
+            <span className="text-black text-3xl">
               {userInfo.first_name?.charAt(0).toUpperCase() ||
                 userInfo.email.charAt(0).toUpperCase()}
             </span>

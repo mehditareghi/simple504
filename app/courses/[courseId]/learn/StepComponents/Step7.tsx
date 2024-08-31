@@ -102,9 +102,9 @@ const Step7: FC<Step7Props> = ({ word, onNext, setCorrectAnswers }) => {
   };
 
   return (
-    <Card className="p-6 rounded-lg shadow-lg space-y-4">
+    <Card className="p-6 rounded-lg space-y-4">
       <CardHeader className="mb-4">
-        <CardTitle className="text-2xl font-bold text-slate-800 dark:text-slate-200">
+        <CardTitle className="text-2xl font-bold">
           Pronounce the word: {word.word}
         </CardTitle>
         <CardDescription>
@@ -119,12 +119,12 @@ const Step7: FC<Step7Props> = ({ word, onNext, setCorrectAnswers }) => {
             onMouseLeave={handleStopListening}
             onTouchStart={handleStartListening}
             onTouchEnd={handleStopListening}
-            className="flex items-center justify-center p-4 rounded-full bg-blue-600 dark:bg-blue-600 hover:bg-blue-700 dark:hover:bg-blue-500"
+            className="flex items-center justify-center p-4 rounded-full bg-primary-9 hover:bg-primary-10 active:bg-primary-11"
           >
             {listening ? (
-              <Loader2Icon className="w-6 h-6 animate-spin text-white" />
+              <Loader2Icon className="w-6 h-6 animate-spin text-black" />
             ) : (
-              <MicIcon className="w-6 h-6 text-white" />
+              <MicIcon className="w-6 h-6 text-black" />
             )}
           </Button>
         </div>

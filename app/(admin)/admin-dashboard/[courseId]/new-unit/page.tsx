@@ -51,16 +51,13 @@ export default async function NewUnit({ params }: { params: Params }) {
     <div className="flex-1 flex flex-col items-center justify-center px-4 py-12 sm:px-6 lg:px-8">
       <Card className="w-full max-w-md space-y-8">
         <CardHeader className="text-center">
-          <CardTitle className="text-2xl font-bold">Add new unit</CardTitle>
+          <CardTitle className="H3">Add new unit</CardTitle>
         </CardHeader>
         <CardContent>
           <form className="flex flex-col space-y-6">
             <div className="space-y-4">
               <div>
-                <label
-                  className="block text-sm font-medium text-foreground"
-                  htmlFor="title"
-                >
+                <label className="block text-sm font-medium" htmlFor="title">
                   Title
                 </label>
                 <Input
@@ -75,7 +72,7 @@ export default async function NewUnit({ params }: { params: Params }) {
 
               <div>
                 <label
-                  className="block text-sm font-medium text-foreground"
+                  className="block text-sm font-medium"
                   htmlFor="description"
                 >
                   Order
@@ -93,7 +90,7 @@ export default async function NewUnit({ params }: { params: Params }) {
 
               <div className="hidden">
                 <label
-                  className="block text-sm font-medium text-foreground"
+                  className="block text-sm font-medium"
                   htmlFor="course_id"
                 >
                   Course ID

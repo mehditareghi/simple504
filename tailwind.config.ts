@@ -1,12 +1,23 @@
-import type { Config } from "tailwindcss"
+import type { Config } from "tailwindcss";
+
+function getColorScale(name) {
+  let scale = {};
+  for (let i = 1; i <= 12; i++) {
+    scale[i] = `var(--${name}-${i})`;
+    // next line only needed if using alpha values
+    scale[`a${i}`] = `var(--${name}-a${i})`;
+  }
+
+  return scale;
+}
 
 const config = {
   darkMode: ["class"],
   content: [
-    './pages/**/*.{ts,tsx}',
-    './components/**/*.{ts,tsx}',
-    './app/**/*.{ts,tsx}',
-    './src/**/*.{ts,tsx}',
+    "./pages/**/*.{ts,tsx}",
+    "./components/**/*.{ts,tsx}",
+    "./app/**/*.{ts,tsx}",
+    "./src/**/*.{ts,tsx}",
   ],
   prefix: "",
   theme: {
@@ -18,6 +29,13 @@ const config = {
       },
     },
     extend: {
+      colors: {
+        primary: getColorScale("amber"),
+        neutral: getColorScale("mauve"),
+        success: getColorScale("green"),
+        error: getColorScale("red"),
+        warning: getColorScale("yellow"),
+      },
       keyframes: {
         "accordion-down": {
           from: { height: "0" },
@@ -35,6 +53,6 @@ const config = {
     },
   },
   plugins: [require("tailwindcss-animate")],
-} satisfies Config
+} satisfies Config;
 
-export default config
+export default config;

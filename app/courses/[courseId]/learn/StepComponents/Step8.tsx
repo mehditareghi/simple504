@@ -128,15 +128,15 @@ const Step8: React.FC<Step8Props> = ({ word, onNext, setCorrectAnswers }) => {
   };
 
   return (
-    <Card className="p-6 rounded-lg shadow-lg space-y-4">
+    <Card className="p-6 rounded-lg space-y-4">
       <CardHeader className="mb-4">
-        <CardTitle className="text-2xl font-bold text-slate-800 dark:text-slate-200">
+        <CardTitle className="text-2xl font-bold">
           Type the word for the pronunciation:
         </CardTitle>
         <CardDescription>
           <button
             onClick={handlePlayAudio}
-            className="text-blue-500 hover:text-blue-700 focus:outline-none"
+            className="text-primary-9 hover:text-primary-10 focus:outline-none"
           >
             <SpeakerLoudIcon
               className={`w-5 h-5 ${isSpeaking ? "animate-pulse" : ""}`}
