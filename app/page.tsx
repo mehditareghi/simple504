@@ -45,45 +45,44 @@ export default function Index() {
           </h2>
           <div className="h-[1px] w-full bg-neutral-7"></div>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          <Card className="text-center">
-            <CardHeader>
-              <BookOpen className="w-12 h-12 text-primary-9 mx-auto mb-4" />
-              <CardTitle className="text-2xl">
-                Engaging Interactive Lessons
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p className="">
+
+        <div className="flex flex-col gap-12">
+          <div className="flex w-full gap-6 justify-start items-center">
+            <div className="bg-primary-9 p-4 rounded-xl">
+              <BookOpen className="w-12 h-12 text-black" strokeWidth={1} />
+            </div>
+            <div className="flex flex-col gap-2">
+              <h3 className="H3">Interactive Lessons</h3>
+              <p>
                 Engage with lessons that adapt to your learning style, ensuring
                 you grasp each concept with ease.
               </p>
-            </CardContent>
-          </Card>
-          <Card className="text-center">
-            <CardHeader>
-              <LineChart className="w-12 h-12 text-primary-9 mx-auto mb-4" />
-              <CardTitle className="text-2xl">Track Your Progress</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p className="">
+            </div>
+          </div>
+          <div className="flex w-full gap-6 justify-start items-center">
+            <div className="bg-primary-9 p-4 rounded-xl">
+              <LineChart className="w-12 h-12 text-black" strokeWidth={1} />
+            </div>
+            <div className="flex flex-col gap-2">
+              <h3 className="H3">Track Your Progress</h3>
+              <p>
                 Monitor your growth with real-time analytics and personalized
                 feedback on your journey to fluency.
               </p>
-            </CardContent>
-          </Card>
-          <Card className="text-center">
-            <CardHeader>
-              <Users className="w-12 h-12 text-primary-9 mx-auto mb-4" />
-              <CardTitle className="text-2xl">Community Support</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p className="">
+            </div>
+          </div>
+          <div className="flex w-full gap-6 justify-start items-center">
+            <div className="bg-primary-9 p-4 rounded-xl">
+              <Users className="w-12 h-12 text-black" strokeWidth={1} />
+            </div>
+            <div className="flex flex-col gap-2">
+              <h3 className="H3">Community Support</h3>
+              <p>
                 Connect with fellow learners, share tips, and stay motivated
                 through a supportive community.
               </p>
-            </CardContent>
-          </Card>
+            </div>
+          </div>
         </div>
       </section>
 
