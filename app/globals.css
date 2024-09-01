@@ -16,13 +16,13 @@
 @import "@radix-ui/colors/yellow-dark.css";
 
 .H1 {
-    @apply text-5xl lg:text-6xl font-bold text-primary-12;
+    @apply text-5xl lg:text-6xl font-bold text-neutral-12;
 }
 
 .H2 {
-    @apply text-4xl lg:text-5xl font-bold text-center text-primary-12;
+    @apply text-4xl lg:text-5xl font-bold text-center text-neutral-12;
 }
 
 .H3 {
-    @apply text-3xl font-bold text-primary-12;
+    @apply text-3xl font-bold text-neutral-12;
 }

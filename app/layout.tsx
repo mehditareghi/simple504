@@ -30,9 +30,9 @@ export default function RootLayout({
               <div className="w-full max-w-4xl flex justify-between items-center p-3 text-sm">
                 <Link
                   href="/"
-                  className="no-underline font-bold text-lg text-transparent bg-clip-text bg-gradient-to-r from-primary-9 via-primary-10 to-primary-11 transition-[background-size] duration-500 ease-in-out hover:bg-gradient-to-l hover:from-primary-10 hover:via-primary-11 hover:to-primary-12 hover:bg-[length:200%_200%] bg-[length:100%_100%]"
+                  className="no-underline font-black text-neutral-12"
                 >
-                  Frendere
+                  Frendere<span className="text-primary-9">.</span>
                 </Link>
                 <div className="flex items-center gap-4">
                   <ThemeToggle />
