@@ -29,8 +29,8 @@ export default function ThemeToggle() {
     <Expand
       toggled={theme === "dark"}
       toggle={toggleTheme}
-      duration={750} // Optional: Control the duration of the animation
-      className="w-6 h-6"
+      duration={750}
+      placeholder="Theme Toggle"
     />
   );
 }
