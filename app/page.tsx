@@ -11,6 +11,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import WaterDropGrid from "@/components/WaterDropGrid";
+import { Separator } from "@/components/ui/separator";
 
 export default function Index() {
   return (
@@ -38,7 +39,12 @@ export default function Index() {
 
       {/* Features Section */}
       <section className="w-full flex flex-col gap-12 mt-16">
-        <h2 className="H2">Why Frendere?</h2>
+        <div className="w-full flex justify-between gap-4 items-center">
+          <h2 className="text-4xl lg:text-5xl text-center text-neutral-12 whitespace-nowrap font-black">
+            Why Frendere<span className="text-primary-9">.</span>
+          </h2>
+          <div className="h-[1px] w-full bg-neutral-7"></div>
+        </div>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           <Card className="text-center">
             <CardHeader>
