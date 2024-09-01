@@ -1,8 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Button } from "@/components/ui/button";
-import { Sun, Moon } from "lucide-react";
+import { Expand } from "@theme-toggles/react";
+import "@theme-toggles/react/css/Expand.css";
 
 export default function ThemeToggle() {
   const [theme, setTheme] = useState("light");
@@ -26,12 +26,11 @@ export default function ThemeToggle() {
   };
 
   return (
-    <Button variant="ghost" onClick={toggleTheme}>
-      {theme === "light" ? (
-        <Moon className="w-4 h-4" />
-      ) : (
-        <Sun className="w-4 h-4" />
-      )}
-    </Button>
+    <Expand
+      toggled={theme === "dark"}
+      toggle={toggleTheme}
+      duration={750} // Optional: Control the duration of the animation
+      className="w-6 h-6"
+    />
   );
 }

@@ -26,9 +26,12 @@ export default function RootLayout({
       <body className="bg-neutral-1 text-neutral-11">
         <div className="min-h-screen flex flex-col items-center">
           <div className="flex-1 w-full flex flex-col gap-20 items-center">
-            <nav className="w-full flex justify-center border-b border-b-neutral-6 h-16">
+            <nav className="w-full flex justify-center h-16 sticky top-0 z-50 backdrop-blur bg-neutral-1/40 border-b border-b-neutral-6 transition-all duration-300">
               <div className="w-full max-w-4xl flex justify-between items-center p-3 text-sm">
-                <Link href="/" className="no-underline hover:underline">
+                <Link
+                  href="/"
+                  className="no-underline font-bold text-lg text-transparent bg-clip-text bg-gradient-to-r from-primary-9 via-primary-10 to-primary-11 transition-[background-size] duration-500 ease-in-out hover:bg-gradient-to-l hover:from-primary-10 hover:via-primary-11 hover:to-primary-12 hover:bg-[length:200%_200%] bg-[length:100%_100%]"
+                >
                   Frendere
                 </Link>
                 <div className="flex items-center gap-4">
