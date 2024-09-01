@@ -15,7 +15,7 @@ import { Separator } from "@/components/ui/separator";
 
 export default function Index() {
   return (
-    <div className="flex-1 w-full flex flex-col gap-12 items-center justify-center">
+    <div className="flex-1 w-full flex flex-col gap-32 items-center justify-center">
       {/* Hero Section */}
       <section className="relative w-full flex items-center gap-4">
         <div className="flex flex-col justify-center z-10">
