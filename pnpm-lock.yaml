@@ -56,6 +56,12 @@ dependencies:
   '@theme-toggles/react':
     specifier: ^4.1.0
     version: 4.1.0(react-dom@18.2.0)(react@18.2.0)
+  '@types/animejs':
+    specifier: ^3.1.12
+    version: 3.1.12
+  animejs:
+    specifier: ^3.2.2
+    version: 3.2.2
   autoprefixer:
     specifier: 10.4.17
     version: 10.4.17(postcss@8.4.33)
@@ -1194,6 +1200,10 @@ packages:
       react-dom: 18.2.0(react@18.2.0)
     dev: false
 
+  /@types/animejs@3.1.12:
+    resolution: {integrity: sha512-fpdH+ZtlO0kqjTOqRaBdsEmvpRNOayI8k4EVkEtitL5l6wducDOXk0rgQgfZqWf/ZX9DzXrHf257S5i9xTcISQ==}
+    dev: false
+
   /@types/dom-speech-recognition@0.0.4:
     resolution: {integrity: sha512-zf2GwV/G6TdaLwpLDcGTIkHnXf8JEf/viMux+khqKQKDa8/8BAUtXXZS563GnvJ4Fg0PBLGAaFf2GekEVSZ6GQ==}
     dev: true
@@ -1252,6 +1262,10 @@ packages:
       debug: 4.3.6
     transitivePeerDependencies:
       - supports-color
+    dev: false
+
+  /animejs@3.2.2:
+    resolution: {integrity: sha512-Ao95qWLpDPXXM+WrmwcKbl6uNlC5tjnowlaRYtuVDHHoygjtIPfDUoK9NthrlZsQSKjZXlmji2TrBUAVbiH0LQ==}
     dev: false
 
   /ansi-regex@5.0.1:

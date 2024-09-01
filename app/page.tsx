@@ -10,26 +10,29 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
+import WaterDropGrid from "@/components/WaterDropGrid";
 
 export default function Index() {
   return (
     <div className="flex-1 w-full flex flex-col gap-12 items-center justify-center">
       {/* Hero Section */}
-      <section className="text-center flex flex-col items-center gap-6">
-        <h1 className="H1">Welcome to Frendere</h1>
-        <p className="text-lg lg:text-xl max-w-2xl">
-          Master new languages effortlessly with interactive lessons, real-time
-          tracking, and community support.
-        </p>
-        <div className="flex gap-4 mt-6">
-          <Link href="/login">
-            <Button variant="default">
-              Get Started <ChevronRight className="ml-2 w-5 h-5" />
-            </Button>
-          </Link>
-          <Link href="/courses">
-            <Button variant="outline">Explore Courses</Button>
-          </Link>
+      <section className="relative w-full flex items-center gap-4">
+        <div className="flex flex-col justify-center z-10">
+          <h1 className="text-5xl lg:text-6xl font-black text-neutral-12 whitespace-nowrap">
+            Discover Frendere<span className="text-primary-9">.</span>
+          </h1>
+          <p className="text-lg lg:text-xl max-w-2xl mt-4">
+            Master new languages effortlessly with interactive lessons,
+            real-time tracking, and community support.
+          </p>
+          <div className="flex gap-4 mt-6">
+            <Link href="/courses">
+              <Button>Explore Courses</Button>
+            </Link>
+          </div>
+        </div>
+        <div className="-ml-60">
+          <WaterDropGrid />
         </div>
       </section>
 
