@@ -15,6 +15,68 @@
 @import "@radix-ui/colors/yellow.css";
 @import "@radix-ui/colors/yellow-dark.css";
 
+:root {
+    /* Light mode */
+    --primary-1: var(--amber-1);
+    --primary-2: var(--amber-2);
+    --primary-3: var(--amber-3);
+    --primary-4: var(--amber-4);
+    --primary-5: var(--amber-5);
+    --primary-6: var(--amber-6);
+    --primary-7: var(--amber-7);
+    --primary-8: var(--amber-8);
+    --primary-9: var(--amber-9);
+    --primary-10: var(--amber-10);
+    --primary-11: var(--amber-11);
+    --primary-12: var(--amber-12);
+
+    --neutral-1: var(--mauve-1);
+    --neutral-2: var(--mauve-2);
+    --neutral-3: var(--mauve-3);
+    --neutral-4: var(--mauve-4);
+    --neutral-5: var(--mauve-5);
+    --neutral-6: var(--mauve-6);
+    --neutral-7: var(--mauve-7);
+    --neutral-8: var(--mauve-8);
+    --neutral-9: var(--mauve-9);
+    --neutral-10: var(--mauve-10);
+    --neutral-11: var(--mauve-11);
+    --neutral-12: var(--mauve-12);
+
+    /* Add more color scales as needed */
+}
+
+.dark {
+    /* Dark mode */
+    --primary-1: var(--amber-dark-1);
+    --primary-2: var(--amber-dark-2);
+    --primary-3: var(--amber-dark-3);
+    --primary-4: var(--amber-dark-4);
+    --primary-5: var(--amber-dark-5);
+    --primary-6: var(--amber-dark-6);
+    --primary-7: var(--amber-dark-7);
+    --primary-8: var(--amber-dark-8);
+    --primary-9: var(--amber-dark-9);
+    --primary-10: var(--amber-dark-10);
+    --primary-11: var(--amber-dark-11);
+    --primary-12: var(--amber-dark-12);
+
+    --neutral-1: var(--mauve-dark-1);
+    --neutral-2: var(--mauve-dark-2);
+    --neutral-3: var(--mauve-dark-3);
+    --neutral-4: var(--mauve-dark-4);
+    --neutral-5: var(--mauve-dark-5);
+    --neutral-6: var(--mauve-dark-6);
+    --neutral-7: var(--mauve-dark-7);
+    --neutral-8: var(--mauve-dark-8);
+    --neutral-9: var(--mauve-dark-9);
+    --neutral-10: var(--mauve-dark-10);
+    --neutral-11: var(--mauve-dark-11);
+    --neutral-12: var(--mauve-dark-12);
+
+    /* Add more color scales as needed */
+}
+
 .H1 {
     @apply text-5xl lg:text-6xl font-bold text-neutral-12;
 }
